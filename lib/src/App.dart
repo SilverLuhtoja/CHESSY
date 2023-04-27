@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:replaceAppName/src/screens/home_sreen.dart';
+import 'package:replaceAppName/src/screens/main_menu_screen.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -10,7 +11,7 @@ class App extends StatelessWidget {
       title: '2048',
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark(),
-      home: HomePage(),
+      home: MainMenuScreen(),
     );
   }
 }
