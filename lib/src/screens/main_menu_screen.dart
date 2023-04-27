@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:replaceAppName/src/screens/game_sreen.dart';
 
 class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});
@@ -10,29 +11,36 @@ class MainMenuScreen extends StatefulWidget {
 }
 
 class _MainMenuScreenState extends State<MainMenuScreen> {
+  navigateTo(StatefulWidget screen) => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => screen),
+      );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("home"),
+        title: const Text("MainMenu"),
       ),
       body: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Container(width: 10, child: Text("C H E S S Y", style: style())),
+            SizedBox(width: 10, child: Text("C H E S S Y", style: style())),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 overView(),
-                SizedBox(height: 40),
-                Container(
-                    width: 160, child: buildFilledButton("New Game", () {})),
-                SizedBox(height: 20),
-                Container(
+                const SizedBox(height: 40),
+                SizedBox(
+                    width: 160,
+                    child: buildFilledButton(
+                        "New Game", () => navigateTo(const GameScreen()))),
+                const SizedBox(height: 20),
+                SizedBox(
                     width: 160, child: buildFilledButton("Join Game", null)),
-                SizedBox(height: 20),
-                Container(
+                const SizedBox(height: 20),
+                SizedBox(
                     width: 160, child: buildFilledButton("How to PLay?", null)),
               ],
             ),
@@ -47,21 +55,16 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
 
   TextStyle style() => const TextStyle(fontSize: 60);
 
-  Widget overView() => Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
+  Widget overView() =>
+      Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         singleOveview(Icons.people, "ONLINE", 7),
-        SizedBox(width: 20,),
+        const SizedBox(width: 20),
         singleOveview(Icons.play_circle, "IN GAME", 4),
-        SizedBox(width: 20,),
+        const SizedBox(width: 20),
         singleOveview(Icons.timelapse, "WAITING", 3),
       ]);
 
   Column singleOveview(IconData icon, String text, int value) {
-    return Column(children: [
-        Icon(icon),
-        Text(text),
-        Text(value.toString())
-      ]);
+    return Column(children: [Icon(icon), Text(text), Text(value.toString())]);
   }
 }
