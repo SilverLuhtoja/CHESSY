@@ -1,15 +1,9 @@
+import 'game_piece.dart';
+
 class GameBoard {
   late List<List<Tile>> gameBoard;
-  final List<String> _notationLetters = [
-    'a',
-    'b',
-    'c',
-    'd',
-    'f',
-    'g',
-    'h',
-    'i'
-  ];
+  final Map<String, GamePiece> gamePieces = {};
+  final List<String> _notationLetters = ['a', 'b', 'c', 'd', 'f', 'g', 'h', 'i'];
 
   GameBoard() {
     gameBoard = generateBoard(8);
@@ -21,20 +15,32 @@ class GameBoard {
 
     for (int row = 1; row < gridSize + 1; row++) {
       List<Tile> singleRowOfTiles = [];
-      generateRow(gridSize,startWhite, row, singleRowOfTiles);
+      generateRow(gridSize, startWhite, row, singleRowOfTiles);
       tiles.add(singleRowOfTiles);
       startWhite = !startWhite;
     }
     return tiles;
   }
 
-  void generateRow(int gridSize, bool startWhite, int row, List<Tile> singleRowOfTiles) {
+  void generateRow(
+      int gridSize, bool startWhite, int row, List<Tile> singleRowOfTiles) {
     bool isWhite = startWhite;
     for (int column = 0; column < gridSize; column++) {
-      String notationValue =
-          "${_notationLetters[column]}${gridSize + 1 - row}";
+      String notationValue = "${_notationLetters[column]}${gridSize + 1 - row}";
+      placeGamePieceToBoard(row,column,notationValue);
       singleRowOfTiles.add(Tile(row, column, isWhite, notationValue));
       isWhite = !isWhite;
+    }
+  }
+
+  void placeGamePieceToBoard(int row, int column, String notationValue) {
+    if (row == 7) {
+      gamePieces[notationValue] =
+          Pawn(notationValue: notationValue, color: PieceColor.white);
+    }
+    if (row == 2) {
+      gamePieces[notationValue] =
+          Pawn(notationValue: notationValue, color: PieceColor.black);
     }
   }
 }

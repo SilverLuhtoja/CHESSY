@@ -8,9 +8,25 @@ import 'package:flutter_svg/flutter_svg.dart';
 // colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
 // )
 
+enum PieceColor{
+  white,
+  black
+}
+
+extension PieceColorValue on PieceColor{
+  Color getColor(){
+    if(name == 'white'){
+      return Colors.white;
+    }else{
+      return Colors.black;
+    }
+  }
+}
+
 abstract class GamePiece {
   late SvgPicture svg;
-  late String currentTile; // 'g5' 'a1'
+  late  PieceColor color;
+  late  String notationValue; // 'g5' 'a1'
 
   void move(); // sending data
   bool canMove(); // check before move
@@ -18,12 +34,13 @@ abstract class GamePiece {
 
 class Pawn implements GamePiece{
   late SvgPicture svg;
-  late String currentTile;
+  late PieceColor color;
+  late String notationValue;
 
-  Pawn(this.currentTile){
+  Pawn({required this.notationValue, required this.color}){
     svg = SvgPicture.asset(
       "assets/pawn.svg",
-      colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+      colorFilter: ColorFilter.mode(color.getColor(), BlendMode.srcIn),
     );
   }
 

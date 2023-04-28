@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:replaceAppName/src/models/game_board.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../constants.dart';
 
@@ -40,21 +39,17 @@ class _GameScreenState extends State<GameScreen> {
           )),
         ))));
 
-    // stackItems.addAll(board.gameBoard.expand((e) => e).map((e) => Positioned(
-    //     top: e.row * tileSize + 8,
-    //     left: e.column * tileSize + 8,
-    //     child: Container(
-    //       margin: EdgeInsets.all(tileSize * 0.05),
-    //       width: tileSize * 0.75,
-    //       height: tileSize * 0.75,
-    //       child: Container(
-    //         child: SvgPicture.asset(
-    //           "assets/pawn.svg",
-    //           matchTextDirection: false,
-    //           colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
-    //         ),
-    //       ),
-    //     ))));
+    stackItems.addAll(board.gameBoard.expand((e) => e).map((tile) => Positioned(
+        top: tile.row * tileSize + 8,
+        left: tile.column * tileSize + 8,
+        child: Container(
+          margin: EdgeInsets.all(tileSize * 0.05),
+          width: tileSize * 0.75,
+          height: tileSize * 0.75,
+          child: board.gamePieces.containsKey(tile.notationValue)
+              ? Container(child: board.gamePieces[tile.notationValue]?.svg)
+              : Container(),
+        ))));
 
     return Scaffold(
       appBar: AppBar(
