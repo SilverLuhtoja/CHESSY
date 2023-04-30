@@ -9,4 +9,4 @@ TODO:
 2. ~~Try to connect to backend, save and receive some message~~
 3. Move some Logic to BE
 4. Get game-board from server and show in app (FutureBuilder and State management)
-5. 
+
