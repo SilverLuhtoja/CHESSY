@@ -1,7 +1,12 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:replaceAppName/src/client_server.dart/client.dart';
 import 'package:replaceAppName/src/screens/game_sreen.dart';
+
+import '../utils/helpers.dart';
 
 class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});
@@ -42,6 +47,34 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 const SizedBox(height: 20),
                 SizedBox(
                     width: 160, child: buildFilledButton("How to PLay?", null)),
+                const SizedBox(height: 20),
+                SizedBox(
+                    width: 160, child: buildFilledButton("SendSomething", (){
+                      client.sendMessage("AND PUSHING BUTTONS");
+                })),
+                const SizedBox(height: 20),
+                // SizedBox(
+                //     width: 160, child: buildFilledButton("ConnectToServer", () async {
+                //   final socket = await Socket.connect('10.0.2.2', 4000);
+                //
+                //   print(
+                //       "Client: Connected to ${socket.remoteAddress.address}:${socket.remotePort}");
+                //
+                //   socket.listen((Uint8List data) {
+                //     final serverResponse = String.fromCharCodes(data);
+                //     printGreen(serverResponse);
+                //   }, onError: (error) {
+                //     printError("Client :$error");
+                //     socket.destroy();
+                //   }, onDone: () {
+                //     printError("Client: Server left");
+                //     socket.destroy();
+                //   });
+                //
+                //
+                //   socket.write("Silver");
+                // })),
+
               ],
             ),
           ],
