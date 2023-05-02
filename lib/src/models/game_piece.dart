@@ -51,9 +51,10 @@ class Pawn implements GamePiece {
     // TODO: implement canMove
 
     //if original position can move 2 steps ahead
-    if (color == PieceColor.white) {
       String letter = notationValue[0];
       int row = int.parse(notationValue[1]);
+    if (color == PieceColor.white) {
+
       if (row == 2) {
         // if initial row, then can move 1 AND 2 steps UP
         if (gamePieces['${letter}3'] == null) {
@@ -68,14 +69,23 @@ class Pawn implements GamePiece {
           validMoves.add('${letter}${row + 1}');
         }
       }
-      printGreen("ADDED NEW MOVES ${validMoves}");
     } else if (color == PieceColor.black) {
-      if (notationValue[1] == '7') {
-        printWarning('I can move 1 or 2 steps DOWN');
+      if (row == 7) {
+        // if initial row, then can move 1 AND 2 steps DOWN
+         if (gamePieces['${letter}6'] == null) {
+          validMoves.add('${letter}6');
+        }
+        if (gamePieces['${letter}5'] == null) {
+          validMoves.add('${letter}5');
+        }
       } else {
-        printWarning('I can move ONLY 1 step DOWN');
+        //else can move only 1 step DOWN
+        if (gamePieces['${letter}${row - 1}'] == null && row - 1 >= 1) {
+          validMoves.add('${letter}${row - 1}');
+        }
       }
     }
+    printGreen("ADDED NEW MOVES ${validMoves}");
     return validMoves;
   }
 

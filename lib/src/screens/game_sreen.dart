@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:replaceAppName/src/models/game_board.dart';
 
@@ -31,13 +33,12 @@ class _GameScreenState extends State<GameScreen> {
 
     // or user the local position method to get the offset
     // print(details.localPosition);
-    printWarning("tap down tile ${tile.notationValue} " +
-        x.toString() +
-        ", " +
-        y.toString());
+    // printWarning("tap down tile ${tile.notationValue} " +
+    //     x.toString() +
+    //     ", " +
+    //     y.toString());
 
     if (tile.occupied == true) {
-
       printWarning(
           'MY POSITION IS ${tile.notationValue}; I am ${tile.occupancyValue}');
       validMoves = tile.occupancyValue!.canMove(board.gamePieces);
@@ -60,15 +61,12 @@ class _GameScreenState extends State<GameScreen> {
     // print(details.localPosition);
     // printWarning("tap up " + x.toString() + ", " + y.toString());
     validMoves.forEach((element) {
-        String row = element[1];
-        String column = element[0];
-        printWarning(board
-            .gameBoard[8 - int.parse(row)][indexes[column]!].notationValue);
-        board.gameBoard[8 - int.parse(row)][indexes[column]!].openForMove =
-            false;
-        setState(() {});
-      });
+      board.gameBoard[8 - int.parse(element[1])][indexes[element[0]]!]
+          .openForMove = false;
+      setState(() {});
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -105,13 +103,25 @@ class _GameScreenState extends State<GameScreen> {
     stackItems.addAll(board.gameBoard.expand((e) => e).map((tile) => Positioned(
         top: tile.row * tileSize + 8,
         left: tile.column * tileSize + 8,
-        child: Container(
-          margin: EdgeInsets.all(tileSize * 0.05),
-          width: tileSize * 0.75,
-          height: tileSize * 0.75,
-          child: board.gamePieces.containsKey(tile.notationValue)
-              ? Container(child: board.gamePieces[tile.notationValue]?.svg)
-              : Container(),
+        child: GestureDetector(
+          onTap: () {},
+          onPanUpdate: (DragUpdateDetails details) {
+            // see https://www.youtube.com/watch?v=WhVXkCFPmK4
+            // _top = max(0, _top + details.delta.dy);
+            // _left = max(0, _left + details.delta.dx);
+            // setState(() {});
+          },
+          onTapDown: (TapDownDetails details) =>
+              _showMoveOptions(details, tile, tileSize),
+          onTapUp: (TapUpDetails details) => _onTapUp(details),
+          child: Container(
+            margin: EdgeInsets.all(tileSize * 0.05),
+            width: tileSize * 0.75,
+            height: tileSize * 0.75,
+            child: board.gamePieces.containsKey(tile.notationValue)
+                ? Container(child: board.gamePieces[tile.notationValue]?.svg)
+                : Container(),
+          ),
         ))));
 
     stackItems.addAll(board.gameBoard.expand((e) => e).map((tile) => Positioned(
@@ -121,7 +131,13 @@ class _GameScreenState extends State<GameScreen> {
           margin: EdgeInsets.all(tileSize * 0.05),
           width: tileSize * 0.75,
           height: tileSize * 0.75,
-          child: tile.openForMove ? Container(child: Text('A', style: TextStyle(color: Colors.red,))) : Container(),
+          child: tile.openForMove
+              ? Container(
+                  child: Text('A',
+                      style: TextStyle(
+                        color: Colors.red,
+                      )))
+              : Container(),
         ))));
 
     return Scaffold(
