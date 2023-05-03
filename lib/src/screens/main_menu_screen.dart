@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:replaceAppName/src/client_server.dart/client.dart';
+import 'package:replaceAppName/src/screens/firebase_test_screen.dart';
 import 'package:replaceAppName/src/screens/game_sreen.dart';
 
 import '../utils/helpers.dart';
@@ -53,28 +54,9 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                       client.sendMessage("AND PUSHING BUTTONS");
                 })),
                 const SizedBox(height: 20),
-                // SizedBox(
-                //     width: 160, child: buildFilledButton("ConnectToServer", () async {
-                //   final socket = await Socket.connect('10.0.2.2', 4000);
-                //
-                //   print(
-                //       "Client: Connected to ${socket.remoteAddress.address}:${socket.remotePort}");
-                //
-                //   socket.listen((Uint8List data) {
-                //     final serverResponse = String.fromCharCodes(data);
-                //     printGreen(serverResponse);
-                //   }, onError: (error) {
-                //     printError("Client :$error");
-                //     socket.destroy();
-                //   }, onDone: () {
-                //     printError("Client: Server left");
-                //     socket.destroy();
-                //   });
-                //
-                //
-                //   socket.write("Silver");
-                // })),
-
+                SizedBox(
+                    width: 160, child: buildFilledButton("TO FIREBASE TEST", () => navigateTo(const FireBaseTestScreen()))),
+                const SizedBox(height: 20),
               ],
             ),
           ],

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "499971058026",
+    "project_id": "kood01-chessy",
+    "storage_bucket": "kood01-chessy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:499971058026:android:0978418163da74a5a01d13",
+        "android_client_info": {
+          "package_name": "com.kood.chessy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "499971058026-qutipiamm6jl4jh8hnuod025jao2flea.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBccM3kC4hKdC0RO6laDrJ9hVQk6lkaBb4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "499971058026-qutipiamm6jl4jh8hnuod025jao2flea.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

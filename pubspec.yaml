@@ -16,6 +16,10 @@ dependencies:
   #For Testing
   mockito: ^5.4.0
 
+  firebase_core: ^2.10.0
+  cloud_firestore: ^4.5.3
+  firebase_database: ^10.1.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,10 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:replaceAppName/src/App.dart';
 import 'package:replaceAppName/src/client_server.dart/client.dart';
 
-// void main() => runApp(App());
 Future<void> main() async {
-  client.initializeConnection();
+  // client.initializeConnection();
+
+  // firebase
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp();
 
   runApp(App());
 }
