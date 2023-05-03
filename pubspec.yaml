@@ -13,6 +13,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   path_provider: ^2.0.14
   flutter_svg: ^2.0.5
+  supabase_flutter: ^1.8.1
   #For Testing
   mockito: ^5.4.0
 

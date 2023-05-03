@@ -10,3 +10,4 @@ TODO:
 3. Move some Logic to BE
 4. Get game-board from server and show in app (FutureBuilder and State management)
 
+database password: kood01chessy 
