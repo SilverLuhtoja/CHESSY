@@ -4,7 +4,7 @@ Basic template for Flutter apps
 database password: kood01chessy <br>
 KOOD01: https://github.com/01-edu/public/tree/master/subjects/mobile-dev/chess
 
-TODO:
+### TODO:
 1. When player click on 'New Game'
     * Gamelogic will set up:
       * gameboard with gamepieces
