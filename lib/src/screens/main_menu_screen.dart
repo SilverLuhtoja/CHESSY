@@ -51,11 +51,6 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                     child: buildFilledButton("Supabase testing", () {
                       navigateTo(SupabaseTestScreen());
                     })),
-                const SizedBox(height: 20),
-                    child: buildFilledButton("SendSomething", () {
-                      client.sendMessage("AND PUSHING BUTTONS");
-                    })),
-                const SizedBox(height: 20),
               ],
             ),
           ],
