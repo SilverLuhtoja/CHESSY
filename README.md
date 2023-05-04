@@ -18,8 +18,8 @@ KOOD01: https://github.com/01-edu/public/tree/master/subjects/mobile-dev/chess
         0 : { 
             white: player_UUID
             black: player_UUID
-            history: Map<String,GamePiece>
-            current_turn: player_UUID
+            history: Map<String,GamePiece> as Json
+            current_turn: player_UUID or color 
             game_over: nil (player_UUID if won)
       }
       ````
