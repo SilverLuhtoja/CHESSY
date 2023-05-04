@@ -11,8 +11,11 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
-  path_provider: ^2.0.14
+  path_provider: ^2.0.14 #maybe not needed
   flutter_svg: ^2.0.5
+  uuid: ^3.0.7
+  shared_preferences: ^2.1.0
+  flutter_riverpod: ^2.3.6
   #For Testing
   mockito: ^5.4.0
 
