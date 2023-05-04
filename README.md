@@ -33,6 +33,7 @@ TODO:
         message: String
       ````
       
-        
-        
 
+DEPENDENCIES:<br>
+shared_preferences: https://pub.dev/packages/shared_preferences <br>
+flutter_riverpod: https://pub.dev/packages/flutter_riverpod <br>

@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:replaceAppName/src/screens/game_sreen.dart';
 import 'package:replaceAppName/src/screens/supabase_test_screen.dart';
+import 'package:replaceAppName/src/widgets/uuid_container.dart';
 
 class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});
@@ -31,6 +32,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                UuidContainer(),
                 overView(),
                 const SizedBox(height: 40),
                 SizedBox(
@@ -49,7 +51,6 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                     child: buildFilledButton("Supabase testing", () {
                       navigateTo(SupabaseTestScreen());
                     })),
-                const SizedBox(height: 20),
               ],
             ),
           ],
