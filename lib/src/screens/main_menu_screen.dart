@@ -1,12 +1,10 @@
-import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:replaceAppName/src/client_server.dart/client.dart';
 import 'package:replaceAppName/src/screens/game_sreen.dart';
+import 'package:replaceAppName/src/widgets/uuid_container.dart';
 
-import '../utils/helpers.dart';
 
 class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});
@@ -35,6 +33,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                UuidContainer(),
                 overView(),
                 const SizedBox(height: 40),
                 SizedBox(
@@ -49,9 +48,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                     width: 160, child: buildFilledButton("How to PLay?", null)),
                 const SizedBox(height: 20),
                 SizedBox(
-                    width: 160, child: buildFilledButton("SendSomething", (){
+                    width: 160,
+                    child: buildFilledButton("SendSomething", () {
                       client.sendMessage("AND PUSHING BUTTONS");
-                })),
+                    })),
                 const SizedBox(height: 20),
                 // SizedBox(
                 //     width: 160, child: buildFilledButton("ConnectToServer", () async {
@@ -74,7 +74,6 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 //
                 //   socket.write("Silver");
                 // })),
-
               ],
             ),
           ],

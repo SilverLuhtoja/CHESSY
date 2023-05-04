@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:replaceAppName/src/App.dart';
-import 'package:replaceAppName/src/client_server.dart/client.dart';
+import 'package:replaceAppName/src/services/uuid_service.dart';
 
-// void main() => runApp(App());
 Future<void> main() async {
-  client.initializeConnection();
+  WidgetsFlutterBinding.ensureInitialized();
+  await createUUID(); //wait until uuid is created
 
-  runApp(App());
+  runApp(ProviderScope(
+    child: App()
+  ));
 }
