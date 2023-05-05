@@ -5,8 +5,7 @@ import 'package:replaceAppName/src/services/database_service.dart';
 import '../../../providers/uuid_provider.dart';
 import '../../../screens/game_sreen.dart';
 import '../../../utils/helpers.dart';
-import '../../../utils/navigation.dart';
-import '../../../utils/show_snackbar.dart';
+import '../../show_snackbar.dart';
 
 class NewGameButton extends ConsumerWidget {
   const NewGameButton({super.key});

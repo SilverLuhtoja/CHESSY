@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 // Black:   \x1B[30m
 // Red:     \x1B[31m
 // Green:   \x1B[32m
@@ -19,3 +21,9 @@ void printWarning(String text) {
 void printError(String text) {
   print('\x1B[31m$text\x1B[0m');
 }
+
+
+navigateTo(BuildContext context, StatefulWidget screen) => Navigator.push(
+  context,
+  MaterialPageRoute(builder: (context) => screen),
+);

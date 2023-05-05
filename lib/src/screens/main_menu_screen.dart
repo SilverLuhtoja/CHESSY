@@ -9,7 +9,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../main.dart';
 import '../services/uuid_service.dart';
 import '../utils/helpers.dart';
-import '../utils/show_snackbar.dart';
+import '../widgets/show_snackbar.dart';
 import '../widgets/main_menu_widgets/buttons/new_game_button.dart';
 
 class MainMenuScreen extends StatefulWidget {

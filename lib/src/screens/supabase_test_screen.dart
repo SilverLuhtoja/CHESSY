@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:replaceAppName/main.dart';
 import 'package:replaceAppName/src/utils/helpers.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:replaceAppName/src/services/database_service.dart';
 
 class SupabaseTestScreen extends StatefulWidget {
   const SupabaseTestScreen({Key? key}) : super(key: key);
@@ -12,7 +12,7 @@ class SupabaseTestScreen extends StatefulWidget {
 
 class _FireBaseTestScreenState extends State<SupabaseTestScreen> {
   final database_controller = TextEditingController();
-  final DatabaseService service = DatabaseService(client); //client from App
+  final DatabaseService service = DatabaseService(db.client); //client from App
 
   @override
   void initState() {
