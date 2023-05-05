@@ -62,12 +62,13 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                               const SnackBar(content: Text('ROOM CREATED ')));
                           //Navigate to game screen
                           navigateTo(const GameScreen());
-                        } 
+                        }
                       } catch (e) {
                         printError('$e');
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
-                          content: Text('Error saving to DB. Please try again '),
+                          content:
+                              Text('Error saving to DB. Please try again '),
                           backgroundColor: Colors.red,
                         ));
                       }
@@ -86,44 +87,45 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           printWarning('FROM DB ${res}');
                           if (mounted) {
                             //if there are rooms available, then join
-                            if (res[0]['game_id'] != null) {
-                              int available_room = res[0]['game_id'];
-                              printWarning('ROOM TO JOIN: $available_room');
-                              //JOIN FIRST AVAILABLE ROOM
-                              try {
-                                String? myUUID = await getUUID();
-                                if (myUUID == null) {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(const SnackBar(
-                                    content: Text('Please restart you app '),
-                                  ));
-                                  return;
-                                }
-                                await Supabase.instance.client
-                                    .from('GAMEROOMS')
-                                    .update({'black_id': myUUID}).eq(
-                                        'game_id', available_room);
-                                if (mounted) {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(const SnackBar(
-                                    content: Text('ROOM JOINED '),
-                                  ));
-                                  //Navigate to game screen
-                                  navigateTo(const GameScreen());
-                                }
-                              } catch (e) {
-                                printError('$e');
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                  content:
-                                      Text('Couldn`t join. Please try again '),
-                                  backgroundColor: Colors.red,
-                                ));
-                              }
-                            } else {
+                            if (res.length == 0) {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(const SnackBar(
-                                content: Text('NO AVAILABLE ROOMS TO PLAY '),
+                                content: Text(
+                                    'NO AVAILABLE ROOMS TO PLAY. CREATE SOME! '),
+                              ));
+                              return;
+                            }
+                            int available_room = res[0]['game_id'];
+                            printWarning('ROOM TO JOIN: $available_room');
+                            //JOIN FIRST AVAILABLE ROOM
+                            try {
+                              String? myUUID = await getUUID();
+                              if (myUUID == null) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content: Text('Please restart you app '),
+                                ));
+                                return;
+                              }
+                              await Supabase.instance.client
+                                  .from('GAMEROOMS')
+                                  .update({'black_id': myUUID}).eq(
+                                      'game_id', available_room);
+                              if (mounted) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content: Text('ROOM JOINED '),
+                                ));
+                                //Navigate to game screen
+                                navigateTo(const GameScreen());
+                              }
+                            } catch (e) {
+                              printError('$e');
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content:
+                                    Text('Couldn`t join. Please try again '),
+                                backgroundColor: Colors.red,
                               ));
                             }
                           }
