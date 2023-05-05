@@ -2,20 +2,22 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:replaceAppName/src/utils/helpers.dart';
 
 // SvgPicture.asset(
 // "assets/pawn.svg",
 // colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
 // )
 
-enum PieceColor { white, black }
+enum PieceColor{
+  white,
+  black
+}
 
-extension PieceColorValue on PieceColor {
-  Color getColor() {
-    if (name == 'white') {
+extension PieceColorValue on PieceColor{
+  Color getColor(){
+    if(name == 'white'){
       return Colors.white;
-    } else {
+    }else{
       return Colors.black;
     }
   }
@@ -23,70 +25,151 @@ extension PieceColorValue on PieceColor {
 
 abstract class GamePiece {
   late SvgPicture svg;
-  late PieceColor color;
-  late String notationValue; // 'g5' 'a1'
+  late  PieceColor color;
+  late  String notationValue; // 'g5' 'a1'
 
   void move(); // sending data
-  List<String> canMove(Map<String, GamePiece> gamePieces); // check before move
+  bool canMove(); // check before move
 }
 
-class Pawn implements GamePiece {
+class Pawn implements GamePiece{
   late SvgPicture svg;
   late PieceColor color;
   late String notationValue;
 
-  Pawn({
-    required this.notationValue,
-    required this.color,
-  }) {
+  Pawn({required this.notationValue, required this.color}){
     svg = SvgPicture.asset(
-      "assets/pawn.svg",
+      "assets/PAWN.svg",
       colorFilter: ColorFilter.mode(color.getColor(), BlendMode.srcIn),
     );
   }
 
   @override
-  List<String> canMove(Map<String, GamePiece> gamePieces) {
-    List<String> validMoves = [];
+  bool canMove() {
     // TODO: implement canMove
+    throw UnimplementedError();
+  }
 
-    //if original position can move 2 steps ahead
-      String letter = notationValue[0];
-      int row = int.parse(notationValue[1]);
-    if (color == PieceColor.white) {
+  @override
+  void move() {
+    // TODO: implement move
+  }
+}
 
-      if (row == 2) {
-        // if initial row, then can move 1 AND 2 steps UP
-        if (gamePieces['${letter}3'] == null) {
-          validMoves.add('${letter}3');
-        }
-        if (gamePieces['${letter}4'] == null) {
-          validMoves.add('${letter}4');
-        }
-      } else {
-        //else can move only 1 step UP
-        if (gamePieces['${letter}${row + 1}'] == null && row + 1 <= 8) {
-          validMoves.add('${letter}${row + 1}');
-        }
-      }
-    } else if (color == PieceColor.black) {
-      if (row == 7) {
-        // if initial row, then can move 1 AND 2 steps DOWN
-         if (gamePieces['${letter}6'] == null) {
-          validMoves.add('${letter}6');
-        }
-        if (gamePieces['${letter}5'] == null) {
-          validMoves.add('${letter}5');
-        }
-      } else {
-        //else can move only 1 step DOWN
-        if (gamePieces['${letter}${row - 1}'] == null && row - 1 >= 1) {
-          validMoves.add('${letter}${row - 1}');
-        }
-      }
-    }
-    printGreen("ADDED NEW MOVES ${validMoves}");
-    return validMoves;
+class Rook implements GamePiece{
+  late SvgPicture svg;
+  late PieceColor color;
+  late String notationValue;
+
+  Rook({required this.notationValue, required this.color}){
+    svg = SvgPicture.asset(
+      "assets/ROOK.svg",
+      colorFilter: ColorFilter.mode(color.getColor(), BlendMode.srcIn),
+    );
+  }
+
+  @override
+  bool canMove() {
+    // TODO: implement canMove
+    throw UnimplementedError();
+  }
+
+  @override
+  void move() {
+    // TODO: implement move
+  }
+}
+
+class Knight implements GamePiece{
+  late SvgPicture svg;
+  late PieceColor color;
+  late String notationValue;
+
+  Knight({required this.notationValue, required this.color}){
+    svg = SvgPicture.asset(
+      "assets/KNIGHT.svg",
+      colorFilter: ColorFilter.mode(color.getColor(), BlendMode.srcIn),
+    );
+  }
+
+  @override
+  bool canMove() {
+    // TODO: implement canMove
+    throw UnimplementedError();
+  }
+
+  @override
+  void move() {
+    // TODO: implement move
+  }
+}
+
+class Bishop implements GamePiece{
+  late SvgPicture svg;
+  late PieceColor color;
+  late String notationValue;
+
+  Bishop({required this.notationValue, required this.color}){
+    svg = SvgPicture.asset(
+      "assets/BISHOP.svg",
+      colorFilter: ColorFilter.mode(color.getColor(), BlendMode.srcIn),
+    );
+  }
+
+  @override
+  bool canMove() {
+    // TODO: implement canMove
+    throw UnimplementedError();
+  }
+
+  @override
+  void move() {
+    // TODO: implement move
+  }
+}
+
+
+class Queen implements GamePiece{
+  late SvgPicture svg;
+  late PieceColor color;
+  late String notationValue;
+
+  Queen({required this.notationValue, required this.color}){
+    svg = SvgPicture.asset(
+      "assets/QUEEN.svg",
+      colorFilter: ColorFilter.mode(color.getColor(), BlendMode.srcIn),
+    );
+  }
+
+  @override
+  bool canMove() {
+    // TODO: implement canMove
+    throw UnimplementedError();
+  }
+
+  @override
+  void move() {
+    // TODO: implement move
+  }
+}
+
+
+class King implements GamePiece{
+  late SvgPicture svg;
+  late PieceColor color;
+  late String notationValue;
+
+  King({required this.notationValue, required this.color}){
+    svg = SvgPicture.asset(
+      "assets/KING.svg",
+      colorFilter: ColorFilter.mode(color.getColor(), BlendMode.srcIn),
+    );
+  }
+
+  @override
+  bool canMove() {
+    // TODO: implement canMove
+    throw UnimplementedError();
   }
 
   @override
