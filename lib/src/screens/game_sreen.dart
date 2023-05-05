@@ -26,8 +26,7 @@ class _GameScreenState extends State<GameScreen> {
         child: Container(
           width: tileSize - padding * 2,
           height: tileSize - padding * 2,
-          decoration:
-              BoxDecoration(gradient: tileStyle(tile), color: boardColor),
+          decoration: BoxDecoration(gradient: tileStyle(tile), color: boardColor),
           child: Center(
               child: Text(
             tile.notationValue,

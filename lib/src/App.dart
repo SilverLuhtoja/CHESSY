@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:replaceAppName/src/screens/game_sreen.dart';
 import 'package:replaceAppName/src/screens/main_menu_screen.dart';
 
 class App extends StatelessWidget {
@@ -12,7 +11,6 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark(),
       home: MainMenuScreen(),
-      // home: GameScreen(),
     );
   }
 }

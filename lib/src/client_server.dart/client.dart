@@ -14,8 +14,7 @@ class ClientSocket {
     printGreen("WAITING CONNECTION");
     await attemptConnect();
 
-    printGreen(
-        "Client: Connected to ${socket.remoteAddress.address}:${socket.remotePort}");
+    printGreen("Client: Connected to ${socket.remoteAddress.address}:${socket.remotePort}");
 
     socket.listen((Uint8List data) {
       final serverResponse = String.fromCharCodes(data);
@@ -33,11 +32,10 @@ class ClientSocket {
 
   Future<void> attemptConnect() async {
     printWarning('CONNECTING TO ${LOCALHOST} and ${PORT}');
-    socket = await Socket.connect(LOCALHOST, PORT)
-        .timeout(const Duration(seconds: 2), onTimeout: () async {
-      printError(
-          "Failed to establish connection. Is connecting server running ?");
-        return Future.value(null);
+    socket = await Socket.connect(LOCALHOST, PORT).timeout(const Duration(seconds: 2),
+        onTimeout: () async {
+      printError("Failed to establish connection. Is connecting server running ?");
+      return Future.value(null);
     });
   }
 

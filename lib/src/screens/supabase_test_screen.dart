@@ -48,8 +48,7 @@ class _FireBaseTestScreenState extends State<SupabaseTestScreen> {
                             .from('test')
                             .upsert({'messages': message, 'author_id': 3});
                         if (mounted) {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                             content: Text('Saved '),
                           ));
                         }
@@ -89,17 +88,16 @@ class DatabaseService {
   DatabaseService(this.client);
 
   void listenToChatMessages(String message, int userId) async {
-
-  // client.channel('public:test').on(
-  //   RealtimeListenTypes.postgresChanges,
-  //   ChannelFilter(event: '*', schema: '*'),
-  //   (payload, [ref]) {
-  //     // Handle realtime payload
-  //     printGreen(payload);
-  //     printGreen(ref);
-  //     printGreen('OLEN SIIN 333');
-  //   },
-  // ).subscribe();
+    // client.channel('public:test').on(
+    //   RealtimeListenTypes.postgresChanges,
+    //   ChannelFilter(event: '*', schema: '*'),
+    //   (payload, [ref]) {
+    //     // Handle realtime payload
+    //     printGreen(payload);
+    //     printGreen(ref);
+    //     printGreen('OLEN SIIN 333');
+    //   },
+    // ).subscribe();
   }
 
   Stream createStream() {
