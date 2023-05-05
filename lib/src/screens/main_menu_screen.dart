@@ -80,33 +80,60 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   SizedBox(
                       width: 160,
                       child: buildFilledButton("Join Game", () async {
-                        //First send JOIN ROOM info to DB
+                        //GET AVAILABLE ROOMS FROM DB
                         try {
-                          String? myUUID = await getUUID();
-                          if (myUUID == null) {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text('Please restart you app '),
-                            ));
-                            return;
-                          }
-                          //TODO GAME_ID CHANGE!!!!
-                          await Supabase.instance.client
+                          var res = await Supabase.instance.client
                               .from('GAMEROOMS')
-                              .update({'black_id': myUUID}).eq('game_id', 3);
+                              .select('game_id');
                           if (mounted) {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text('ROOM JOINED '),
-                            ));
-                            //Navigate to game screen
-                            navigateTo(const GameScreen());
+                            //if there are rooms available, then join
+                            if (res[0]['game_id'] != null) {
+                              int available_room = res[0]['game_id'];
+                              printWarning('ROOM TO JOIN: $available_room');
+                              //JOIN FIRST AVAILABLE ROOM
+                              try {
+                                String? myUUID = await getUUID();
+                                if (myUUID == null) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(
+                                    content: Text('Please restart you app '),
+                                  ));
+                                  return;
+                                }
+                                await Supabase.instance.client
+                                    .from('GAMEROOMS')
+                                    .update({'black_id': myUUID}).eq(
+                                        'game_id', available_room);
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(
+                                    content: Text('ROOM JOINED '),
+                                  ));
+                                  //Navigate to game screen
+                                  navigateTo(const GameScreen());
+                                }
+                              } catch (e) {
+                                printError('$e');
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content:
+                                      Text('Couldn`t join. Please try again '),
+                                  backgroundColor: Colors.red,
+                                ));
+                              }
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text('NO AVAILABLE ROOMS TO PLAY '),
+                              ));
+                            }
                           }
                         } catch (e) {
                           printError('$e');
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
-                            content: Text('Error saving. Please try again '),
+                            content: Text(
+                                'Could not connect to DB. Please try again '),
                             backgroundColor: Colors.red,
                           ));
                         }
