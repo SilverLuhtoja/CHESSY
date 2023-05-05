@@ -6,6 +6,7 @@ import 'package:replaceAppName/src/screens/supabase_test_screen.dart';
 import 'package:replaceAppName/src/widgets/uuid_container.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../main.dart';
 import '../services/uuid_service.dart';
 import '../utils/helpers.dart';
 
@@ -49,28 +50,24 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         if (myUUID == null) {
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
-                            content: Text('Please restart you app '),
+                            content: Text('NO UUID. Please restart you app '),
                           ));
                           return;
                         }
-                        await Supabase.instance.client
+                        await client
                             .from('GAMEROOMS')
-                            .upsert({
-                          'white': myUUID,
-                        });
+                            .upsert({'white_id': myUUID});
                         if (mounted) {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text('ROOM CREATED '),
-                          ));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('ROOM CREATED ')));
                           //Navigate to game screen
                           navigateTo(const GameScreen());
-                        }
+                        } 
                       } catch (e) {
                         printError('$e');
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
-                          content: Text('Error saving. Please try again '),
+                          content: Text('Error saving to DB. Please try again '),
                           backgroundColor: Colors.red,
                         ));
                       }
@@ -82,9 +79,11 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                       child: buildFilledButton("Join Game", () async {
                         //GET AVAILABLE ROOMS FROM DB
                         try {
-                          var res = await Supabase.instance.client
+                          var res = await client
                               .from('GAMEROOMS')
-                              .select('game_id');
+                              .select('game_id')
+                              .is_('black_id', null);
+                          printWarning('FROM DB ${res}');
                           if (mounted) {
                             //if there are rooms available, then join
                             if (res[0]['game_id'] != null) {
