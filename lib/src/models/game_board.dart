@@ -40,7 +40,7 @@ class GameBoard {
     for (int i = 0 ; i < 8 ; i++){
       String rowNumber = color == PieceColor.white ? '2' : '7';
       String value = "${_notationLetters[i]}$rowNumber";
-      gamePieces[value] =Pawn(notationValue: value, color: color);
+      gamePieces[value] = Pawn(notationValue: value, color: color);
     }
     for (int i = 0 ; i < 8 ; i++){
       String rowNumber = color == PieceColor.white ? '1' : '8';
