@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter_svg/svg.dart';
+import '../../utils/helpers.dart';
 import 'game_piece_interface.dart';
 
 class Knight implements GamePiece {
@@ -15,9 +16,11 @@ class Knight implements GamePiece {
   }
 
   @override
-  bool canMove() {
+  List<String> canMove(Map<String, GamePiece> gamePieces) {
     // TODO: implement canMove
-    throw UnimplementedError();
+        printWarning('Can MOve KNIGHT');
+
+    return [];
   }
 
   @override

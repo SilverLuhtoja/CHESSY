@@ -8,6 +8,9 @@ class AppStatistics extends StatefulWidget {
 }
 
 class _AppStatisticsState extends State<AppStatistics> {
+
+  
+
   @override
   Widget build(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [

@@ -1,3 +1,5 @@
+import 'package:replaceAppName/src/utils/helpers.dart';
+
 import 'game_pieces/bishop.dart';
 import 'game_pieces/game_piece_interface.dart';
 import 'game_pieces/king.dart';
@@ -9,7 +11,16 @@ import 'game_pieces/rook.dart';
 class GameBoard {
   late List<List<Tile>> gameBoard;
   final Map<String, GamePiece> gamePieces = {};
-  final List<String> _notationLetters = ['a', 'b', 'c', 'd', 'f', 'g', 'h', 'i'];
+  final List<String> _notationLetters = [
+    'a',
+    'b',
+    'c',
+    'd',
+    'f',
+    'g',
+    'h',
+    'i'
+  ];
 
   GameBoard() {
     gameBoard = generateBoard(8);
@@ -30,11 +41,12 @@ class GameBoard {
     return tiles;
   }
 
-  void generateRow(int gridSize, bool startWhite, int row, List<Tile> singleRowOfTiles) {
+  void generateRow(
+      int gridSize, bool startWhite, int row, List<Tile> singleRowOfTiles) {
     bool isWhite = startWhite;
     for (int column = 0; column < gridSize; column++) {
       String notationValue = "${_notationLetters[column]}${gridSize + 1 - row}";
-      singleRowOfTiles.add(Tile(row, column, isWhite, notationValue));
+      singleRowOfTiles.add(Tile(row, column, isWhite, notationValue, false, false));
       isWhite = !isWhite;
     }
   }
@@ -70,6 +82,20 @@ class GameBoard {
       }
     }
   }
+
+  // void changeActiveTile(String tileNotationValue) {
+  //   for (var row in gameBoard) {
+  //     for (var cell in row) {
+  //       if (cell.notationValue == tileNotationValue) {
+  //         cell.active = true;
+  //         printWarning('ACTIVE: ${cell.notationValue} ');
+  //       } else {
+  //         cell.active = false;
+  //         printWarning('PASSIVE: ${cell.notationValue} ');
+  //       }
+  //     }
+  //   }
+  // }
 }
 
 class Tile {
@@ -77,6 +103,7 @@ class Tile {
   late int column;
   late bool isWhite;
   late String notationValue; // 'g5', 'a1'
-
-  Tile(this.row, this.column, this.isWhite, this.notationValue);
+  late bool active;
+  late bool openForMove;
+  Tile(this.row, this.column, this.isWhite, this.notationValue, this.active, this.openForMove);
 }

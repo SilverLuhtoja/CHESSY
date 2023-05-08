@@ -21,5 +21,5 @@ abstract class GamePiece {
   late String notationValue; // 'g5' 'a1'
 
   void move(); // sending data
-  bool canMove(); // check before move
+  List<String> canMove(Map<String, GamePiece> gamePieces); // check before move
 }

@@ -9,6 +9,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../main.dart';
 import '../services/uuid_service.dart';
 import '../utils/helpers.dart';
+import '../widgets/main_menu_widgets/buttons/join_game_button.dart';
 import '../widgets/show_snackbar.dart';
 import '../widgets/main_menu_widgets/buttons/new_game_button.dart';
 
@@ -45,65 +46,9 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   const SizedBox(height: 40),
                   const NewGameButton(),
                   const SizedBox(height: 20),
-                  // SizedBox(
-                  //     width: 160,
-                  //     child: MenuButton(
-                  //         text: "Join Game",
-                  //         handler: () async {
-                  //           //GET AVAILABLE ROOMS FROM DB
-                  //           try {
-                  //             var res = await client
-                  //                 .from('GAMEROOMS')
-                  //                 .select('game_id')
-                  //                 .is_('black_id', null);
-                  //             printWarning('FROM DB ${res}');
-                  //             // throw Error();
-                  //               //if there are rooms available, then join
-                  //               if (res.length == 0) {
-                  //                 showError(
-                  //                     currentContext: context,
-                  //                     message: 'NO AVAILABLE ROOMS TO PLAY. CREATE SOME! ',
-                  //                     isError: false);
-                  //                 return;
-                  //               }
-                  //               int available_room = res[0]['game_id'];
-                  //               printWarning('ROOM TO JOIN: $available_room');
-                  //               //JOIN FIRST AVAILABLE ROOM
-                  //               try {
-                  //                 String? myUUID = await getUUID();
-                  //                 if (myUUID == null) {
-                  //                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  //                     content: Text('Please restart you app '),
-                  //                   ));
-                  //                   return;
-                  //                 }
-                  //                 await Supabase.instance.client
-                  //                     .from('GAMEROOMS')
-                  //                     .update({'black_id': myUUID}).eq('game_id', available_room);
-                  //                 if (mounted) {
-                  //                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  //                     content: Text('ROOM JOINED '),
-                  //                   ));
-                  //                   //Navigate to game screen
-                  //                   navigateTo(const GameScreen());
-                  //                 }
-                  //               } catch (e) {
-                  //                 printError('$e');
-                  //                 showError(
-                  //                     currentContext: context,
-                  //                     message: 'Couldn`t join. Please try again ',
-                  //                     isError: true);
-                  //               }
-                  //           } catch (e) {
-                  //             printError('$e');
-                  //             showError(
-                  //                 currentContext: context,
-                  //                 message: 'Could not connect to DB. Please try again ',
-                  //                 isError: true);
-                  //           }
-                  //         })),
+                  const JoinGameButton(),
                   const SizedBox(height: 20),
-                  MenuButton(text: "How to PLay?", handler: null),
+                  const MenuButton(text: "How to PLay?", handler: null),
                   const SizedBox(height: 20),
                   MenuButton(
                       text: "To Supabase Test", handler: () => navigateTo(SupabaseTestScreen()))
