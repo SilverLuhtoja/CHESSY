@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:replaceAppName/main.dart';
 import 'package:replaceAppName/src/utils/helpers.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:replaceAppName/src/services/database_service.dart';
 
 class SupabaseTestScreen extends StatefulWidget {
   const SupabaseTestScreen({Key? key}) : super(key: key);
@@ -12,7 +12,7 @@ class SupabaseTestScreen extends StatefulWidget {
 
 class _FireBaseTestScreenState extends State<SupabaseTestScreen> {
   final database_controller = TextEditingController();
-  final DatabaseService service = DatabaseService(client); //client from App
+  final DatabaseService service = DatabaseService(db.client); //client from App
 
   @override
   void initState() {
@@ -48,8 +48,7 @@ class _FireBaseTestScreenState extends State<SupabaseTestScreen> {
                             .from('test')
                             .upsert({'messages': message, 'author_id': 3});
                         if (mounted) {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                             content: Text('Saved '),
                           ));
                         }
@@ -89,17 +88,16 @@ class DatabaseService {
   DatabaseService(this.client);
 
   void listenToChatMessages(String message, int userId) async {
-
-  // client.channel('public:test').on(
-  //   RealtimeListenTypes.postgresChanges,
-  //   ChannelFilter(event: '*', schema: '*'),
-  //   (payload, [ref]) {
-  //     // Handle realtime payload
-  //     printGreen(payload);
-  //     printGreen(ref);
-  //     printGreen('OLEN SIIN 333');
-  //   },
-  // ).subscribe();
+    // client.channel('public:test').on(
+    //   RealtimeListenTypes.postgresChanges,
+    //   ChannelFilter(event: '*', schema: '*'),
+    //   (payload, [ref]) {
+    //     // Handle realtime payload
+    //     printGreen(payload);
+    //     printGreen(ref);
+    //     printGreen('OLEN SIIN 333');
+    //   },
+    // ).subscribe();
   }
 
   Stream createStream() {

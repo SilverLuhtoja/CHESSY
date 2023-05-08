@@ -1,6 +1,10 @@
-import 'package:replaceAppName/src/utils/helpers.dart';
-
-import 'game_piece.dart';
+import 'game_pieces/bishop.dart';
+import 'game_pieces/game_piece_interface.dart';
+import 'game_pieces/king.dart';
+import 'game_pieces/knight.dart';
+import 'game_pieces/pawn.dart';
+import 'game_pieces/queen.dart';
+import 'game_pieces/rook.dart';
 
 class GameBoard {
   late List<List<Tile>> gameBoard;
@@ -26,8 +30,7 @@ class GameBoard {
     return tiles;
   }
 
-  void generateRow(
-      int gridSize, bool startWhite, int row, List<Tile> singleRowOfTiles) {
+  void generateRow(int gridSize, bool startWhite, int row, List<Tile> singleRowOfTiles) {
     bool isWhite = startWhite;
     for (int column = 0; column < gridSize; column++) {
       String notationValue = "${_notationLetters[column]}${gridSize + 1 - row}";
@@ -37,15 +40,15 @@ class GameBoard {
   }
 
   void placeGamePieceToBoard(PieceColor color) {
-    for (int i = 0 ; i < 8 ; i++){
+    for (int i = 0; i < 8; i++) {
       String rowNumber = color == PieceColor.white ? '2' : '7';
       String value = "${_notationLetters[i]}$rowNumber";
       gamePieces[value] = Pawn(notationValue: value, color: color);
     }
-    for (int i = 0 ; i < 8 ; i++){
+    for (int i = 0; i < 8; i++) {
       String rowNumber = color == PieceColor.white ? '1' : '8';
       String value = "${_notationLetters[i]}$rowNumber";
-      switch (i){
+      switch (i) {
         case 0:
         case 7:
           gamePieces[value] = Rook(notationValue: value, color: color);
