@@ -1,3 +1,6 @@
+import 'package:flutter/cupertino.dart';
+
+import '../utils/helpers.dart';
 import 'game_pieces/bishop.dart';
 import 'game_pieces/game_piece_interface.dart';
 import 'game_pieces/king.dart';
@@ -14,6 +17,8 @@ class GameBoard {
   GameBoard() {
     gameBoard = generateBoard(8);
   }
+
+  Iterable<Tile> get flatGrid => gameBoard.expand((e) => e);
 
   List<List<Tile>> generateBoard(int gridSize) {
     List<List<Tile>> tiles = [];
@@ -69,6 +74,19 @@ class GameBoard {
           break;
       }
     }
+  }
+
+  // seems repeating (something is fishy)
+  void moveGamePiece(String moveFrom, String moveTo){
+    GamePiece? copy = gamePieces[moveFrom];
+    gamePieces.remove(moveFrom);
+    if (copy != null){
+      printGreen(copy.notationValue);
+      copy.move(moveTo);
+      gamePieces[moveTo] = copy;
+      return;
+    }
+    throw ErrorDescription("GameBoard: Couldn't find key in GamePieces");
   }
 }
 
