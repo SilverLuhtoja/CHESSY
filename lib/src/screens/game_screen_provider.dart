@@ -4,7 +4,6 @@ import 'package:replaceAppName/src/models/game_board.dart';
 import 'package:replaceAppName/src/models/game_pieces/pawn.dart';
 import 'package:replaceAppName/src/providers/game_provider.dart';
 import 'package:replaceAppName/src/utils/helpers.dart';
-
 import '../constants.dart';
 
 class GameScreenTest extends ConsumerWidget {
@@ -26,6 +25,7 @@ class GameScreenTest extends ConsumerWidget {
 
     printWarning("RENDERING");
 
+    // TODO: MAJOR REFACTORING
     // make gameGrid
     stackItems.addAll(board.flatGrid.map((tile) => Positioned(
         top: tile.row * tileSize + 8,

@@ -29,14 +29,9 @@ class Pawn implements GamePiece {
     // TODO: implement move
     isFirstMove = false;
     notationValue = moveTo;
-
   }
 
-  // dont want to re-write every game piece right now (For testing)
-  void pawnMove(String to){
-    isFirstMove = false;
-  }
-
+  // TODO: REFACTO
   List<String> getAvailableMoves(Map<String, GamePiece> gamePieces) {
     printWarning('Clicked $notationValue');
     int moveCount = 1;

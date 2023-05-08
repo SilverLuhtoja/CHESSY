@@ -1,3 +1,5 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 // game_piece_clicked: nil
 // game_pieces: Map<String, GamePiece>
 // my_color: String
@@ -5,22 +7,17 @@
 // king_on_check: bool
 // message: String
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-
 class GameState {
   final String? gamePieceClicked;
 
   GameState({this.gamePieceClicked});
 
-  GameState copyWith({String? pieceClicked}){
-    return GameState(
-      gamePieceClicked: pieceClicked ?? gamePieceClicked
-    );
+  GameState copyWith({String? pieceClicked}) {
+    return GameState(gamePieceClicked: pieceClicked ?? gamePieceClicked);
   }
 }
 
-class GameStateNotifier extends StateNotifier<GameState>{
+class GameStateNotifier extends StateNotifier<GameState> {
   GameStateNotifier() : super(GameState()); // init GameState in super for StateNotifierProvider
 
   void setLastClickedPiece(String? piece) {
@@ -28,6 +25,6 @@ class GameStateNotifier extends StateNotifier<GameState>{
   }
 }
 
-final gameStateProvider = StateNotifierProvider<GameStateNotifier,GameState>((ref) {
+final gameStateProvider = StateNotifierProvider<GameStateNotifier, GameState>((ref) {
   return GameStateNotifier();
 });

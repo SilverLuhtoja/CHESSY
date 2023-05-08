@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-
 import '../utils/helpers.dart';
 import 'game_pieces/bishop.dart';
 import 'game_pieces/game_piece_interface.dart';
@@ -77,10 +76,10 @@ class GameBoard {
   }
 
   // seems repeating (something is fishy)
-  void moveGamePiece(String moveFrom, String moveTo){
+  void moveGamePiece(String moveFrom, String moveTo) {
     GamePiece? copy = gamePieces[moveFrom];
     gamePieces.remove(moveFrom);
-    if (copy != null){
+    if (copy != null) {
       printGreen(copy.notationValue);
       copy.move(moveTo);
       gamePieces[moveTo] = copy;
