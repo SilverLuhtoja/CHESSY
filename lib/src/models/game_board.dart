@@ -11,7 +11,7 @@ import 'game_pieces/rook.dart';
 class GameBoard {
   late List<List<Tile>> gameBoard;
   final Map<String, GamePiece> gamePieces = {};
-  final List<String> _notationLetters = ['a', 'b', 'c', 'd', 'f', 'g', 'h', 'i'];
+  final List<String> _notationLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
   GameBoard() {
     gameBoard = generateBoard(8);
