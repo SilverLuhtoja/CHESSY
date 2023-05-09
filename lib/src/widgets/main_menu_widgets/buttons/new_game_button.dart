@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:replaceAppName/src/services/database_service.dart';
 
+import '../../../providers/game_provider.dart';
 import '../../../providers/uuid_provider.dart';
+import '../../../screens/game_screen_provider.dart';
 import '../../../screens/game_sreen.dart';
 import '../../../utils/helpers.dart';
 import '../../show_snackbar.dart';
@@ -13,6 +15,7 @@ class NewGameButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final futureValue = ref.watch(futureUuid);
+    GameState gameState = ref.watch(gameStateProvider);
 
     return futureValue.when(
         data: (data) => SizedBox(
@@ -22,8 +25,13 @@ class NewGameButton extends ConsumerWidget {
                 child: FilledButton(
                     onPressed: () async {
                       try {
-                        await db.createNewGame();
-                        if (context.mounted) navigateTo(context, const GameScreen());
+                        var roomNr = await db.createNewGame();
+                        printGreen('CREATED_ROOM $roomNr, I`M WHITE');
+                        if (context.mounted) {
+                          ref.read(gameStateProvider.notifier).setState(roomNr[0]['game_id'], 'white');
+                          printGreen('STATE CREATED_ROOM ${gameState.gameIdInDB}');
+                          navigateTo(context, GameScreenTest());
+                          }
                       } catch (e) {
                         printError(e.toString());
                         showError(

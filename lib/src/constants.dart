@@ -6,3 +6,4 @@ final supabaseKey =
 
 const Color gridValues = Color.fromRGBO(155, 155, 155, 1);
 const Color boardColor = Color.fromRGBO(208, 207, 198, 1.0);
+const Color availableMoveColor = Color.fromRGBO(150, 239, 150, 0.7);

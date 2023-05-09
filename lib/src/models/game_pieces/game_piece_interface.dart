@@ -20,6 +20,6 @@ abstract class GamePiece {
   late PieceColor color;
   late String notationValue; // 'g5' 'a1'
 
-  void move(); // sending data
+  void move(String moveTo); // sending data
   List<String> canMove(Map<String, GamePiece> gamePieces); // check before move
 }

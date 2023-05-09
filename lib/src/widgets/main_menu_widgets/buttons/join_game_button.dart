@@ -2,17 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:replaceAppName/src/services/database_service.dart';
 
+import '../../../providers/game_provider.dart';
 import '../../../providers/uuid_provider.dart';
+import '../../../screens/game_screen_provider.dart';
 import '../../../screens/game_sreen.dart';
 import '../../../utils/helpers.dart';
 import '../../show_snackbar.dart';
 
 class JoinGameButton extends ConsumerWidget {
   const JoinGameButton({super.key});
+  
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final futureValue = ref.watch(futureUuid);
+    GameState gameState = ref.watch(gameStateProvider);
 
     return futureValue.when(
         data: (data) => SizedBox(
@@ -22,9 +26,12 @@ class JoinGameButton extends ConsumerWidget {
                 child: FilledButton(
                     onPressed: () async {
                       try {
-                        await db.joinRoom();
+                        var roomId = await db.joinRoom();
+                        printGreen('JOINED_ROOM: $roomId, I AM BLACK');
                         if (context.mounted) {
-                          navigateTo(context, const GameScreen());
+                          ref.read(gameStateProvider.notifier).setState(roomId, 'black');
+                          printGreen('STATE JOINED_ROOM: ${gameState.gameIdInDB}');
+                          navigateTo(context, GameScreenTest());
                         }
                       } catch (e) {
                         printError(e.toString());
