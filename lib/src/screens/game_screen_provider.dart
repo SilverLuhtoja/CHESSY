@@ -4,20 +4,21 @@ import 'package:replaceAppName/src/models/game_board.dart';
 import 'package:replaceAppName/src/models/game_pieces/pawn.dart';
 import 'package:replaceAppName/src/providers/game_provider.dart';
 import 'package:replaceAppName/src/utils/helpers.dart';
+
 import '../constants.dart';
 
 class GameScreenTest extends ConsumerWidget {
-  GameScreenTest({Key? key}) : super(key: key);
-
-  GameBoard board = GameBoard();
+  final GameBoard board = GameBoard();
   List<String> activeTiles = [];
+
+  GameScreenTest({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     double padding = 1.0;
-    double gridRowsSize = MediaQuery.of(context).size.width;
-    double tileSize = (gridRowsSize - padding * 2) / 8;
-    double tileWithOffset = tileSize - padding * 2;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double tileSize = (screenWidth - padding * 2) / 8;
+    double tilePositionOffset = tileSize - padding * 2;
     List<Widget> stackItems = [];
     List<Widget> gamePieces = [];
     List<Widget> availableMoves = [];
@@ -31,8 +32,8 @@ class GameScreenTest extends ConsumerWidget {
         top: tile.row * tileSize + 8,
         left: tile.column * tileSize + 8,
         child: Container(
-          width: tileWithOffset,
-          height: tileWithOffset,
+          width: tilePositionOffset,
+          height: tilePositionOffset,
           decoration: BoxDecoration(gradient: tileStyle(tile), color: boardColor),
           child: Center(
               child: Text(
@@ -91,8 +92,8 @@ class GameScreenTest extends ConsumerWidget {
             }
           },
           child: Container(
-            width: tileWithOffset,
-            height: tileWithOffset,
+            width: tilePositionOffset,
+            height: tilePositionOffset,
             child: activeTiles.contains(tile.notationValue)
                 ? Container(color: availableMoveColor)
                 : Container(),

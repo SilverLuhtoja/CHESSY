@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:replaceAppName/src/services/database_service.dart';
 import 'package:replaceAppName/src/utils/helpers.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:replaceAppName/src/services/database_service.dart';
 
 class SupabaseTestScreen extends StatefulWidget {
   const SupabaseTestScreen({Key? key}) : super(key: key);

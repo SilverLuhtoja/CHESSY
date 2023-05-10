@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:replaceAppName/src/screens/game_sreen.dart';
 import 'package:replaceAppName/src/screens/supabase_test_screen.dart';
 import 'package:replaceAppName/src/widgets/main_menu_widgets/app_statistics.dart';
 import 'package:replaceAppName/src/widgets/main_menu_widgets/buttons/button.dart';
 import 'package:replaceAppName/src/widgets/uuid_container.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../../main.dart';
-import '../services/uuid_service.dart';
-import '../utils/helpers.dart';
-import '../widgets/show_snackbar.dart';
 import '../widgets/main_menu_widgets/buttons/new_game_button.dart';
 
 class MainMenuScreen extends StatefulWidget {
