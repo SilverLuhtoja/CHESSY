@@ -29,7 +29,6 @@ class Pawn implements GamePiece {
 
   @override
   void move(String moveTo) {
-    // TODO: implement move
     isFirstMove = false;
     notationValue = moveTo;
   }
@@ -54,7 +53,7 @@ class Pawn implements GamePiece {
       // check enemies last
       getDiagonals().forEach((diagonal) {
         GamePiece? piece = gamePieces[diagonal];
-        if (piece != null && piece.color == PieceColor.black) {
+        if (piece != null && piece.color != color) {
           moves.add(piece.notationValue);
         }
       });
