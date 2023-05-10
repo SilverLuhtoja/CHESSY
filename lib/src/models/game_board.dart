@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import '../utils/helpers.dart';
 import 'game_pieces/bishop.dart';
 import 'game_pieces/game_piece_interface.dart';
 import 'game_pieces/king.dart';
@@ -9,11 +11,13 @@ import 'game_pieces/rook.dart';
 class GameBoard {
   late List<List<Tile>> gameBoard;
   final Map<String, GamePiece> gamePieces = {};
-  final List<String> _notationLetters = ['a', 'b', 'c', 'd', 'f', 'g', 'h', 'i'];
+  final List<String> _notationLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
   GameBoard() {
     gameBoard = generateBoard(8);
   }
+
+  Iterable<Tile> get flatGrid => gameBoard.expand((e) => e);
 
   List<List<Tile>> generateBoard(int gridSize) {
     List<List<Tile>> tiles = [];
@@ -69,6 +73,19 @@ class GameBoard {
           break;
       }
     }
+  }
+
+  // seems repeating (something is fishy)
+  void moveGamePiece(String moveFrom, String moveTo) {
+    GamePiece? copy = gamePieces[moveFrom];
+    gamePieces.remove(moveFrom);
+    if (copy != null) {
+      printGreen(copy.notationValue);
+      copy.move(moveTo);
+      gamePieces[moveTo] = copy;
+      return;
+    }
+    throw ErrorDescription("GameBoard: Couldn't find key in GamePieces");
   }
 }
 

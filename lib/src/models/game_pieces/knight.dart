@@ -21,7 +21,7 @@ class Knight implements GamePiece {
   }
 
   @override
-  void move() {
+  void move(String moveTo) {
     // TODO: implement move
   }
 }

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:replaceAppName/src/services/database_service.dart';
-
+import 'package:replaceAppName/src/screens/game_screen_provider.dart';
 import '../../../providers/uuid_provider.dart';
-import '../../../screens/game_sreen.dart';
 import '../../../utils/helpers.dart';
 import '../../show_snackbar.dart';
 
@@ -22,8 +20,9 @@ class NewGameButton extends ConsumerWidget {
                 child: FilledButton(
                     onPressed: () async {
                       try {
-                        await db.createNewGame();
-                        if (context.mounted) navigateTo(context, const GameScreen());
+                        // await db.createNewGame();
+                        printGreen("DB: new game created");
+                        if (context.mounted) navigateTo(context, GameScreenTest());
                       } catch (e) {
                         printError(e.toString());
                         showError(

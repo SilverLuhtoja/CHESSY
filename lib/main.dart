@@ -14,6 +14,3 @@ Future<void> main() async {
     child: App()
   ));
 }
-
-// Is Singelton (so no extra will be created,always single instance)
-// final SupabaseClient client = Supabase.instance.client;
