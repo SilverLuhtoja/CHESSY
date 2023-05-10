@@ -10,14 +10,26 @@ import 'game_pieces/rook.dart';
 
 class GameBoard {
   late List<List<Tile>> gameBoard;
-  final Map<String, GamePiece> gamePieces = {};
+  late Map<String, GamePiece> gamePieces = {};
   final List<String> _notationLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
   GameBoard() {
     gameBoard = generateBoard(8);
   }
 
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> map = {};
+
+    for (final entry in gamePieces.entries) {
+      map[entry.key] = entry.value.toJson();
+    }
+
+    return map;
+  }
+
   Iterable<Tile> get flatGrid => gameBoard.expand((e) => e);
+
+  void setGamePieces(Map<String, GamePiece> pieces) => gamePieces = pieces;
 
   List<List<Tile>> generateBoard(int gridSize) {
     List<List<Tile>> tiles = [];
@@ -49,30 +61,30 @@ class GameBoard {
       String value = "${_notationLetters[i]}$rowNumber";
       gamePieces[value] = Pawn(notationValue: value, color: color);
     }
-    for (int i = 0; i < 8; i++) {
-      String rowNumber = color == PieceColor.white ? '1' : '8';
-      String value = "${_notationLetters[i]}$rowNumber";
-      switch (i) {
-        case 0:
-        case 7:
-          gamePieces[value] = Rook(notationValue: value, color: color);
-          break;
-        case 1:
-        case 6:
-          gamePieces[value] = Knight(notationValue: value, color: color);
-          break;
-        case 2:
-        case 5:
-          gamePieces[value] = Bishop(notationValue: value, color: color);
-          break;
-        case 3:
-          gamePieces[value] = Queen(notationValue: value, color: color);
-          break;
-        case 4:
-          gamePieces[value] = King(notationValue: value, color: color);
-          break;
-      }
-    }
+    // for (int i = 0; i < 8; i++) {
+    //   String rowNumber = color == PieceColor.white ? '1' : '8';
+    //   String value = "${_notationLetters[i]}$rowNumber";
+    //   switch (i) {
+    //     case 0:
+    //     case 7:
+    //       gamePieces[value] = Rook(notationValue: value, color: color);
+    //       break;
+    //     case 1:
+    //     case 6:
+    //       gamePieces[value] = Knight(notationValue: value, color: color);
+    //       break;
+    //     case 2:
+    //     case 5:
+    //       gamePieces[value] = Bishop(notationValue: value, color: color);
+    //       break;
+    //     case 3:
+    //       gamePieces[value] = Queen(notationValue: value, color: color);
+    //       break;
+    //     case 4:
+    //       gamePieces[value] = King(notationValue: value, color: color);
+    //       break;
+    //   }
+    // }
   }
 
   // seems repeating (something is fishy)

@@ -22,6 +22,14 @@ class Pawn implements GamePiece {
   }
 
   @override
+  Map<String, dynamic> toJson() => {
+    // 'svg': svg,
+    'color': color.name,
+    'notationValue': notationValue,
+    'isFirstMove': isFirstMove,
+  };
+
+  @override
   bool canMove() {
     // TODO: implement canMove
     throw UnimplementedError();

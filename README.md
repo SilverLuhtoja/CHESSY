@@ -4,6 +4,20 @@ Basic template for Flutter apps
 database password: kood01chessy <br>
 KOOD01: https://github.com/01-edu/public/tree/master/subjects/mobile-dev/chess
 
+THOUGHTS: 
+1. Creating game:
+   * ~~randomize color (set this color in state ??? )~~
+   * ~~send gamepieces as map and send color with player uuid~~
+   * ~~get created room id to listen to~~
+   * setup player board with database map (not init with Gameboard.gamepieces, should come through database)
+   * show player that 'Waiting for player'
+
+2. Join game: (GameStarter, kicking off)
+    * find free room and join
+    * setup gamepieces (again through database)
+    * Find out what color is available, assign uuid
+
+
 ### TODO:
 1. When player click on 'New Game'
     * Gamelogic will set up:
