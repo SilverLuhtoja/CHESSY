@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:replaceAppName/src/models/game_board.dart';
 import 'package:replaceAppName/src/models/game_pieces/pawn.dart';
 import 'package:replaceAppName/src/providers/game_provider.dart';
+import 'package:replaceAppName/src/services/database_service.dart';
 import 'package:replaceAppName/src/utils/helpers.dart';
-
 import '../constants.dart';
 
-class GameScreenTest extends ConsumerWidget {
-  final GameBoard board = GameBoard();
+class GameScreenStream extends ConsumerWidget {
   List<String> activeTiles = [];
 
-  GameScreenTest({super.key});
+  GameScreenStream({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,13 +22,13 @@ class GameScreenTest extends ConsumerWidget {
     List<Widget> stackItems = [];
     List<Widget> gamePieces = [];
     List<Widget> availableMoves = [];
-    GameState gameState = ref.watch(gameStateProvider);
 
-    printWarning("RENDERING");
+    GameState pieceClickedState = ref.watch(gameStateProvider);
+    GamePiecesState gameBoard = ref.watch(gamePiecesStateProvider);
 
-    // TODO: MAJOR REFACTORING
-    // make gameGrid
-    stackItems.addAll(board.flatGrid.map((tile) => Positioned(
+    printWarning("RENDER");
+
+    stackItems.addAll(gameBoard.gameboard.flatGrid.map((tile) => Positioned(
         top: tile.row * tileSize + 8,
         left: tile.column * tileSize + 8,
         child: Container(
@@ -46,17 +46,16 @@ class GameScreenTest extends ConsumerWidget {
           )),
         ))));
 
-    // place Game Pieces
-    gamePieces.addAll(board.flatGrid.map((tile) => Positioned(
+    gamePieces.addAll(gameBoard.gameboard.flatGrid.map((tile) => Positioned(
         top: tile.row * tileSize + 8,
         left: tile.column * tileSize + 8,
         child: GestureDetector(
           onTap: () {
             // ONLY RENDERS WHEN STATE IS CHANGED
-            Pawn? clickedPiece = board.gamePieces[tile.notationValue] as Pawn?;
+            Pawn? clickedPiece = gameBoard.gameboard.gamePieces[tile.notationValue] as Pawn?;
             if (clickedPiece != null) {
-              if (gameState.gamePieceClicked != clickedPiece.notationValue) {
-                activeTiles = clickedPiece.getAvailableMoves(board.gamePieces);
+              if (pieceClickedState.gamePieceClicked != clickedPiece.notationValue) {
+                activeTiles = clickedPiece.getAvailableMoves(gameBoard.gameboard.gamePieces);
                 ref
                     .read(gameStateProvider.notifier)
                     .setLastClickedPiece(clickedPiece.notationValue);
@@ -71,24 +70,37 @@ class GameScreenTest extends ConsumerWidget {
             margin: EdgeInsets.all(tileSize * 0.05),
             width: tileSize * 0.75,
             height: tileSize * 0.75,
-            child: board.gamePieces.containsKey(tile.notationValue)
-                ? Container(child: board.gamePieces[tile.notationValue]?.svg)
+            child: gameBoard.gameboard.gamePieces.containsKey(tile.notationValue)
+                ? Container(
+                    child: SvgPicture.asset(
+                    "assets/PAWN.svg",
+                    colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                  ))
                 : Container(),
           ),
         ))));
 
-    // Show available moves
-    availableMoves.addAll(board.flatGrid.map((tile) => Positioned(
+    // TODO: IF CLICKED ON TILE, Make new json map and update column: db_game_board
+    // TODO:  db will be updated and our client will change its state and update view
+    availableMoves.addAll(gameBoard.gameboard.flatGrid.map((tile) => Positioned(
         top: tile.row * tileSize + 8,
         left: tile.column * tileSize + 8,
         child: GestureDetector(
-          onTap: () {
-            printGreen('${gameState.gamePieceClicked} -> ${tile.notationValue}');
-            String clickedValue = gameState.gamePieceClicked ?? "";
+          onTap: () async {
+            printGreen('${pieceClickedState.gamePieceClicked} -> ${tile.notationValue}');
+            String clickedValue = pieceClickedState.gamePieceClicked ?? "";
             if (clickedValue.isNotEmpty) {
-              board.moveGamePiece(clickedValue, tile.notationValue);
+              gameBoard.gameboard.moveGamePiece(clickedValue, tile.notationValue);
               activeTiles = [];
-              ref.read(gameStateProvider.notifier).setLastClickedPiece(null);
+              try {
+                db.updateGamePieces(gameBoard.gameboard);
+                // ref.read(gameStateProvider.notifier).setLastClickedPiece(null);
+
+                // await db.client.from('GAMEROOMS').upsert({"db_game_board": jsonPieces}).eq('game_id', db.id);
+              } catch (e) {
+                ref.read(gameStateProvider.notifier).setLastClickedPiece(null);
+                printError(e.toString());
+              }
             }
           },
           child: Container(

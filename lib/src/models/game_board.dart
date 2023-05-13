@@ -9,12 +9,18 @@ import 'game_pieces/queen.dart';
 import 'game_pieces/rook.dart';
 
 class GameBoard {
-  late List<List<Tile>> gameBoard;
+  late List<List<Tile>> gameBoard = generateBoard(8);
   late Map<String, GamePiece> gamePieces = {};
   final List<String> _notationLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
-  GameBoard() {
-    gameBoard = generateBoard(8);
+  GameBoard();
+
+  GameBoard.fromJson(Map<String, dynamic> json) {
+    for (dynamic piece in json.entries) {
+      if (piece.value['instance'] == 'PAWN') {
+        gamePieces[piece.key] = Pawn.fromJson(piece.value);
+      }
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -56,11 +62,13 @@ class GameBoard {
   }
 
   void placeGamePieceToBoard(PieceColor color) {
-    for (int i = 0; i < 8; i++) {
-      String rowNumber = color == PieceColor.white ? '2' : '7';
-      String value = "${_notationLetters[i]}$rowNumber";
-      gamePieces[value] = Pawn(notationValue: value, color: color);
-    }
+    // gamePieces['d2'] = Pawn(notationValue: 'd2', color: color);
+
+    // for (int i = 0; i < 8; i++) {
+    //   String rowNumber = color == PieceColor.white ? '2' : '7';
+    //   String value = "${_notationLetters[i]}$rowNumber";
+    //   gamePieces[value] = Pawn(notationValue: value, color: color);
+    // }
     // for (int i = 0; i < 8; i++) {
     //   String rowNumber = color == PieceColor.white ? '1' : '8';
     //   String value = "${_notationLetters[i]}$rowNumber";
@@ -92,7 +100,6 @@ class GameBoard {
     GamePiece? copy = gamePieces[moveFrom];
     gamePieces.remove(moveFrom);
     if (copy != null) {
-      printGreen(copy.notationValue);
       copy.move(moveTo);
       gamePieces[moveTo] = copy;
       return;

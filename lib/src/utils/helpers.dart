@@ -10,6 +10,10 @@ import 'package:flutter/material.dart';
 // White:   \x1B[37m
 // Reset:   \x1B[0m
 
+void printDB(String text) {
+  print('\x1B[34m$text\x1B[0m');
+}
+
 void printGreen(String text) {
   print('\x1B[32m$text\x1B[0m');
 }

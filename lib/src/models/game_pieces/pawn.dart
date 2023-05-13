@@ -21,13 +21,26 @@ class Pawn implements GamePiece {
     );
   }
 
+  Pawn.fromJson(Map<String, dynamic> json)
+      : color = json['color'] == 'white' ? PieceColor.white : PieceColor.black,
+        notationValue = json['notationValue'],
+        isFirstMove = json['isFirstMove'];
+
   @override
   Map<String, dynamic> toJson() => {
-    // 'svg': svg,
-    'color': color.name,
-    'notationValue': notationValue,
-    'isFirstMove': isFirstMove,
-  };
+        // 'svg': svg,
+        'instance': 'PAWN',
+        'color': color.name,
+        'notationValue': notationValue,
+        'isFirstMove': isFirstMove,
+      };
+
+  SvgPicture? getPic() {
+    SvgPicture.asset(
+      "assets/PAWN.svg",
+      colorFilter: ColorFilter.mode(color.getColor(), BlendMode.srcIn),
+    );
+  }
 
   @override
   bool canMove() {

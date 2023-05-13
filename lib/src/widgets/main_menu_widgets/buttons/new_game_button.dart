@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:replaceAppName/src/screens/game_screen_provider.dart';
+import 'package:replaceAppName/src/screens/game_screen.dart';
+import '../../../providers/game_provider.dart';
 import '../../../providers/uuid_provider.dart';
 import '../../../services/database_service.dart';
 import '../../../utils/helpers.dart';
@@ -22,9 +23,13 @@ class NewGameButton extends ConsumerWidget {
                     onPressed: () async {
                       try {
                         await db.createNewGame();
-                        printGreen("DB: new game created");
-                        // print("${db.id}");
-                        if (context.mounted) navigateTo(context, GameScreenTest());
+                        printGreen("new_game_button: new game created");
+                        if (context.mounted) {
+                          ref.read(gamePiecesStateProvider.notifier).startStreamTest();
+                          navigateTo(context, GameScreenStream());
+                          // ref.read(testStateProvider.notifier).startStreamTest();
+                          // navigateTo(context, TestScreen());
+                        }
                       } catch (e) {
                         printError(e.toString());
                         showError(
