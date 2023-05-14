@@ -69,7 +69,7 @@ class GamePiecesStateNotifier extends StateNotifier<GamePiecesState> {
     state.gameboard.gamePieces = pieces;
   }
 
-  startStreamTest() {
+  startStream() {
     _stream = db.createStream().listen((event) {
       final json = Map<String, dynamic>.from(event[0] as Map<Object?, Object?>);
 
@@ -84,7 +84,7 @@ class GamePiecesStateNotifier extends StateNotifier<GamePiecesState> {
     });
   }
 
-  closeStreamTest() {
+  closeStream() {
     _stream.cancel();
   }
 }

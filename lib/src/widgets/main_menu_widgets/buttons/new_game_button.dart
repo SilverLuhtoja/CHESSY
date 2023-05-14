@@ -26,8 +26,8 @@ class NewGameButton extends ConsumerWidget {
                         ref.read(gamePiecesStateProvider.notifier).setMyColor(myColor);
                         printGreen("new_game_button: new game created");
                         if (context.mounted) {
-                          ref.read(gamePiecesStateProvider.notifier).startStreamTest();
-                          navigateTo(context, GameScreenStream());
+                          ref.read(gamePiecesStateProvider.notifier).startStream();
+                          navigateTo(context, GameScreen());
                           // ref.read(testStateProvider.notifier).startStreamTest();
                           // navigateTo(context, TestScreen());
                         }

@@ -9,10 +9,10 @@ import 'package:replaceAppName/src/services/database_service.dart';
 import 'package:replaceAppName/src/utils/helpers.dart';
 import '../constants.dart';
 
-class GameScreenStream extends ConsumerWidget {
+class GameScreen extends ConsumerWidget {
   List<String> activeTiles = [];
 
-  GameScreenStream({super.key});
+  GameScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
