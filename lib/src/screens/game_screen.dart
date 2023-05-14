@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:replaceAppName/src/models/game_board.dart';
+import 'package:replaceAppName/src/models/game_pieces/game_piece_interface.dart';
 import 'package:replaceAppName/src/models/game_pieces/pawn.dart';
 import 'package:replaceAppName/src/providers/game_provider.dart';
 import 'package:replaceAppName/src/services/database_service.dart';
@@ -15,8 +16,8 @@ class GameScreenStream extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    double padding = 1.0;
-    double screenWidth = MediaQuery.of(context).size.width;
+    double padding = 2.0;
+    double screenWidth = MediaQuery.of(context).size.width - (4 * padding);
     double tileSize = (screenWidth - padding * 2) / 8;
     double tilePositionOffset = tileSize - padding * 2;
     List<Widget> stackItems = [];
@@ -25,12 +26,16 @@ class GameScreenStream extends ConsumerWidget {
 
     GameState pieceClickedState = ref.watch(gameStateProvider);
     GamePiecesState gameBoard = ref.watch(gamePiecesStateProvider);
+    Map<String, GamePiece> pieces = gameBoard.gameboard.gamePieces;
+    bool isMyTurn = gameBoard.isMyTurn;
 
-    printWarning("RENDER");
+    Color getPieceColor(Map<String, GamePiece> pieces, String notationValue) {
+      return pieces[notationValue]?.color == PieceColor.white ? Colors.white : Colors.black;
+    }
 
     stackItems.addAll(gameBoard.gameboard.flatGrid.map((tile) => Positioned(
-        top: tile.row * tileSize + 8,
-        left: tile.column * tileSize + 8,
+        top: (tile.row - 1) * tileSize + padding * 2,
+        left: tile.column * tileSize + padding * 2,
         child: Container(
           width: tilePositionOffset,
           height: tilePositionOffset,
@@ -47,8 +52,8 @@ class GameScreenStream extends ConsumerWidget {
         ))));
 
     gamePieces.addAll(gameBoard.gameboard.flatGrid.map((tile) => Positioned(
-        top: tile.row * tileSize + 8,
-        left: tile.column * tileSize + 8,
+        top: (tile.row - 1) * tileSize + 4,
+        left: tile.column * tileSize + 4,
         child: GestureDetector(
           onTap: () {
             // ONLY RENDERS WHEN STATE IS CHANGED
@@ -74,17 +79,16 @@ class GameScreenStream extends ConsumerWidget {
                 ? Container(
                     child: SvgPicture.asset(
                     "assets/PAWN.svg",
-                    colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                    colorFilter: ColorFilter.mode(
+                        getPieceColor(pieces, tile.notationValue), BlendMode.srcIn),
                   ))
                 : Container(),
           ),
         ))));
 
-    // TODO: IF CLICKED ON TILE, Make new json map and update column: db_game_board
-    // TODO:  db will be updated and our client will change its state and update view
     availableMoves.addAll(gameBoard.gameboard.flatGrid.map((tile) => Positioned(
-        top: tile.row * tileSize + 8,
-        left: tile.column * tileSize + 8,
+        top: (tile.row - 1) * tileSize + 4,
+        left: tile.column * tileSize + 4,
         child: GestureDetector(
           onTap: () async {
             printGreen('${pieceClickedState.gamePieceClicked} -> ${tile.notationValue}');
@@ -92,15 +96,8 @@ class GameScreenStream extends ConsumerWidget {
             if (clickedValue.isNotEmpty) {
               gameBoard.gameboard.moveGamePiece(clickedValue, tile.notationValue);
               activeTiles = [];
-              try {
-                db.updateGamePieces(gameBoard.gameboard);
-                // ref.read(gameStateProvider.notifier).setLastClickedPiece(null);
-
-                // await db.client.from('GAMEROOMS').upsert({"db_game_board": jsonPieces}).eq('game_id', db.id);
-              } catch (e) {
-                ref.read(gameStateProvider.notifier).setLastClickedPiece(null);
-                printError(e.toString());
-              }
+              db.updateGamePieces(gameBoard.gameboard, ref);
+              ref.read(gameStateProvider.notifier).setLastClickedPiece(null);
             }
           },
           child: Container(
@@ -116,9 +113,22 @@ class GameScreenStream extends ConsumerWidget {
       appBar: AppBar(
         title: const Text("GameScreen"),
       ),
-      body: Stack(children: stackItems + gamePieces + availableMoves),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: screenWidth,
+            height: screenWidth,
+            child: Container(
+                color: getTurnColor(isMyTurn),
+                child: Stack(children: stackItems + gamePieces + availableMoves)),
+          ),
+        ],
+      ),
     );
   }
+
+  ColorSwatch<int> getTurnColor(bool myTurn) => myTurn ? Colors.greenAccent : Colors.grey;
 
   LinearGradient? tileStyle(Tile tile) {
     return tile.isWhite

@@ -22,7 +22,8 @@ class NewGameButton extends ConsumerWidget {
                 child: FilledButton(
                     onPressed: () async {
                       try {
-                        await db.createNewGame();
+                        String myColor = await db.createNewGame();
+                        ref.read(gamePiecesStateProvider.notifier).setMyColor(myColor);
                         printGreen("new_game_button: new game created");
                         if (context.mounted) {
                           ref.read(gamePiecesStateProvider.notifier).startStreamTest();

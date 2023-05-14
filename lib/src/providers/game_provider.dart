@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:replaceAppName/src/models/game_board.dart';
@@ -37,16 +36,34 @@ final gameStateProvider = StateNotifierProvider<GameStateNotifier, GameState>((r
 });
 
 class GamePiecesState {
-  late GameBoard gameboard;
+  final GameBoard gameboard;
+  final bool isMyTurn;
+  late String? myColor;
 
-  GamePiecesState(this.gameboard);
+  GamePiecesState({
+    required this.gameboard,
+    required this.isMyTurn,
+    required this.myColor,
+  });
+
+  GamePiecesState copyWith({required GameBoard board, required bool turn, required String? color}) {
+    return GamePiecesState(gameboard: board, isMyTurn: turn, myColor: color);
+  }
 }
 
 class GamePiecesStateNotifier extends StateNotifier<GamePiecesState> {
   GamePiecesStateNotifier()
-      : super(GamePiecesState(GameBoard())); // init GameState in super for StateNotifierProvider
+      : super(GamePiecesState(
+            gameboard: GameBoard(),
+            isMyTurn: false,
+            myColor: null)); // init GameState in super for StateNotifierProvider
 
   late StreamSubscription<dynamic> _stream;
+
+  void setMyColor(String? color) {
+    printGreen('Setting my color to : $color');
+    state.myColor = color;
+  }
 
   void setNewGamePieces(Map<String, GamePiece> pieces) {
     state.gameboard.gamePieces = pieces;
@@ -54,15 +71,15 @@ class GamePiecesStateNotifier extends StateNotifier<GamePiecesState> {
 
   startStreamTest() {
     _stream = db.createStream().listen((event) {
-      dynamic json = event[0];
+      final json = Map<String, dynamic>.from(event[0] as Map<Object?, Object?>);
 
       if (json['db_game_board'].toString().isEmpty) {
         printError('is null');
       } else {
-        final convertedData =
-            Map<String, dynamic>.from(jsonDecode(json['db_game_board']) as Map<Object?, Object?>);
+        bool myTurn = json['current_turn'] == state.myColor ? true : false;
+        Map<String, dynamic> convertedData = jsonDecode(json['db_game_board']);
         final GameBoard newBoard = GameBoard.fromJson(convertedData);
-        state = GamePiecesState(newBoard);
+        state = GamePiecesState(gameboard: newBoard, isMyTurn: myTurn, myColor: state.myColor);
       }
     });
   }

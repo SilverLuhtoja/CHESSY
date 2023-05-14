@@ -10,19 +10,19 @@ import 'package:flutter/material.dart';
 // White:   \x1B[37m
 // Reset:   \x1B[0m
 
-void printDB(String text) {
+void printDB(dynamic text) {
   print('\x1B[34m$text\x1B[0m');
 }
 
-void printGreen(String text) {
+void printGreen(dynamic text) {
   print('\x1B[32m$text\x1B[0m');
 }
 
-void printWarning(String text) {
+void printWarning(dynamic text) {
   print('\x1B[33m$text\x1B[0m');
 }
 
-void printError(String text) {
+void printError(dynamic text) {
   print('\x1B[31m$text\x1B[0m');
 }
 
