@@ -57,11 +57,7 @@ class Pawn implements GamePiece {
   // TODO: REFACTO
   List<String> getAvailableMoves(Map<String, GamePiece> gamePieces) {
     printWarning('Clicked $notationValue');
-    int moveCount = 1;
-    if (isFirstMove) {
-      moveCount = 2;
-      return calculateMoves([], notationValue, moveCount, gamePieces);
-    }
+    int moveCount = isFirstMove ? 2 : 1;
     return calculateMoves([], notationValue, moveCount, gamePieces);
   }
 
@@ -71,7 +67,7 @@ class Pawn implements GamePiece {
     String nextTile = '$letter$nextRowNumber';
 
     if (moveCount == 0 || gamePieces[nextTile] != null) {
-      // check enemies last
+      // check and add enemies last
       getDiagonals().forEach((diagonal) {
         GamePiece? piece = gamePieces[diagonal];
         if (piece != null && piece.color != color) {

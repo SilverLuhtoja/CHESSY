@@ -26,7 +26,7 @@ class TestStateNotifier extends StateNotifier<TestState> {
       if (json['current_turn'].toString().isEmpty) {
         printError('is null');
       } else {
-        print(json['current_turn']);
+        printState(json['current_turn']);
         state = TestState(test: json['current_turn']);
       }
     });

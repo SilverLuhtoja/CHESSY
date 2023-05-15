@@ -44,12 +44,9 @@ class Database {
     return myColor == 'white_id' ? 'white' : 'black';
   }
 
-  Future<void> updateGamePieces(GameBoard board, WidgetRef ref) async {
+  Future<void> updateGamePieces(GameBoard board, String otherPlayerTurnColor) async {
     printDB("DB: UPDATEING GAMEPIECES");
     printDB("DB: ${board.gamePieces}");
-    String? color = ref.watch(gamePiecesStateProvider).myColor;
-    String otherPlayerTurnColor = color == 'white' ? 'black' : 'white';
-
     // currently only gamePieces are mapped, not GameBoard Object(change ??)
     final jsonPieces = jsonEncode(board.toJson());
 

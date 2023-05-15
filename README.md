@@ -16,8 +16,8 @@ THOUGHTS:
 - [x] get created room id to listen to
 - [x] setup player board with database map (not init with Gameboard.gamepieces, should come through database)
 - [x] Show player that it's currently his turn, after move change turn
-- [ ] Block player interactions when it's not currently his turn
-- [ ] show player that 'Waiting for player'
+- [x] Block player interactions when it's not currently his turn
+- [x] show player that 'Waiting for player'
 
 2. Join game: (GameStarter, kicking off)
 
@@ -26,6 +26,7 @@ THOUGHTS:
 - [ ] Find out what color is available, assign uuid
 - [ ] When one of players leaves room, notify other player
 
+NOTE : Before full gamelogic development rethink if things can be simplified (DRY)
 3. Basic GameLogic (starting with only Pawns):
 
 - [ ] Every piece is clickable (last column gives error)

@@ -61,7 +61,7 @@ class GamePiecesStateNotifier extends StateNotifier<GamePiecesState> {
   late StreamSubscription<dynamic> _stream;
 
   void setMyColor(String? color) {
-    printGreen('Setting my color to : $color');
+    printState('Setting my color to : $color');
     state.myColor = color;
   }
 
