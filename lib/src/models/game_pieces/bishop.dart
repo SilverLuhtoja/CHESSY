@@ -24,4 +24,10 @@ class Bishop implements GamePiece {
   void move(String moveTo) {
     // TODO: implement move
   }
+
+  @override
+  Map<String, dynamic> toJson() {
+    // TODO: implement toJson
+    throw UnimplementedError();
+  }
 }

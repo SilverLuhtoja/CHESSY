@@ -20,6 +20,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // db.removeAllSubriptions();
     return Scaffold(
       appBar: AppBar(
         title: const Text("MainMenu"),

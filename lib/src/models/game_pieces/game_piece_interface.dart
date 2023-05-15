@@ -22,4 +22,6 @@ abstract class GamePiece {
 
   void move(String moveTo); // sending data
   bool canMove(); // check before move
+
+  Map<String, dynamic> toJson();
 }
