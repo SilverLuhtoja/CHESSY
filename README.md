@@ -5,8 +5,13 @@ Basic template for Flutter apps
 database password: kood01chessy <br>
 KOOD01: https://github.com/01-edu/public/tree/master/subjects/mobile-dev/chess
 
-THOUGHTS:
+NEEDED CHANGES:
+* Currently, creating game doesn't set db id dynamically (hard_coded)
 
+THOUGHTS:
+* There is not much difference when creating and joining game currently, because the logic is the same.
+Join button makes sense only if app shows available rooms to join as list. So join create and join button
+or make list of available rooms? 
 ## TODO:
 
 1. Creating game:
@@ -21,12 +26,13 @@ THOUGHTS:
 
 2. Join game: (GameStarter, kicking off)
 
-- [ ] find free room and join
-- [ ] setup gamepieces (again through database)
-- [ ] Find out what color is available, assign uuid
+- [x] find free room and join
+- [x] setup gamepieces (again through database)
+- [x] Find out what color is available, assign uuid, set his states (myColor)
 - [ ] When one of players leaves room, notify other player
 
 NOTE : Before full gamelogic development rethink if things can be simplified (DRY)
+
 3. Basic GameLogic (starting with only Pawns):
 
 - [ ] Every piece is clickable (last column gives error)
@@ -36,33 +42,22 @@ NOTE : Before full gamelogic development rethink if things can be simplified (DR
 
 ### OTHER INFO:
 
-1. When player click on 'New Game'
-    * Gamelogic will set up:
-        * gameboard with gamepieces
-        * assigns player gamepieces color to player randomly (black || white)
-            * Shows player his color (Name colored with his pieces color for example)
-            * Shows 'Waiting for player' (opens dialog box for example)
-    * Supabase service will set up info in database
-        * INSERT's to table 'GAMEROOMS' new room with int value
-      ````
-      Table GAMEROOMS
-        0 : { 
-            white: player_UUID
-            black: player_UUID
-            db_game_board: Map<String,GamePiece> as String
-            current_turn: player_UUID or color 
-            game_over: nil (player_UUID if won)
-      }
-      ````
+    Table GAMEROOMS
+    0 : { 
+        white: player_UUID
+        black: player_UUID
+        db_game_board: Map<String,GamePiece> as String
+        current_turn: player_UUID or color 
+        game_over: nil (player_UUID if won)
+    }
+
     * GameState needs to hold:
-      ````
         game_piece_clicked: nil
         game_pieces: Map<String, GamePiece>
         my_color: String
         my_turn: bool
         king_on_check: bool
         message: String
-      ````
 
 DEPENDENCIES:<br>
 shared_preferences: https://pub.dev/packages/shared_preferences <br>

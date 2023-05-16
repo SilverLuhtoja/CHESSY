@@ -10,20 +10,14 @@ import 'package:replaceAppName/src/utils/helpers.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/game_board.dart';
 
+Database db = Database();
+
 class Database {
   final SupabaseClient client = Supabase.instance.client;
   late int id = 91;
   late dynamic subscribed;
 
-  //  FOR TESTING
-  void resetPieces(GameBoard board) async {
-    Pawn pawn = Pawn(notationValue: 'e7', color: PieceColor.black);
-    Pawn pawn2 = Pawn(notationValue: 'd2', color: PieceColor.white);
-    board.setGamePieces({'e7': pawn, 'd2': pawn2});
-    final jsonPieces = jsonEncode(board.toJson());
-    printDB("DB: $jsonPieces");
-    await db.client.from('GAMEROOMS').update({"db_game_board": jsonPieces}).eq('game_id', id);
-  }
+  get table => client.from('GAMEROOMS');
 
   // TODO: REFACTOR
   Future<String> createNewGame() async {
@@ -39,9 +33,30 @@ class Database {
     printDB(params.toString());
 
     // resetPieces(board);
-
-    // await client.from('GAMEROOMS').upsert(params);
+    // await table.upsert(params);
     return myColor == 'white_id' ? 'white' : 'black';
+  }
+
+  Future<dynamic> joinRoom() async {
+    List<dynamic> rooms = await getAvailableRooms();
+    if (rooms.isEmpty) return;
+    printDB("DB: set database id to > ${rooms[0]['game_id']}");
+    id = rooms.first['game_id'];
+
+    String availableSlot = await getAvailableSlot();
+    printDB("DB: available slot > $availableSlot");
+
+    // TODO: should to extra check if UUID is present, add if not
+    String? myUUID = await getUUID();
+    Map<String, dynamic> params = {availableSlot: myUUID};
+    await table.upsert(params);
+    return availableSlot == 'white_id' ? 'white' : 'black';
+  }
+
+  Future<List<dynamic>> getAvailableRooms() async {
+    dynamic rooms = await table.select('*').or('black_id.is.null,white_id.is.null');
+    printDB("DB: available rooms > $rooms");
+    return rooms;
   }
 
   Future<void> updateGamePieces(GameBoard board, String otherPlayerTurnColor) async {
@@ -55,35 +70,29 @@ class Database {
       "current_turn": otherPlayerTurnColor
     };
 
-    await db.client.from('GAMEROOMS').update(updateParams).eq('game_id', id);
+    await table.update(updateParams).eq('game_id', id);
     printDB("DB: UPDATE DONE");
   }
 
   Stream createStream() {
-    return client.from('GAMEROOMS').stream(primaryKey: ['game_id']).eq('game_id', id);
+    return table.stream(primaryKey: ['game_id']).eq('game_id', id);
   }
 
-// Future<dynamic> joinRoom() async {
-//   var rooms = await getAvailableRooms();
-//   printWarning('FROM DB $rooms');
-//   if (rooms.length == 0) {
-//     return Future.error('NO AVAILABLE ROOMS TO PLAY. CREATE ONE!');
-//   }
-//   int available_room = rooms[rooms.length - 1]['game_id'];
-//   printWarning('ROOM TO JOIN: $available_room');
-//   await joinToSelectedRoom(available_room);
-//   return available_room;
-// }
-//
-// Future<List<dynamic>> getAvailableRooms() async {
-//   return await client.from('GAMEROOMS').select('game_id').is_('black_id', null);
-// }
+  Future<String> getAvailableSlot() async {
+    dynamic json = await table.select('*').eq('game_id', id).single();
+    printDB("DB: current room  > ${json['white_id']}");
+    return json['white_id'] == null ? 'white_id' : 'black_id';
+  }
 
-// Future<void> joinToSelectedRoom(int room) async {
-//   String? myUUID = await getUUID();
-//   await client.from('GAMEROOMS').update({'black_id': myUUID}).eq('game_id', room);
-// }
-
+  //  FOR TESTING
+  void resetPieces(GameBoard board) async {
+    Pawn pawn = Pawn(notationValue: 'e7', color: PieceColor.black);
+    Pawn pawn2 = Pawn(notationValue: 'd2', color: PieceColor.white);
+    board.setGamePieces({'e7': pawn, 'd2': pawn2});
+    final jsonPieces = jsonEncode(board.toJson());
+    printDB("DB: $jsonPieces");
+    await table.update({"db_game_board": jsonPieces}).eq('game_id', id);
+  }
 //   subscribeToChannel() {
 //     client.channel('GAMEROOMS').on(
 //       RealtimeListenTypes.postgresChanges,
@@ -100,5 +109,3 @@ class Database {
 //     printDB("All channels : ${client.getChannels()}");
 //   }
 }
-
-Database db = Database();

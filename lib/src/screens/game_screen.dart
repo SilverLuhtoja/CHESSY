@@ -7,7 +7,7 @@ import 'package:replaceAppName/src/models/game_pieces/pawn.dart';
 import 'package:replaceAppName/src/providers/game_provider.dart';
 import 'package:replaceAppName/src/services/database_service.dart';
 import 'package:replaceAppName/src/utils/helpers.dart';
-import 'package:replaceAppName/src/widgets/game_screen_widgets/waiting_indicator.dart';
+import 'package:replaceAppName/src/widgets/game_screen_widgets/waiting_viewr.dart';
 import '../constants.dart';
 
 class GameScreen extends ConsumerWidget {
@@ -50,7 +50,7 @@ class GameScreen extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             isWaitingForPlayer
-                ? WaitingIndicator()
+                ? const WaitingView()
                 : SizedBox(
                     width: screenWidth,
                     height: screenWidth,
