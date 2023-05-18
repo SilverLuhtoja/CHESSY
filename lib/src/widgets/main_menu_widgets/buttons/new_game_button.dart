@@ -11,7 +11,7 @@ class NewGameButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.read(gamePiecesStateProvider.notifier);
+    final gameProvider = ref.read(gamePiecesStateProvider.notifier);
 
     return SizedBox(
       width: 160,
@@ -19,10 +19,10 @@ class NewGameButton extends ConsumerWidget {
           onPressed: () async {
             try {
               String myColor = await db.createNewGame();
-              provider.setMyColor(myColor);
+              gameProvider.setMyColor(myColor);
               printGreen("new_game_button: new game created");
               if (context.mounted) {
-                provider.startStream();
+                gameProvider.startStream();
                 navigateTo(context, GameScreen());
                 // ref.read(testStateProvider.notifier).startStreamTest();
                 // navigateTo(context, TestScreen());

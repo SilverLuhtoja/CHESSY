@@ -1,10 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:replaceAppName/main.dart';
 import 'package:replaceAppName/src/models/game_pieces/game_piece_interface.dart';
 import 'package:replaceAppName/src/models/game_pieces/pawn.dart';
-import 'package:replaceAppName/src/providers/game_provider.dart';
 import 'package:replaceAppName/src/services/uuid_service.dart';
 import 'package:replaceAppName/src/utils/helpers.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -14,7 +11,8 @@ Database db = Database();
 
 class Database {
   final SupabaseClient client = Supabase.instance.client;
-  late int id = 91;
+  late int id ;
+
   late dynamic subscribed;
 
   get table => client.from('GAMEROOMS');
@@ -23,46 +21,40 @@ class Database {
   Future<String> createNewGame() async {
     printDB("DB: Creating new game");
 
-    // TODO: should to extra check if UUID is present, add if not
     String? myUUID = await getUUID();
-    GameBoard board = GameBoard();
-    String myColor = Random().nextInt(2) == 0 ? 'white_id' : 'black_id';
-
-    final jsonPieces = jsonEncode(board.toJson());
+    String myColor = Random().nextInt(2) == 0 ? 'white' : 'black';
+    String jsonPieces = jsonEncode(GameBoard().toJson());
     Map<String, dynamic> params = {myColor: myUUID, "db_game_board": jsonPieces};
-    printDB(params.toString());
 
-    // resetPieces(board);
-    // await table.upsert(params);
-    return myColor == 'white_id' ? 'white' : 'black';
+    Map<String, dynamic> data = await table.insert(params).select().single();
+    id = data['game_id'];
+    await resetPieces();
+    printDB("DB: room $id");
+
+    return myColor;
   }
 
   Future<dynamic> joinRoom() async {
+    printDB("DB: Joining game");
+
+    String? myUUID = await getUUID();
     List<dynamic> rooms = await getAvailableRooms();
     if (rooms.isEmpty) return;
-    printDB("DB: set database id to > ${rooms[0]['game_id']}");
     id = rooms.first['game_id'];
 
-    String availableSlot = await getAvailableSlot();
-    printDB("DB: available slot > $availableSlot");
+    String availableColor = await getAvailableColor();
+    Map<String, dynamic> params = {availableColor: myUUID};
 
-    // TODO: should to extra check if UUID is present, add if not
-    String? myUUID = await getUUID();
-    Map<String, dynamic> params = {availableSlot: myUUID};
-    await table.upsert(params);
-    return availableSlot == 'white_id' ? 'white' : 'black';
-  }
+    await table.update(params).eq('game_id', id);
 
-  Future<List<dynamic>> getAvailableRooms() async {
-    dynamic rooms = await table.select('*').or('black_id.is.null,white_id.is.null');
-    printDB("DB: available rooms > $rooms");
-    return rooms;
+    return availableColor;
   }
 
   Future<void> updateGamePieces(GameBoard board, String otherPlayerTurnColor) async {
     printDB("DB: UPDATEING GAMEPIECES");
-    printDB("DB: ${board.gamePieces}");
-    // currently only gamePieces are mapped, not GameBoard Object(change ??)
+    // printDB("DB: ${board.gamePieces}");
+
+    // TODO: currently only gamePieces are mapped, not GameBoard Object(change ??)
     final jsonPieces = jsonEncode(board.toJson());
 
     Map<String, dynamic> updateParams = {
@@ -71,21 +63,39 @@ class Database {
     };
 
     await table.update(updateParams).eq('game_id', id);
-    printDB("DB: UPDATE DONE");
+  }
+
+  Future<void> deleteOrUpdateRoom(String? myColor) async {
+    Map<String, dynamic> data = await table.select().eq('game_id', id).single();
+    printDB("DB: deleteOrUpdateRoom > data : $data");
+    Map<String, dynamic> updateParams = {};
+    if (myColor != null) {
+      updateParams = {myColor: null};
+    }
+    printDB("DB: deleteOrUpdateRoom > updateParams : $updateParams");
+
+    await table.update(updateParams).eq('game_id', id);
+  }
+
+  Future<List<dynamic>> getAvailableRooms() async {
+    List<dynamic> rooms = await table.select('*').or('black.is.null,white.is.null');
+
+    printDB("DB: available rooms > $rooms");
+    return rooms;
   }
 
   Stream createStream() {
     return table.stream(primaryKey: ['game_id']).eq('game_id', id);
   }
 
-  Future<String> getAvailableSlot() async {
-    dynamic json = await table.select('*').eq('game_id', id).single();
-    printDB("DB: current room  > ${json['white_id']}");
-    return json['white_id'] == null ? 'white_id' : 'black_id';
+  Future<String> getAvailableColor() async {
+    Map<String, dynamic> json = await table.select('*').eq('game_id', id).single();
+    return json['white'] == null ? 'white' : 'black';
   }
 
   //  FOR TESTING
-  void resetPieces(GameBoard board) async {
+  Future<void> resetPieces() async {
+    GameBoard board = GameBoard();
     Pawn pawn = Pawn(notationValue: 'e7', color: PieceColor.black);
     Pawn pawn2 = Pawn(notationValue: 'd2', color: PieceColor.white);
     board.setGamePieces({'e7': pawn, 'd2': pawn2});

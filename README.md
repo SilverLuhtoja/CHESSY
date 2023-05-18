@@ -5,14 +5,15 @@ Basic template for Flutter apps
 database password: kood01chessy <br>
 KOOD01: https://github.com/01-edu/public/tree/master/subjects/mobile-dev/chess
 
-NEEDED CHANGES:
-* Currently, creating game doesn't set db id dynamically (hard_coded)
+### NEEDED CHANGES / BUGS:
 
-THOUGHTS:
+### THOUGHTS:
+
 * There is not much difference when creating and joining game currently, because the logic is the same.
-Join button makes sense only if app shows available rooms to join as list. So join create and join button
-or make list of available rooms? 
-## TODO:
+  Join button makes sense only if app shows available rooms to join as list. So join create and join button
+  or make list of available rooms?
+
+## TODO <  History Of Development > :
 
 1. Creating game:
 
@@ -29,9 +30,14 @@ or make list of available rooms?
 - [x] find free room and join
 - [x] setup gamepieces (again through database)
 - [x] Find out what color is available, assign uuid, set his states (myColor)
-- [ ] When one of players leaves room, notify other player
+- [x] playable with other player
 
-NOTE : Before full gamelogic development rethink if things can be simplified (DRY)
+INCLUDING:
+
+- [x] When one of players leaves room, notify other player
+- [x] When winner assigned, notify both players
+
+NOTE : Before full gamelogic development rethink if things can be simplified, also (DRY & SOLID)
 
 3. Basic GameLogic (starting with only Pawns):
 
@@ -63,7 +69,11 @@ DEPENDENCIES:<br>
 shared_preferences: https://pub.dev/packages/shared_preferences <br>
 flutter_riverpod: https://pub.dev/packages/flutter_riverpod <br>
 supabase_flutter:https://pub.dev/packages/supabase_flutter <br>
-<br>
+
+#testing <br>
+mockito: https://pub.dev/packages/mockito  <br>
+build_runner: https://pub.dev/packages/build_runner  <br>
+
 #database <br>
 supabase: https://supabase.com/ <br>
 
