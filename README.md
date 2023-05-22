@@ -6,6 +6,7 @@ database password: kood01chessy <br>
 KOOD01: https://github.com/01-edu/public/tree/master/subjects/mobile-dev/chess
 
 ### NEEDED CHANGES / BUGS:
+  * Need to add one more field to game (GameState - [PLAYING, WAITING, GAMEOVER])
 
 ### THOUGHTS:
 

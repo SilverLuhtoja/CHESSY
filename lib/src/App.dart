@@ -10,7 +10,7 @@ class App extends StatelessWidget {
       title: '2048',
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark(),
-      home: MainMenuScreen(),
+      home:  MainMenuScreen(),
     );
   }
 }
