@@ -1,18 +1,11 @@
-import 'dart:ui';
-import 'package:flutter_svg/svg.dart';
 import 'game_piece_interface.dart';
 
 class Rook implements GamePiece {
-  late SvgPicture svg;
+  late String name = 'ROOK';
   late PieceColor color;
   late String notationValue;
 
-  Rook({required this.notationValue, required this.color}) {
-    svg = SvgPicture.asset(
-      "assets/ROOK.svg",
-      colorFilter: ColorFilter.mode(color.getColor(), BlendMode.srcIn),
-    );
-  }
+  Rook({required this.notationValue, required this.color});
 
   @override
   bool canMove() {
@@ -28,6 +21,12 @@ class Rook implements GamePiece {
   @override
   Map<String, dynamic> toJson() {
     // TODO: implement toJson
+    throw UnimplementedError();
+  }
+
+  @override
+  List<String> getAvailableMoves(Map<String, GamePiece> gamePieces) {
+    // TODO: implement getAvailableMoves
     throw UnimplementedError();
   }
 }

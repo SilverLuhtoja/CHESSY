@@ -14,7 +14,7 @@ Future<String?> getUUID() async {
 Future createUUID() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? prefs_uuid = prefs.getString("client_uuid");
-  String uuid = Uuid().v1();
+  String uuid = const Uuid().v1();
 
   if (prefs_uuid == null) prefs.setString("client_uuid", uuid);
   // await prefs.remove("client_uuid");

@@ -45,7 +45,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   const MenuButton(text: "How to PLay?", handler: null),
                   const SizedBox(height: 20),
                   MenuButton(
-                      text: "To Supabase Test", handler: () => navigateTo(const SupabaseTestScreen()))
+                      text: "To Supabase Test",
+                      handler: () => navigateTo(const SupabaseTestScreen()))
                 ],
               ),
             ],

@@ -1,11 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:replaceAppName/src/models/game_board.dart';
 import 'package:replaceAppName/src/models/game_pieces/game_piece_interface.dart';
-import 'package:replaceAppName/src/models/game_pieces/pawn.dart';
 import 'package:replaceAppName/src/providers/game_provider.dart';
 import 'package:replaceAppName/src/services/database_service.dart';
 import 'package:replaceAppName/src/utils/helpers.dart';
@@ -90,8 +87,10 @@ class GameScreen extends ConsumerWidget {
   Container buildGamePieces(
       double tileSize, Map<String, GamePiece> gamePieces, Tile tile, WidgetRef ref) {
     Map<String, GamePiece> gamePieces = ref.watch(gamePiecesStateProvider).gameboard.gamePieces;
-    Color color =
-        gamePieces[tile.notationValue]?.color == PieceColor.white ? Colors.white : Colors.black;
+
+    //  TODO: How This should be handled?
+    Color color = gamePieces[tile.notationValue]?.color.getColor() ?? Colors.red;
+    String? svgToPick = gamePieces[tile.notationValue]?.name ?? "";
     return Container(
       margin: EdgeInsets.all(tileSize * 0.05),
       width: tileSize * 0.75,
@@ -101,7 +100,7 @@ class GameScreen extends ConsumerWidget {
               onTap: () => pieceClickedHandler(gamePieces, tile, ref),
               child: Container(
                   child: SvgPicture.asset(
-                "assets/PAWN.svg",
+                "assets/${svgToPick}.svg",
                 colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
               )),
             )
@@ -125,7 +124,7 @@ class GameScreen extends ConsumerWidget {
 
     // ONLY RENDERS WHEN STATE IS CHANGED
     GameState pieceClickedState = ref.watch(gameStateProvider);
-    Pawn? clickedPiece = gamePieces[tile.notationValue] as Pawn?;
+    GamePiece clickedPiece = gamePieces[tile.notationValue]!;
     if (clickedPiece != null && clickedPiece.color.name == gamePiecesState.myColor) {
       if (pieceClickedState.gamePieceClicked != clickedPiece.notationValue) {
         activeTiles = clickedPiece.getAvailableMoves(gamePieces);

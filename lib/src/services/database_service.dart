@@ -11,7 +11,7 @@ Database db = Database();
 
 class Database {
   final SupabaseClient client = Supabase.instance.client;
-  late int id ;
+  late int id;
 
   late dynamic subscribed;
 
@@ -28,7 +28,6 @@ class Database {
 
     Map<String, dynamic> data = await table.insert(params).select().single();
     id = data['game_id'];
-    await resetPieces();
     printDB("DB: room $id");
 
     return myColor;
@@ -52,7 +51,6 @@ class Database {
 
   Future<void> updateGamePieces(GameBoard board, String otherPlayerTurnColor) async {
     printDB("DB: UPDATEING GAMEPIECES");
-    // printDB("DB: ${board.gamePieces}");
 
     // TODO: currently only gamePieces are mapped, not GameBoard Object(change ??)
     final jsonPieces = jsonEncode(board.toJson());

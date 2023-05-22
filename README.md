@@ -42,7 +42,7 @@ NOTE : Before full gamelogic development rethink if things can be simplified, al
 
 3. Basic GameLogic (starting with only Pawns):
 
-- [ ] Every piece is clickable (last column gives error)
+- [ ] Every piece is clickable (last and first column gives error)
 - [ ] GameLogic is understandable and flexible ( PiecesMap don't have to be in gameboard, or board holds all pieces?)
 - [ ] Pawns are able to take each other
 - [ ] Pawns move as expected and based on rules (Last row on gameboard, choose -> Queen,Rook,Knight,Bishop)

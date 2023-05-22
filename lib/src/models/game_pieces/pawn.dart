@@ -1,11 +1,9 @@
-import 'dart:ui';
-import 'package:flutter_svg/svg.dart';
 import 'package:replaceAppName/src/constants.dart';
 import 'package:replaceAppName/src/utils/helpers.dart';
 import 'game_piece_interface.dart';
 
 class Pawn implements GamePiece {
-  late SvgPicture svg;
+  late String name = 'PAWN';
   late PieceColor color;
   late String notationValue;
   bool isFirstMove = true;
@@ -14,33 +12,26 @@ class Pawn implements GamePiece {
 
   String get letter => notationValue.substring(0, 1);
 
-  Pawn({required this.notationValue, required this.color}) {
-    svg = SvgPicture.asset(
-      "assets/PAWN.svg",
-      colorFilter: ColorFilter.mode(color.getColor(), BlendMode.srcIn),
-    );
-  }
+  Pawn({required this.notationValue, required this.color}) {}
 
-  Pawn.fromJson(Map<String, dynamic> json)
-      : color = json['color'] == 'white' ? PieceColor.white : PieceColor.black,
-        notationValue = json['notationValue'],
-        isFirstMove = json['isFirstMove'];
+  // Pawn.fromJson(Map<String, dynamic> json)
+  //     : color = json['color'] == 'white' ? PieceColor.white : PieceColor.black,
+  //       notationValue = json['notationValue'],
+  //       isFirstMove = json['isFirstMove'];
+
+  Pawn.fromJson(Map<String, dynamic> json) {
+    color = PieceColorFunc.fromJson(json['color']);
+    notationValue = json['notationValue'];
+    isFirstMove = json['isFirstMove'];
+  }
 
   @override
   Map<String, dynamic> toJson() => {
-        // 'svg': svg,
-        'instance': 'PAWN',
+        'name': name,
         'color': color.name,
         'notationValue': notationValue,
         'isFirstMove': isFirstMove,
       };
-
-  SvgPicture? getPic() {
-    SvgPicture.asset(
-      "assets/PAWN.svg",
-      colorFilter: ColorFilter.mode(color.getColor(), BlendMode.srcIn),
-    );
-  }
 
   @override
   bool canMove() {
