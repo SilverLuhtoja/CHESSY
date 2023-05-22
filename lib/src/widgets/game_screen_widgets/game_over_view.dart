@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../constants.dart';
+import '../../models/game_over_status.dart';
 
 class GameOverView extends StatefulWidget {
   final GameOverStatus? status;
@@ -11,21 +11,12 @@ class GameOverView extends StatefulWidget {
 }
 
 class _GameOverViewState extends State<GameOverView> {
-  String message = "";
+  late String message;
 
   @override
   void initState() {
     super.initState();
-    switch (widget.status) {
-      case GameOverStatus.won:
-        setState(() => message = 'You have won!');
-        break;
-      case GameOverStatus.lost:
-        setState(() => message = 'You have lost!');
-        break;
-      default:
-        setState(() => message = 'Player has surrendered!');
-    }
+    message = widget.status?.value ?? "Unknown State";
   }
 
   @override

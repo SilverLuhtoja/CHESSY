@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:replaceAppName/src/models/game_board.dart';
 import 'package:replaceAppName/src/models/game_pieces/game_piece_interface.dart';
-import '../constants.dart';
+import '../models/game_over_status.dart';
 import '../services/database_service.dart';
 import '../utils/helpers.dart';
 
@@ -134,7 +134,7 @@ class GamePiecesStateNotifier extends StateNotifier<GamePiecesState> {
       return;
     }
     if (json['white'] == null || json['black'] == null) {
-      setGameOverStatus(GameOverStatus.playerSurrender);
+      setGameOverStatus(GameOverStatus.surrendered);
       return;
     }
   }
