@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,19 +9,18 @@ import 'package:replaceAppName/src/models/game_pieces/pawn.dart';
 import 'package:replaceAppName/src/providers/game_provider.dart';
 import 'package:replaceAppName/src/services/database_service.dart';
 import 'package:replaceAppName/src/utils/helpers.dart';
-import 'package:replaceAppName/src/widgets/game_screen_widgets/waiting_indicator.dart';
+import 'package:replaceAppName/src/widgets/game_screen_widgets/game_over_view.dart';
+import 'package:replaceAppName/src/widgets/game_screen_widgets/waiting_view.dart';
 import '../constants.dart';
 
 class GameScreen extends ConsumerWidget {
   List<String> activeTiles = [];
 
-  final bool isWaitingForPlayer = false;
-
   GameScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final double padding = 2.0;
+    const double padding = 2.0;
     final double screenWidth = MediaQuery.of(context).size.width - (4 * padding);
     final double tileSize = (screenWidth - padding * 2) / 8;
     final double tilePositionOffset = tileSize - padding * 2;
@@ -27,6 +28,8 @@ class GameScreen extends ConsumerWidget {
 
     final GamePiecesState gameBoard = ref.watch(gamePiecesStateProvider);
     final Map<String, GamePiece> gamePieces = gameBoard.gameboard.gamePieces;
+    final bool isWaitingForPlayer = gameBoard.waitingPlayer;
+    final bool isGameOver = gameBoard.gameOverStatus == null;
     final bool isMyTurn = gameBoard.isMyTurn;
 
     stackedBuilds.addAll(gameBoard.gameboard.flatGrid.map((tile) => Positioned(
@@ -44,22 +47,32 @@ class GameScreen extends ConsumerWidget {
               ],
             )))));
 
-    return Scaffold(
-        appBar: AppBar(title: const Text("GameScreen")),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            isWaitingForPlayer
-                ? WaitingIndicator()
-                : SizedBox(
-                    width: screenWidth,
-                    height: screenWidth,
-                    child: Container(
-                      color: isMyTurn ? Colors.greenAccent : Colors.grey,
-                      child: Stack(children: stackedBuilds),
-                    )),
-          ],
-        ));
+    return WillPopScope(
+      onWillPop: () async {
+        ref.read(gamePiecesStateProvider.notifier).closeStream();
+        ref.read(gamePiecesStateProvider.notifier).resetState();
+        db.deleteOrUpdateRoom(gameBoard.myColor);
+        return true;
+      },
+      child: Scaffold(
+          appBar: AppBar(title: const Text("GameScreen")),
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              isWaitingForPlayer
+                  ? const WaitingView()
+                  : isGameOver
+                      ? SizedBox(
+                          width: screenWidth,
+                          height: screenWidth,
+                          child: Container(
+                            color: isMyTurn ? Colors.greenAccent : Colors.grey,
+                            child: Stack(children: stackedBuilds),
+                          ))
+                      : GameOverView(status: gameBoard.gameOverStatus),
+            ],
+          )),
+    );
   }
 
   Center buildGridValues(Tile tile) {

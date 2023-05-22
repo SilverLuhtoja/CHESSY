@@ -1,31 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:replaceAppName/src/screens/game_screen.dart';
 import '../../../providers/game_provider.dart';
+import '../../../screens/game_screen.dart';
 import '../../../services/database_service.dart';
 import '../../../utils/helpers.dart';
 import '../../show_snackbar.dart';
 
-class NewGameButton extends ConsumerWidget {
-  const NewGameButton({super.key});
+class JoinGameButton extends ConsumerWidget {
+  const JoinGameButton({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gameProvider = ref.read(gamePiecesStateProvider.notifier);
+    final provider = ref.read(gamePiecesStateProvider.notifier);
 
     return SizedBox(
       width: 160,
       child: FilledButton(
           onPressed: () async {
             try {
-              String myColor = await db.createNewGame();
-              gameProvider.setMyColor(myColor);
-              printGreen("new_game_button: new game created");
+              String myColor = await db.joinRoom();
+              provider.setMyColor(myColor);
               if (context.mounted) {
-                gameProvider.startStream();
+                provider.startStream();
                 navigateTo(context, GameScreen());
-                // ref.read(testStateProvider.notifier).startStreamTest();
-                // navigateTo(context, TestScreen());
+                printGreen("join_game_button: joined with room > ${db.id}");
               }
             } catch (e) {
               printError(e.toString());
@@ -35,7 +33,7 @@ class NewGameButton extends ConsumerWidget {
                   isError: true);
             }
           },
-          child: const Text('New Game')),
+          child: const Text('Join Game')),
     );
   }
 }

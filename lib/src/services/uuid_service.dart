@@ -5,6 +5,9 @@ import 'package:uuid/uuid.dart';
 // TODO: REFACTOR
 Future<String?> getUUID() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  if (prefs.getString("client_uuid") == null) {
+    await createUUID();
+  }
   return prefs.getString("client_uuid");
 }
 
