@@ -13,12 +13,20 @@ class GameBoard {
   late Map<String, GamePiece> gamePieces = {};
   final List<String> _notationLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
-  GameBoard();
+  GameBoard() {
+    placeGamePiecesToBoard(PieceColor.white);
+    placeGamePiecesToBoard(PieceColor.black);
+  }
 
   GameBoard.fromJson(Map<String, dynamic> json) {
     for (dynamic piece in json.entries) {
-      if (piece.value['instance'] == 'PAWN') {
-        gamePieces[piece.key] = Pawn.fromJson(piece.value);
+      switch (piece.value['name']) {
+        case 'PAWN':
+          gamePieces[piece.key] = Pawn.fromJson(piece.value);
+          break;
+        case 'KNIGHT':
+          gamePieces[piece.key] = Knight.fromJson(piece.value);
+          break;
       }
     }
   }
@@ -47,8 +55,6 @@ class GameBoard {
       tiles.add(singleRowOfTiles);
       startWhite = !startWhite;
     }
-    placeGamePieceToBoard(PieceColor.white);
-    placeGamePieceToBoard(PieceColor.black);
     return tiles;
   }
 
@@ -61,14 +67,12 @@ class GameBoard {
     }
   }
 
-  void placeGamePieceToBoard(PieceColor color) {
-    // gamePieces['d2'] = Pawn(notationValue: 'd2', color: color);
-
-    // for (int i = 0; i < 8; i++) {
-    //   String rowNumber = color == PieceColor.white ? '2' : '7';
-    //   String value = "${_notationLetters[i]}$rowNumber";
-    //   gamePieces[value] = Pawn(notationValue: value, color: color);
-    // }
+  void placeGamePiecesToBoard(PieceColor color) {
+    for (int i = 0; i < 8; i++) {
+      String rowNumber = color == PieceColor.white ? '2' : '7';
+      String value = "${_notationLetters[i]}$rowNumber";
+      gamePieces[value] = Pawn(notationValue: value, color: color);
+    }
     // for (int i = 0; i < 8; i++) {
     //   String rowNumber = color == PieceColor.white ? '1' : '8';
     //   String value = "${_notationLetters[i]}$rowNumber";

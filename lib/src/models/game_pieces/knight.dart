@@ -1,18 +1,23 @@
-import 'dart:ui';
-import 'package:flutter_svg/svg.dart';
 import 'game_piece_interface.dart';
 
 class Knight implements GamePiece {
-  late SvgPicture svg;
+  late String name = 'KNIGHT';
   late PieceColor color;
   late String notationValue;
 
-  Knight({required this.notationValue, required this.color}) {
-    svg = SvgPicture.asset(
-      "assets/KNIGHT.svg",
-      colorFilter: ColorFilter.mode(color.getColor(), BlendMode.srcIn),
-    );
+  Knight({required this.notationValue, required this.color});
+
+  Knight.fromJson(Map<String, dynamic> json) {
+    color = PieceColorFunc.fromJson(json['color']);
+    notationValue = json['notationValue'];
   }
+
+  @override
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'color': color.name,
+        'notationValue': notationValue,
+      };
 
   @override
   bool canMove() {
@@ -26,8 +31,8 @@ class Knight implements GamePiece {
   }
 
   @override
-  Map<String, dynamic> toJson() {
-    // TODO: implement toJson
+  List<String> getAvailableMoves(Map<String, GamePiece> gamePieces) {
+    // TODO: implement getAvailableMoves
     throw UnimplementedError();
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:replaceAppName/src/providers/uuid_provider.dart';
+import 'package:replaceAppName/src/providers/util_provider.dart';
 
 class UuidContainer extends ConsumerWidget {
   @override

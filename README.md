@@ -6,13 +6,17 @@ database password: kood01chessy <br>
 KOOD01: https://github.com/01-edu/public/tree/master/subjects/mobile-dev/chess
 
 ### NEEDED CHANGES / BUGS:
-  * Need to add one more field to game (GameState - [PLAYING, WAITING, GAMEOVER])
+
+* DB also need history column
 
 ### THOUGHTS:
 
 * There is not much difference when creating and joining game currently, because the logic is the same.
   Join button makes sense only if app shows available rooms to join as list. So join create and join button
   or make list of available rooms?
+  This would need Also userNames to show, to easily recognize your friends game (simpler that following UUID)
+
+* Show only INGAME and WAITING Games? Not Show at all?
 
 ## TODO <  History Of Development > :
 
@@ -40,12 +44,63 @@ INCLUDING:
 
 NOTE : Before full gamelogic development rethink if things can be simplified, also (DRY & SOLID)
 
-3. Basic GameLogic (starting with only Pawns):
+3. GameLogic:
 
-- [ ] Every piece is clickable (last column gives error)
+- [ ] GameBoard and pieces has set up correctly 
+- [ ] Board notation numbers and letters are easy to read (Like Leonards)
+- [ ] Every piece is clickable (last and first column gives error)
 - [ ] GameLogic is understandable and flexible ( PiecesMap don't have to be in gameboard, or board holds all pieces?)
-- [ ] Pawns are able to take each other
-- [ ] Pawns move as expected and based on rules (Last row on gameboard, choose -> Queen,Rook,Knight,Bishop)
+
+NOTFICATIONS:
+
+- [ ] Notify player that KING is in check
+
+PAWNS:
+
+- [x] Pawns are able to take each other
+- [x] Pawns move as expected and based on rules
+- [ ] Last row on gameboard, choose -> Queen,Rook,Knight,Bishop (SPECIAL MOVE)
+- [ ] Pawns can take next to each other (SPECIAL MOVE)
+
+KNIGHTS:
+
+- [ ] show available moves and can move
+
+BISHOPS:
+
+- [ ] show available moves and can move
+
+ROOK:
+
+- [ ] show available moves and can move
+
+QUEEN:
+
+- [ ] show available moves and can move
+
+THE KING:
+
+- [ ] show available moves and can move
+- [ ] When King and Rook have not moved, can make Castling (SPECIAL MOVE)
+- [ ] When King is under attack, then every other gamepiece can only move to kill threat or cover its line of fire
+- [ ] Nobody can kill THE KING
+
+4. MainMenu
+
+- [ ] Show statistics [ONLINE(players), INGAME (games), WAITING(games)]
+- [ ] Listen database and disable JoinButton when there are no room available
+
+5. HowToPlay
+
+- [ ] code is modular and simple to change
+- [ ] all info provided
+
+6. Finishing touches
+
+- [ ] play tested
+- [ ] clean up unnecessary code (functions, files, dependencies, models, widgets)
+
+
 
 ### OTHER INFO:
 
