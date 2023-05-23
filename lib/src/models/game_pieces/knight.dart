@@ -30,6 +30,7 @@ class Knight implements GamePiece {
     // TODO: implement move
   }
 
+
   @override
   List<String> getAvailableMoves(Map<String, GamePiece> gamePieces) {
     // TODO: implement getAvailableMoves
