@@ -9,6 +9,8 @@ import '../models/game_board.dart';
 
 Database db = Database();
 
+enum DbGameState { INGAME, WAITING, GAMEOVER }
+
 class Database {
   final SupabaseClient client = Supabase.instance.client;
   late int id;
@@ -42,7 +44,7 @@ class Database {
     id = rooms.first['game_id'];
 
     String availableColor = await getAvailableColor();
-    Map<String, dynamic> params = {availableColor: myUUID};
+    Map<String, dynamic> params = {availableColor: myUUID, "game_state": DbGameState.INGAME.name};
 
     await table.update(params).eq('game_id', id);
 
@@ -63,12 +65,16 @@ class Database {
     await table.update(updateParams).eq('game_id', id);
   }
 
+  // TODO: Should we delete some data?
   Future<void> deleteOrUpdateRoom(String? myColor) async {
     Map<String, dynamic> data = await table.select().eq('game_id', id).single();
     printDB("DB: deleteOrUpdateRoom > data : $data");
     Map<String, dynamic> updateParams = {};
     if (myColor != null) {
-      updateParams = {myColor: null};
+      updateParams = {
+        myColor: null,
+        "game_state": DbGameState.GAMEOVER.name,
+      };
     }
     printDB("DB: deleteOrUpdateRoom > updateParams : $updateParams");
 
@@ -76,7 +82,7 @@ class Database {
   }
 
   Future<List<dynamic>> getAvailableRooms() async {
-    List<dynamic> rooms = await table.select('*').or('black.is.null,white.is.null');
+    List<dynamic> rooms = await table.select('*').eq('game_state', DbGameState.WAITING.name);
 
     printDB("DB: available rooms > $rooms");
     return rooms;
