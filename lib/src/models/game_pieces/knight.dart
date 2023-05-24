@@ -7,6 +7,8 @@ class Knight implements GamePiece {
   late PieceColor color;
   late String notationValue;
 
+  late Map<String, GamePiece> _pieces;
+
   String get letter => notationValue.substring(0, 1);
 
   int get notationLetterIndex => notationLetters.indexOf(letter);
@@ -40,10 +42,11 @@ class Knight implements GamePiece {
 
   @override
   List<String> getAvailableMoves(Map<String, GamePiece> gamePieces) {
+    _pieces = gamePieces;
     printWarning('Clicked $notationValue');
     List<String> moves = getVerticalTileValues();
     moves.addAll(getHorizontalTileValues());
-    return filterList(moves, gamePieces);
+    return filterList(moves);
   }
 
   List<String> getVerticalTileValues() {
@@ -77,13 +80,19 @@ class Knight implements GamePiece {
     return moves;
   }
 
-  List<String> filterList(List<String> moves, Map<String, GamePiece> gamePieces) {
+  List<String> filterList(List<String> moves) {
     List<String> newMoves = [];
     for (String i in moves) {
-      if ((0 < i.notationNumber() && i.notationNumber() < 8) && gamePieces[i]?.color != color && gamePieces[i]?.name != 'KING') {
+      if ((0 < i.notationNumber() && i.notationNumber() < 8) &&
+          _pieces[i]?.color != color &&
+          isNotKing(i)) {
         newMoves.add(i);
       }
     }
     return newMoves;
+  }
+
+  bool isNotKing(String value) {
+    return _pieces[value]?.name != 'KING';
   }
 }
