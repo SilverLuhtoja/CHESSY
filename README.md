@@ -48,7 +48,7 @@ NOTE : Before full gamelogic development rethink if things can be simplified, al
 
 - [ ] GameBoard and pieces has set up correctly 
 - [ ] Board notation numbers and letters are easy to read (Like Leonards)
-- [ ] Every piece is clickable (last and first column gives error)
+- [ ] Every piece is clickable
 - [ ] GameLogic is understandable and flexible ( PiecesMap don't have to be in gameboard, or board holds all pieces?)
 
 NOTFICATIONS:
@@ -64,7 +64,7 @@ PAWNS:
 
 KNIGHTS:
 
-- [ ] show available moves and can move
+- [x] show available moves and can move
 
 BISHOPS:
 

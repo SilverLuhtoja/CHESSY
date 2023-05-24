@@ -34,3 +34,7 @@ navigateTo(BuildContext context, StatefulWidget screen) => Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => screen),
     );
+
+extension GameValidator on String {
+  int notationNumber() => int.parse(substring(1));
+}

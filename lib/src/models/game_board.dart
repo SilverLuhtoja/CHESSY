@@ -73,30 +73,30 @@ class GameBoard {
       String value = "${_notationLetters[i]}$rowNumber";
       gamePieces[value] = Pawn(notationValue: value, color: color);
     }
-    // for (int i = 0; i < 8; i++) {
-    //   String rowNumber = color == PieceColor.white ? '1' : '8';
-    //   String value = "${_notationLetters[i]}$rowNumber";
-    //   switch (i) {
-    //     case 0:
-    //     case 7:
-    //       gamePieces[value] = Rook(notationValue: value, color: color);
-    //       break;
-    //     case 1:
-    //     case 6:
-    //       gamePieces[value] = Knight(notationValue: value, color: color);
-    //       break;
-    //     case 2:
-    //     case 5:
-    //       gamePieces[value] = Bishop(notationValue: value, color: color);
-    //       break;
-    //     case 3:
-    //       gamePieces[value] = Queen(notationValue: value, color: color);
-    //       break;
-    //     case 4:
-    //       gamePieces[value] = King(notationValue: value, color: color);
-    //       break;
-    //   }
-    // }
+    for (int i = 0; i < 8; i++) {
+      String rowNumber = color == PieceColor.white ? '1' : '8';
+      String value = "${_notationLetters[i]}$rowNumber";
+      switch (i) {
+        // case 0:
+        // case 7:
+        //   gamePieces[value] = Rook(notationValue: value, color: color);
+        //   break;
+        case 1:
+        case 6:
+          gamePieces[value] = Knight(notationValue: value, color: color);
+          break;
+        // case 2:
+        // case 5:
+        //   gamePieces[value] = Bishop(notationValue: value, color: color);
+        //   break;
+        // case 3:
+        //   gamePieces[value] = Queen(notationValue: value, color: color);
+        //   break;
+        // case 4:
+        //   gamePieces[value] = King(notationValue: value, color: color);
+        //   break;
+      }
+    }
   }
 
   // seems repeating (something is fishy)

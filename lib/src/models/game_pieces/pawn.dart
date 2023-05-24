@@ -12,12 +12,11 @@ class Pawn implements GamePiece {
 
   String get letter => notationValue.substring(0, 1);
 
-  Pawn({required this.notationValue, required this.color}) {}
+  int get notationLetterIndex => notationLetters.indexOf(letter);
 
-  // Pawn.fromJson(Map<String, dynamic> json)
-  //     : color = json['color'] == 'white' ? PieceColor.white : PieceColor.black,
-  //       notationValue = json['notationValue'],
-  //       isFirstMove = json['isFirstMove'];
+  int get pieceNumber => int.parse(notationValue.substring(1));
+
+  Pawn({required this.notationValue, required this.color});
 
   Pawn.fromJson(Map<String, dynamic> json) {
     color = PieceColorFunc.fromJson(json['color']);
@@ -54,14 +53,14 @@ class Pawn implements GamePiece {
 
   List<String> calculateMoves(
       List<String> moves, String currentTile, int moveCount, Map<String, GamePiece> gamePieces) {
-    int nextRowNumber = int.parse(currentTile.substring(1)) + _moveCalcHelper;
+    int nextRowNumber = pieceNumber + _moveCalcHelper;
     String nextTile = '$letter$nextRowNumber';
 
     if (moveCount == 0 || gamePieces[nextTile] != null) {
       // check and add enemies last
       getDiagonals().forEach((diagonal) {
         GamePiece? piece = gamePieces[diagonal];
-        if (piece != null && piece.color != color) {
+        if (piece != null && piece.color != color && gamePieces[diagonal]?.name != 'KING') {
           moves.add(piece.notationValue);
         }
       });
@@ -73,14 +72,16 @@ class Pawn implements GamePiece {
   }
 
   List<String> getDiagonals() {
-    int nextRowNumber = int.parse(notationValue.substring(1)) + _moveCalcHelper;
-    int letterIndex = notationLetters.indexOf(letter);
+    int nextRowNumber = pieceNumber + _moveCalcHelper;
+    List<String> diagonals = [];
 
-    List<String> diagonals = [
-      '${notationLetters[letterIndex - 1]}$nextRowNumber',
-      '${notationLetters[letterIndex + 1]}$nextRowNumber'
-    ];
+    if (notationLetterIndex > 0) {
+      diagonals.add('${notationLetters[notationLetterIndex - 1]}$nextRowNumber');
+    }
 
+    if (notationLetterIndex < 7) {
+      diagonals.add('${notationLetters[notationLetterIndex + 1]}$nextRowNumber');
+    }
     return diagonals;
   }
 }

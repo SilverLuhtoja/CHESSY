@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:replaceAppName/src/models/game_pieces/game_piece_interface.dart';
+import 'package:replaceAppName/src/models/game_pieces/king.dart';
 import 'package:replaceAppName/src/models/game_pieces/pawn.dart';
 
 void main() {
@@ -65,6 +66,18 @@ void main() {
     };
 
     List<String> expected = ['e3', 'f3'];
+    List<String> result = pawn.getAvailableMoves(gamePieces);
+
+    expect(result, expected);
+  });
+
+  test("when no first move and KING in vicinity, it shows 1 available moves", () {
+    pawn.isFirstMove = false;
+    Map<String, GamePiece> gamePieces = {
+      'f3': King(notationValue: 'f3', color: PieceColor.black),
+    };
+
+    List<String> expected = ['e3'];
     List<String> result = pawn.getAvailableMoves(gamePieces);
 
     expect(result, expected);
