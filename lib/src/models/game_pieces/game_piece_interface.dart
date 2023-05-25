@@ -20,6 +20,17 @@ extension PieceColorFunc on PieceColor {
   }
 }
 
+extension CustomMapMethods on Map<String, GamePiece>{
+  bool isNotKing(String value){
+    return this[value]?.name != 'KING';
+  }
+}
+
+extension GameValidator on String {
+  int number() => int.parse(substring(1));
+  String letter() => substring(0, 1);
+}
+
 abstract class GamePiece {
   late PieceColor color;
   late String notationValue; // 'g5' 'a1'

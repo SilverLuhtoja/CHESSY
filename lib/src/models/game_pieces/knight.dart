@@ -6,14 +6,11 @@ class Knight implements GamePiece {
   late String name = 'KNIGHT';
   late PieceColor color;
   late String notationValue;
-
   late Map<String, GamePiece> _pieces;
 
-  String get letter => notationValue.substring(0, 1);
+  int get notationLetterIndex => notationLetters.indexOf(notationValue.letter());
 
-  int get notationLetterIndex => notationLetters.indexOf(letter);
-
-  int get pieceNumber => int.parse(notationValue.substring(1));
+  int get pieceNumber => notationValue.number();
 
   Knight({required this.notationValue, required this.color});
 
@@ -46,7 +43,7 @@ class Knight implements GamePiece {
     printWarning('Clicked $notationValue');
     List<String> moves = getVerticalTileValues();
     moves.addAll(getHorizontalTileValues());
-    return filterList(moves);
+    return filterValidMoves(moves);
   }
 
   List<String> getVerticalTileValues() {
@@ -80,19 +77,11 @@ class Knight implements GamePiece {
     return moves;
   }
 
-  List<String> filterList(List<String> moves) {
-    List<String> newMoves = [];
-    for (String i in moves) {
-      if ((0 < i.notationNumber() && i.notationNumber() < 8) &&
-          _pieces[i]?.color != color &&
-          isNotKing(i)) {
-        newMoves.add(i);
-      }
-    }
-    return newMoves;
-  }
-
-  bool isNotKing(String value) {
-    return _pieces[value]?.name != 'KING';
+  List<String> filterValidMoves(List<String> moves) {
+    return moves.where((move) {
+      final number = move.number();
+      final pieceColor = _pieces[move]?.color;
+      return (0 < number && number < 8) && pieceColor != color && _pieces.isNotKing(move);
+    }).toList();
   }
 }
