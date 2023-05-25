@@ -100,7 +100,7 @@ class GameScreen extends ConsumerWidget {
               onTap: () => pieceClickedHandler(gamePieces, tile, ref),
               child: Container(
                   child: SvgPicture.asset(
-                "assets/${svgToPick}.svg",
+                "assets/$svgToPick.svg",
                 colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
               )),
             )
