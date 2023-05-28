@@ -16,7 +16,6 @@ class GameBoard {
   GameBoard() {
     placeGamePiecesToBoard(PieceColor.white);
     placeGamePiecesToBoard(PieceColor.black);
-    gamePieces['d4'] = Bishop(notationValue: 'd4', color: PieceColor.white);
   }
 
   GameBoard.fromJson(Map<String, dynamic> json) {
