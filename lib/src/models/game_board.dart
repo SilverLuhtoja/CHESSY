@@ -27,6 +27,9 @@ class GameBoard {
         case 'KNIGHT':
           gamePieces[piece.key] = Knight.fromJson(piece.value);
           break;
+        case 'BISHOP':
+          gamePieces[piece.key] = Bishop.fromJson(piece.value);
+          break;
       }
     }
   }
@@ -85,10 +88,10 @@ class GameBoard {
         case 6:
           gamePieces[value] = Knight(notationValue: value, color: color);
           break;
-        // case 2:
-        // case 5:
-        //   gamePieces[value] = Bishop(notationValue: value, color: color);
-        //   break;
+        case 2:
+        case 5:
+          gamePieces[value] = Bishop(notationValue: value, color: color);
+          break;
         // case 3:
         //   gamePieces[value] = Queen(notationValue: value, color: color);
         //   break;

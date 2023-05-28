@@ -68,7 +68,7 @@ KNIGHTS:
 
 BISHOPS:
 
-- [ ] show available moves and can move
+- [x] show available moves and can move
 
 ROOK:
 
