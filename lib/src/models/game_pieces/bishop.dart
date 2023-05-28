@@ -55,7 +55,8 @@ class Bishop implements GamePiece {
     if (isOutsideOfGrid(currentTile) || _pieces[currentTile]?.color == PieceColor.black) return;
     String nextTile =
         "${notationLetters[currentTile.index() + dir[0]]}${currentTile.number() + dir[1]}";
-    if (_pieces[nextTile]?.color == PieceColor.white) return;
+    if (_pieces[nextTile]?.color == PieceColor.white || !_pieces.isNotKing(nextTile)) return;
+
     _moves.add(nextTile);
     calculateMoves(dir, nextTile);
   }
