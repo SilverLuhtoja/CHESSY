@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
+import '../../constants.dart';
+
 enum PieceColor { white, black }
 
 extension PieceColorFunc on PieceColor {
@@ -20,15 +22,18 @@ extension PieceColorFunc on PieceColor {
   }
 }
 
-extension GamePieceMapMethods on Map<String, GamePiece>{
-  bool isNotKing(String value){
+extension GamePieceMapMethods on Map<String, GamePiece> {
+  bool isNotKing(String value) {
     return this[value]?.name != 'KING';
   }
 }
 
 extension NotationValueMethods on String {
   int number() => int.parse(substring(1));
+
   String letter() => substring(0, 1);
+
+  int index() => notationLetters.indexOf(letter());
 }
 
 abstract class GamePiece {
