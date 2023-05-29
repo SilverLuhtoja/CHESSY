@@ -6,7 +6,6 @@ class Bishop implements GamePiece {
   late String name = 'BISHOP';
   late PieceColor color;
   late String notationValue;
-
   late Map<String, GamePiece> _pieces;
   late List<String> _moves = [];
 
@@ -52,7 +51,8 @@ class Bishop implements GamePiece {
   }
 
   void calculateMoves(List<int> dir, String currentTile) {
-    if (isOutsideOfGrid(currentTile) || _pieces[currentTile]?.color == PieceColor.black) return;
+    if (!isNextTileOutsideBorders(currentTile, dir) ||
+        _pieces[currentTile]?.color == PieceColor.black) return;
     String nextTile =
         "${notationLetters[currentTile.index() + dir[0]]}${currentTile.number() + dir[1]}";
     if (_pieces[nextTile]?.color == PieceColor.white || !_pieces.isNotKing(nextTile)) return;
@@ -61,42 +61,9 @@ class Bishop implements GamePiece {
     calculateMoves(dir, nextTile);
   }
 
-  bool isOutsideOfGrid(String currentTile) {
-    return currentTile.index() < 1 ||
-        currentTile.number() < 2 ||
-        currentTile.index() > 6 ||
-        currentTile.number() > 7;
+  bool isNextTileOutsideBorders(String currentTile, List<int> dir) {
+    int letterVal = currentTile.index() + dir[0];
+    int numberVal = currentTile.number() + dir[1];
+    return letterVal >= 0 && letterVal < 8 && numberVal > 0 && numberVal < 9;
   }
-
-// void calcLeftDecreasingMoves(String currentTile) {
-//   if (isOutsideOfGrid(currentTile)) return;
-//   String nextTile = "${notationLetters[currentTile.index() - 1]}${currentTile.number() - 1}";
-//   if (_pieces[nextTile]?.color == PieceColor.white) return;
-//   _moves.add(nextTile);
-//   calcLeftDecreasingMoves(nextTile);
-// }
-//
-// void calcLeftIncreasingMoves(String currentTile) {
-//   if (isOutsideOfGrid(currentTile)) return;
-//   String nextTile = "${notationLetters[currentTile.index() - 1]}${currentTile.number() + 1}";
-//   if (_pieces[nextTile]?.color == PieceColor.white) return;
-//   _moves.add(nextTile);
-//   calcLeftIncreasingMoves(nextTile);
-// }
-//
-// void calcRightDecreasingMoves(String currentTile) {
-//   if (isOutsideOfGrid(currentTile)) return;
-//   String nextTile = "${notationLetters[currentTile.index() + 1]}${currentTile.number() - 1}";
-//   if (_pieces[nextTile]?.color == PieceColor.white) return;
-//   _moves.add(nextTile);
-//   calcRightDecreasingMoves(nextTile);
-// }
-//
-// void calcRightIncreasingMoves(String currentTile) {
-//   if (isOutsideOfGrid(currentTile)) return;
-//   String nextTile = "${notationLetters[currentTile.index() + 1]}${currentTile.number() + 1}";
-//   if (_pieces[nextTile]?.color == PieceColor.white) return;
-//   _moves.add(nextTile);
-//   calcRightIncreasingMoves(nextTile);
-// }
 }

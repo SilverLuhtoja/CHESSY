@@ -92,9 +92,9 @@ class GameBoard {
         case 5:
           gamePieces[value] = Bishop(notationValue: value, color: color);
           break;
-        // case 3:
-        //   gamePieces[value] = Queen(notationValue: value, color: color);
-        //   break;
+        case 3:
+          gamePieces[value] = Queen(notationValue: value, color: color);
+          break;
         // case 4:
         //   gamePieces[value] = King(notationValue: value, color: color);
         //   break;

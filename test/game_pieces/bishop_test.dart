@@ -21,10 +21,8 @@ void main() {
 
   test("when nothing blocking, it shows 11 available moves", () {
     Bishop bishop = Bishop(notationValue: 'f4', color: PieceColor.white);
-    Map<String, GamePiece> gamePieces = {};
-
     List<String> expected = ['e3', 'd2', 'c1', 'g3', 'h2', 'e5', 'd6', 'c7', 'b8', 'g5', 'h6'];
-    List<String> result = bishop.getAvailableMoves(gamePieces);
+    List<String> result = bishop.getAvailableMoves({});
 
     expect(result.toSet(), expected.toSet());
   });
@@ -43,5 +41,13 @@ void main() {
 
     expect(result.toSet(), expected.toSet());
     assert(!result.contains('g5'));
+  });
+
+  test("when in corner, return correct moves", () {
+    Bishop bishop = Bishop(notationValue: 'a1', color: PieceColor.white);
+    List<String> expected = ['b2', 'c3', 'd4', 'e5', 'f6', 'g7', 'h8'];
+    List<String> result = bishop.getAvailableMoves({});
+
+    expect(result.toSet(), expected.toSet());
   });
 }
