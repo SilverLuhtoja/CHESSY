@@ -30,6 +30,9 @@ class GameBoard {
         case 'BISHOP':
           gamePieces[piece.key] = Bishop.fromJson(piece.value);
           break;
+        case 'ROOK':
+          gamePieces[piece.key] = Rook.fromJson(piece.value);
+          break;
       }
     }
   }
@@ -80,10 +83,10 @@ class GameBoard {
       String rowNumber = color == PieceColor.white ? '1' : '8';
       String value = "${_notationLetters[i]}$rowNumber";
       switch (i) {
-        // case 0:
-        // case 7:
-        //   gamePieces[value] = Rook(notationValue: value, color: color);
-        //   break;
+        case 0:
+        case 7:
+          gamePieces[value] = Rook(notationValue: value, color: color);
+          break;
         case 1:
         case 6:
           gamePieces[value] = Knight(notationValue: value, color: color);
