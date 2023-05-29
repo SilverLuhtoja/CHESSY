@@ -72,7 +72,7 @@ BISHOPS:
 
 ROOK:
 
-- [ ] show available moves and can move
+- [   ] show available moves and can move
 
 QUEEN:
 
@@ -110,7 +110,8 @@ THE KING:
         black: player_UUID
         db_game_board: Map<String,GamePiece> as String
         current_turn: player_UUID or color 
-        game_over: nil (player_UUID if won)
+        winner: nil (player_UUID if won)
+        game_state: DbGameState(INGAME, WAITING, GAMEOVER)
     }
 
     * GameState needs to hold:
