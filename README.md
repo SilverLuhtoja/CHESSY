@@ -11,8 +11,30 @@ KOOD01: https://github.com/01-edu/public/tree/master/subjects/mobile-dev/chess
 
 ### THOUGHTS:
 
+* How do handle check ???
+    1. Extra table to database and piece logic check if piece is threatening king,
+       if it is update database table with current piece
+    2. Every turn other player first have to check if his king is on check.
+       Basically the checking will work as queen moves + checking horse and pawns around 3 squares
+
+* How do make the end game logic when king is on check?
+    1. When player moves to block or kill the threat, then it needs to check again if king is still in check
+        * if it is then this move is invalid, and it doesn't let to make this move
+    2. Game over is when king cant move anymore and there is no other pieces to block or kill the threat
+        1. get attacking piece array moves to king (including it notationValue)
+        2. get all defending pieces available moves (meaning loop every piece)
+           and see if there are values that will include in attacking piece
+            * this will give all blockers and killers
+        3. get all king moves
+            1. if there is no available moves left for king, but can kill pieces
+                * if attacking piece don't have defenders, then king can kill
+                * if attacking piece has defenders  (meaning if king kills, but he will again be in check)
+                  and king has no other moves
+                * !!! THEN GAMEOVER !!!
+
+
 * There is not much difference when creating and joining game currently, because the logic is the same.
-  Join button makes sense only if app shows available rooms to join as list. So join create and join button
+  Join button makes sense only if app shows available rooms to join as list. So combine create and join button
   or make list of available rooms?
   This would need Also userNames to show, to easily recognize your friends game (simpler that following UUID)
 
@@ -46,7 +68,7 @@ NOTE : Before full gamelogic development rethink if things can be simplified, al
 
 3. GameLogic:
 
-- [ ] GameBoard and pieces has set up correctly 
+- [ ] GameBoard and pieces has set up correctly
 - [ ] Board notation numbers and letters are easy to read (Like Leonards)
 - [ ] Every piece is clickable
 - [ ] GameLogic is understandable and flexible ( PiecesMap don't have to be in gameboard, or board holds all pieces?)
@@ -76,7 +98,7 @@ ROOK:
 
 QUEEN:
 
-- [ ] show available moves and can move
+- [x] show available moves and can move
 
 THE KING:
 
@@ -99,8 +121,6 @@ THE KING:
 
 - [ ] play tested
 - [ ] clean up unnecessary code (functions, files, dependencies, models, widgets)
-
-
 
 ### OTHER INFO:
 

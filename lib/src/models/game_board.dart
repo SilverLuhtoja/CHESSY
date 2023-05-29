@@ -33,6 +33,9 @@ class GameBoard {
         case 'ROOK':
           gamePieces[piece.key] = Rook.fromJson(piece.value);
           break;
+        case 'QUEEN':
+          gamePieces[piece.key] = Queen.fromJson(piece.value);
+          break;
       }
     }
   }
