@@ -7,8 +7,6 @@ import 'package:replaceAppName/src/models/game_pieces/rook.dart';
 void main() {
   test("when nothing blocking, it stays inside borders", () {
     Rook rook = Rook(notationValue: 'e4', color: PieceColor.white);
-    Map<String, GamePiece> gamePieces = {};
-
     List<String> expected = [
       'd4',
       'c4',
@@ -25,7 +23,7 @@ void main() {
       'e7',
       'e8'
     ];
-    List<String> result = rook.getAvailableMoves(gamePieces);
+    List<String> result = rook.getAvailableMoves({});
 
     expect(result.toSet(), expected.toSet());
   });
@@ -59,5 +57,18 @@ void main() {
 
     expect(result.toSet(), expected.toSet());
     assert(!result.contains('g5'));
+  });
+
+  test("when in corner, return correct moves", () {
+    Rook rook = Rook(notationValue: 'h8', color: PieceColor.white);
+    Map<String, GamePiece> gamePieces = {
+      'f8': King(notationValue: 'f8', color: PieceColor.white),
+      'h6': Pawn(notationValue: 'h6', color: PieceColor.white),
+    };
+
+    List<String> expected = ['g8', 'h7'];
+    List<String> result = rook.getAvailableMoves(gamePieces);
+
+    expect(result.toSet(), expected.toSet());
   });
 }

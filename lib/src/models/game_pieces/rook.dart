@@ -6,7 +6,6 @@ class Rook implements GamePiece {
   late String name = 'ROOK';
   late PieceColor color;
   late String notationValue;
-
   late Map<String, GamePiece> _pieces;
   late List<String> _moves = [];
 
@@ -51,7 +50,8 @@ class Rook implements GamePiece {
   }
 
   void calculateMoves(List<int> dir, String currentTile) {
-    if (isOutsideOfGrid(currentTile) || _pieces[currentTile]?.color == PieceColor.black) return;
+    if (!isNextTileOutsideBorders(currentTile, dir) ||
+        _pieces[currentTile]?.color == PieceColor.black) return;
     String nextTile =
         "${notationLetters[currentTile.index() + dir[0]]}${currentTile.number() + dir[1]}";
     if (_pieces[nextTile]?.color == PieceColor.white || !_pieces.isNotKing(nextTile)) return;
@@ -60,10 +60,9 @@ class Rook implements GamePiece {
     calculateMoves(dir, nextTile);
   }
 
-  bool isOutsideOfGrid(String currentTile) {
-    return currentTile.index() < 1 ||
-        currentTile.number() < 2 ||
-        currentTile.index() > 6 ||
-        currentTile.number() > 7;
+  bool isNextTileOutsideBorders(String currentTile, List<int> dir) {
+    int letterVal = currentTile.index() + dir[0];
+    int numberVal = currentTile.number() + dir[1];
+    return letterVal >= 0 && letterVal < 8 && numberVal > 0 && numberVal < 9;
   }
 }
