@@ -72,7 +72,7 @@ BISHOPS:
 
 ROOK:
 
-- [   ] show available moves and can move
+- [x] show available moves and can move
 
 QUEEN:
 
