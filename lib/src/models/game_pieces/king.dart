@@ -68,4 +68,13 @@ class King implements GamePiece {
     int numberVal = currentTile.number() + dir[1];
     return letterVal >= 0 && letterVal < 8 && numberVal > 0 && numberVal < 9;
   }
+
+  // get current king spot
+  // loop squares like queen
+  // loop surrounding squares and check for pawns and knights
+  // Basically every piece movement to check for opposite colors
+  bool isUnderCheck(){
+
+    return false;
+  }
 }

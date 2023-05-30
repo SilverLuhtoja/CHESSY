@@ -8,14 +8,15 @@ KOOD01: https://github.com/01-edu/public/tree/master/subjects/mobile-dev/chess
 ### NEEDED CHANGES / BUGS:
 
 * DB also need history column
+* Refactor knight logic as in other piece logic, simplify pawns logic
 
 ### THOUGHTS:
 
 * How do handle check ???
-    1. Extra table to database and piece logic check if piece is threatening king,
-       if it is update database table with current piece
-    2. Every turn other player first have to check if his king is on check.
-       Basically the checking will work as queen moves + checking horse and pawns around 3 squares
+   * Every turn other player first have to check if his king is on check.
+    Basically the checking will work as queen moves + checking horse and pawns around 3 squares
+   * ~~Extra table to database and piece logic check if piece is threatening king,
+      if it is update database table with current piece~~
 
 * How do make the end game logic when king is on check?
     1. When player moves to block or kill the threat, then it needs to check again if king is still in check

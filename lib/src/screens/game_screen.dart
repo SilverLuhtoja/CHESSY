@@ -23,11 +23,12 @@ class GameScreen extends ConsumerWidget {
     final double tilePositionOffset = tileSize - padding * 2;
     final List<Widget> stackedBuilds = [];
 
-    final GamePiecesState gameBoard = ref.watch(gamePiecesStateProvider);
+    final GameState gameBoard = ref.watch(gamePiecesStateProvider);
     final Map<String, GamePiece> gamePieces = gameBoard.gameboard.gamePieces;
     final bool isWaitingForPlayer = gameBoard.waitingPlayer;
     final bool isGameOver = gameBoard.gameOverStatus == null;
     final bool isMyTurn = gameBoard.isMyTurn;
+    const bool isKingChecked = false;
 
     stackedBuilds.addAll(gameBoard.gameboard.flatGrid.map((tile) => Positioned(
         top: (tile.row - 1) * tileSize + padding * 2,
@@ -56,6 +57,7 @@ class GameScreen extends ConsumerWidget {
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              isKingChecked ? kingCheckNotification() : Container(),
               isWaitingForPlayer
                   ? const WaitingView()
                   : isGameOver
@@ -71,6 +73,13 @@ class GameScreen extends ConsumerWidget {
           )),
     );
   }
+
+  Widget kingCheckNotification() => Container(
+      margin: const EdgeInsets.only(bottom: 20),
+      child: const Text(
+        "! KING ON CHECK !",
+        style: TextStyle(fontSize: 20),
+      ));
 
   Center buildGridValues(Tile tile) {
     return Center(
@@ -108,7 +117,7 @@ class GameScreen extends ConsumerWidget {
     );
   }
 
-  GestureDetector buildAvailableMoveHighlight(GamePiecesState gameBoard, Tile tile, WidgetRef ref) {
+  GestureDetector buildAvailableMoveHighlight(GameState gameBoard, Tile tile, WidgetRef ref) {
     return GestureDetector(
         onTap: () async => pieceMoveHandler(gameBoard, tile, ref),
         child: Container(
@@ -119,11 +128,11 @@ class GameScreen extends ConsumerWidget {
   }
 
   void pieceClickedHandler(Map<String, GamePiece> gamePieces, Tile tile, WidgetRef ref) {
-    GamePiecesState gamePiecesState = ref.watch(gamePiecesStateProvider);
+    GameState gamePiecesState = ref.watch(gamePiecesStateProvider);
     if (!gamePiecesState.isMyTurn) return;
 
     // ONLY RENDERS WHEN STATE IS CHANGED
-    GameState pieceClickedState = ref.watch(gameStateProvider);
+    ClickedPieceState pieceClickedState = ref.watch(gameStateProvider);
     GamePiece clickedPiece = gamePieces[tile.notationValue]!;
     if (clickedPiece != null && clickedPiece.color.name == gamePiecesState.myColor) {
       if (pieceClickedState.gamePieceClicked != clickedPiece.notationValue) {
@@ -137,10 +146,10 @@ class GameScreen extends ConsumerWidget {
     }
   }
 
-  void pieceMoveHandler(GamePiecesState gameBoard, Tile tile, WidgetRef ref) {
+  void pieceMoveHandler(GameState gameBoard, Tile tile, WidgetRef ref) {
     if (!ref.watch(gamePiecesStateProvider).isMyTurn) return;
 
-    GameState pieceClickedState = ref.watch(gameStateProvider);
+    ClickedPieceState pieceClickedState = ref.watch(gameStateProvider);
     String clickedValue = pieceClickedState.gamePieceClicked ?? "";
     String? otherPlayerTurnColor =
         ref.watch(gamePiecesStateProvider).myColor == 'white' ? 'black' : 'white';
