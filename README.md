@@ -102,7 +102,7 @@ QUEEN:
 
 THE KING:
 
-- [ ] show available moves and can move
+- [x] show available moves and can move
 - [ ] When King and Rook have not moved, can make Castling (SPECIAL MOVE)
 - [ ] When King is under attack, then every other gamepiece can only move to kill threat or cover its line of fire
 - [ ] Nobody can kill THE KING

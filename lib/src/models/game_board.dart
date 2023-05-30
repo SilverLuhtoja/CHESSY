@@ -36,6 +36,9 @@ class GameBoard {
         case 'QUEEN':
           gamePieces[piece.key] = Queen.fromJson(piece.value);
           break;
+        case 'KING':
+          gamePieces[piece.key] = King.fromJson(piece.value);
+          break;
       }
     }
   }
@@ -56,7 +59,7 @@ class GameBoard {
 
   List<List<Tile>> generateBoard(int gridSize) {
     List<List<Tile>> tiles = [];
-    bool startWhite = true;
+    bool startWhite = false;
 
     for (int row = 1; row < gridSize + 1; row++) {
       List<Tile> singleRowOfTiles = [];
@@ -101,9 +104,9 @@ class GameBoard {
         case 3:
           gamePieces[value] = Queen(notationValue: value, color: color);
           break;
-        // case 4:
-        //   gamePieces[value] = King(notationValue: value, color: color);
-        //   break;
+        case 4:
+          gamePieces[value] = King(notationValue: value, color: color);
+          break;
       }
     }
   }
