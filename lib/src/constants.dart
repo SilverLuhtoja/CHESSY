@@ -9,12 +9,11 @@ const Color boardColor = Color.fromRGBO(208, 207, 198, 1.0);
 const Color availableMoveColor = Color.fromRGBO(150, 239, 150, 0.7);
 const List<String> notationLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
-var gameRules = [
+List<Map<String, dynamic>> gameRules = [
   {
-    'name': 'pawn',
+    'name': 'PAWN',
     "image": "assets/pawn_move.jpg",
-    'text':
-        'PAWNS are unusual because they move and capture in different ways\n',
+    'text': 'PAWNS are unusual because they move and capture in different ways\n',
     "actions":
         "MOVE:\n* If first move: can move forward one or two squares.\n* All other moves: forward one square at a time\n\n ATTACK: diagonally",
     'SPECIAL': {
@@ -25,30 +24,30 @@ var gameRules = [
     }
   },
   {
-    'name': 'knight',
+    'name': 'KNIGHT',
     "image": "assets/knight_move.jpg",
     'text': 'KNIGHTS are the only pieces that can move over other pieces.\n',
     "actions":
         "MOVE and ATTACK:\n\ngoing two squares in one direction + then one more move at a 90-degree angle.\n\n * just like the shape of an “L”",
   },
   {
-    'name': 'king',
+    'name': 'KING',
     "image": "assets/king_move.jpg",
     "actions":
         "MOVE and ATTACK:\n\n* ONE square in any direction:\n*up \n*down \n*sideways\n*diagonally",
   },
   {
-    'name': 'queen',
+    'name': 'QUEEN',
     "image": "assets/queen_move.png",
     "actions": "MOVE and ATTACK:\n\n*up\n*down\n*sideways\n*diagonally",
   },
   {
-    'name': "bishop",
+    'name': "BISHOP",
     "image": "assets/bishop_move.png",
     "actions": "MOVE and ATTACK:\n\n *only diagonally",
   },
   {
-    'name': "rook",
+    'name': "ROOK",
     "image": "assets/rook_move.png",
     "actions": "MOVE and ATTACK:\n\n*up\n*down\n*sideways",
     'SPECIAL': {
@@ -60,5 +59,5 @@ var gameRules = [
   },
 ];
 
-  String chessHistory =
-      'The game of chess is believed to have originated in India, where it was call Chaturange prior to the 6th century AD. The game became popular in India and then spread to Persia, and the Arabs. The Arabs coined the term “Shah Mat”, which translates to “the King is dead”. This is where the word “checkmate” came from.';
+String chessHistory =
+    'The game of chess is believed to have originated in India, where it was call Chaturange prior to the 6th century AD. The game became popular in India and then spread to Persia, and the Arabs. The Arabs coined the term “Shah Mat”, which translates to “the King is dead”. This is where the word “checkmate” came from.';
