@@ -114,8 +114,8 @@ THE KING:
 
 5. HowToPlay
 
-- [ ] code is modular and simple to change
-- [ ] all info provided
+- [x] code is modular and simple to change
+- [x] all info provided
 
 6. Finishing touches
 
