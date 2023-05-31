@@ -5,6 +5,7 @@ import 'package:replaceAppName/src/widgets/main_menu_widgets/buttons/button.dart
 import 'package:replaceAppName/src/widgets/main_menu_widgets/buttons/join_game_button.dart';
 import 'package:replaceAppName/src/widgets/uuid_container.dart';
 import '../widgets/main_menu_widgets/buttons/new_game_button.dart';
+import 'how_to_play_screen.dart';
 
 class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});
@@ -42,7 +43,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   const SizedBox(height: 20),
                   const JoinGameButton(),
                   const SizedBox(height: 20),
-                  const MenuButton(text: "How to PLay?", handler: null),
+                  MenuButton(text: "How to PLay?", handler: () => navigateTo(const HowToPlayScreen())),
                   const SizedBox(height: 20),
                   MenuButton(
                       text: "To Supabase Test",
