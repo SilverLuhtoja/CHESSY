@@ -69,7 +69,7 @@ NOTE : Before full gamelogic development rethink if things can be simplified, al
 
 3. GameLogic:
 
-- [ ] GameBoard and pieces has set up correctly
+- [x] GameBoard and pieces has set up correctly
 - [ ] Board notation numbers and letters are easy to read (Like Leonards)
 - [ ] Every piece is clickable
 - [ ] GameLogic is understandable and flexible ( PiecesMap don't have to be in gameboard, or board holds all pieces?)

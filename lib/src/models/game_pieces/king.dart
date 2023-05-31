@@ -8,6 +8,7 @@ class King implements GamePiece {
   late String notationValue;
   late Map<String, GamePiece> _pieces;
   late List<String> _moves = [];
+  late bool underAttack;
 
   King({required this.notationValue, required this.color});
 
@@ -18,10 +19,11 @@ class King implements GamePiece {
 
   @override
   Map<String, dynamic> toJson() => {
-    'name': name,
-    'color': color.name,
-    'notationValue': notationValue,
-  };
+        'name': name,
+        'color': color.name,
+        'notationValue': notationValue,
+      };
+
   @override
   bool canMove() {
     // TODO: implement canMove
@@ -71,10 +73,32 @@ class King implements GamePiece {
 
   // get current king spot
   // loop squares like queen
+  // Have to check whos currently attacking also (rook cant move diagonally)
   // loop surrounding squares and check for pawns and knights
   // Basically every piece movement to check for opposite colors
-  bool isUnderCheck(){
-
-    return false;
+  bool isUnderCheck(Map<String, GamePiece> gamePieces) {
+    _pieces = gamePieces;
+    isCheckFromPawn();
+    return underAttack;
   }
+
+  void isCheckFromPawn() {
+    int index = notationValue.index();
+    int moveCalcHelper = color == PieceColor.white ? 1 : -1;
+    int nextRowNumber = notationValue.number() + moveCalcHelper;
+    for (int i in [1, -1]) {
+      if (index > 0 && index < 7) {
+        String diag = '${notationLetters[index - i]}$nextRowNumber';
+        if (_pieces[diag]?.name == 'PAWN' && _pieces[diag]?.color != color) {
+          underAttack = true;
+          return;
+        }
+      }
+    }
+    underAttack = false;
+  }
+
+// void isCheckFromKnight{
+// void isCheckFromQueenAndRook(){
+// void isCheckFromQueenAndBishop(){
 }

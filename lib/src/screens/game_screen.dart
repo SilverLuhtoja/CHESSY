@@ -23,7 +23,7 @@ class GameScreen extends ConsumerWidget {
     final double tilePositionOffset = tileSize - padding * 2;
     final List<Widget> stackedBuilds = [];
 
-    final GameState gameBoard = ref.watch(gamePiecesStateProvider);
+    final GamePiecesState gameBoard = ref.watch(gamePiecesStateProvider);
     final Map<String, GamePiece> gamePieces = gameBoard.gameboard.gamePieces;
     final bool isWaitingForPlayer = gameBoard.waitingPlayer;
     final bool isGameOver = gameBoard.gameOverStatus == null;
@@ -117,7 +117,7 @@ class GameScreen extends ConsumerWidget {
     );
   }
 
-  GestureDetector buildAvailableMoveHighlight(GameState gameBoard, Tile tile, WidgetRef ref) {
+  GestureDetector buildAvailableMoveHighlight(GamePiecesState gameBoard, Tile tile, WidgetRef ref) {
     return GestureDetector(
         onTap: () async => pieceMoveHandler(gameBoard, tile, ref),
         child: Container(
@@ -128,11 +128,11 @@ class GameScreen extends ConsumerWidget {
   }
 
   void pieceClickedHandler(Map<String, GamePiece> gamePieces, Tile tile, WidgetRef ref) {
-    GameState gamePiecesState = ref.watch(gamePiecesStateProvider);
+    GamePiecesState gamePiecesState = ref.watch(gamePiecesStateProvider);
     if (!gamePiecesState.isMyTurn) return;
 
     // ONLY RENDERS WHEN STATE IS CHANGED
-    ClickedPieceState pieceClickedState = ref.watch(gameStateProvider);
+    GameState pieceClickedState = ref.watch(gameStateProvider);
     GamePiece clickedPiece = gamePieces[tile.notationValue]!;
     if (clickedPiece != null && clickedPiece.color.name == gamePiecesState.myColor) {
       if (pieceClickedState.gamePieceClicked != clickedPiece.notationValue) {
@@ -146,10 +146,10 @@ class GameScreen extends ConsumerWidget {
     }
   }
 
-  void pieceMoveHandler(GameState gameBoard, Tile tile, WidgetRef ref) {
+  void pieceMoveHandler(GamePiecesState gameBoard, Tile tile, WidgetRef ref) {
     if (!ref.watch(gamePiecesStateProvider).isMyTurn) return;
 
-    ClickedPieceState pieceClickedState = ref.watch(gameStateProvider);
+    GameState pieceClickedState = ref.watch(gameStateProvider);
     String clickedValue = pieceClickedState.gamePieceClicked ?? "";
     String? otherPlayerTurnColor =
         ref.watch(gamePiecesStateProvider).myColor == 'white' ? 'black' : 'white';
