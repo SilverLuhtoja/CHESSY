@@ -42,43 +42,36 @@ class Knight implements GamePiece {
   List<String> getAvailableMoves(Map<String, GamePiece> gamePieces) {
     _pieces = gamePieces;
     printWarning('Clicked $notationValue');
-    getVerticalTileValues();
-    getHorizontalTileValues();
-    return filterValidMoves(_moves);
+    List<List<int>> directions = [
+      [-1, -2],
+      [-1, 2],
+      [1, -2],
+      [1, 2],
+      [-2, -1],
+      [-2, 1],
+      [2, 1],
+      [2, -1],
+    ];
+    for (var dir in directions) {
+      calculateMoves(dir, notationValue);
+    }
+
+    return _moves;
   }
 
-  void getVerticalTileValues() {
-    if (notationLetterIndex > 0) {
-      String upLeftTile = '${notationLetters[notationLetterIndex - 1]}${pieceNumber - 2}';
-      String downLeftTile = '${notationLetters[notationLetterIndex - 1]}${pieceNumber + 2}';
-      _moves.addAll([upLeftTile, downLeftTile]);
-    }
-    if (notationLetterIndex < 7) {
-      String upRightTile = '${notationLetters[notationLetterIndex + 1]}${pieceNumber - 2}';
-      String downRightTile = '${notationLetters[notationLetterIndex + 1]}${pieceNumber + 2}';
-      _moves.addAll([upRightTile, downRightTile]);
-    }
+  void calculateMoves(List<int> dir, String currentTile) {
+    if (!isNextTileOutsideBorders(currentTile, dir) ||
+        (_pieces[currentTile] != null && _pieces[currentTile]?.color != color)) return;
+    String nextTile =
+        "${notationLetters[currentTile.index() + dir[0]]}${currentTile.number() + dir[1]}";
+    if (_pieces[nextTile]?.color == color) return;
+
+    _moves.add(nextTile);
   }
 
-  void getHorizontalTileValues() {
-    if (notationLetterIndex > 1) {
-      String rightDownTile = '${notationLetters[notationLetterIndex - 2]}${pieceNumber - 1}';
-      String rightUpTile = '${notationLetters[notationLetterIndex - 2]}${pieceNumber + 1}';
-      _moves.addAll([rightDownTile, rightUpTile]);
-    }
-
-    if (notationLetterIndex < 6) {
-      String leftDownTile = '${notationLetters[notationLetterIndex + 2]}${pieceNumber - 1}';
-      String leftUpTile = '${notationLetters[notationLetterIndex + 2]}${pieceNumber + 1}';
-      _moves.addAll([leftDownTile, leftUpTile]);
-    }
-  }
-
-  List<String> filterValidMoves(List<String> moves) {
-    return moves.where((move) {
-      final number = move.number();
-      final pieceColor = _pieces[move]?.color;
-      return (0 < number && number < 8) && pieceColor != color && _pieces.isNotKing(move);
-    }).toList();
+  bool isNextTileOutsideBorders(String currentTile, List<int> dir) {
+    int letterVal = currentTile.index() + dir[0];
+    int numberVal = currentTile.number() + dir[1];
+    return letterVal >= 0 && letterVal < 8 && numberVal > 0 && numberVal < 9;
   }
 }

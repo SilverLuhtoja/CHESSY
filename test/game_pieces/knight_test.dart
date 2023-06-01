@@ -41,7 +41,7 @@ void main() {
       'g3': King(notationValue: 'g3', color: PieceColor.black),
     };
 
-    List<String> expected = ['f2'];
+    List<String> expected = ['f2', 'g3'];
     List<String> result = knight.getAvailableMoves(gamePieces);
 
     expect(result.toSet(), expected.toSet());

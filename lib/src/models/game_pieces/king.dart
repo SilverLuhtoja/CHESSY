@@ -8,7 +8,7 @@ class King implements GamePiece {
   late String notationValue;
   late Map<String, GamePiece> _pieces;
   late List<String> _moves = [];
-  late bool underAttack;
+  bool underAttack = false;
 
   King({required this.notationValue, required this.color});
 
@@ -76,29 +76,26 @@ class King implements GamePiece {
   // Have to check whos currently attacking also (rook cant move diagonally)
   // loop surrounding squares and check for pawns and knights
   // Basically every piece movement to check for opposite colors
+
+  // LOOP ALL ENEMY PIECES AND CHECK IF KING IS INSIDE
   bool isUnderCheck(Map<String, GamePiece> gamePieces) {
-    _pieces = gamePieces;
-    isCheckFromPawn();
+    Map<String, GamePiece> newGamePieces = sortedPieces(gamePieces);
+
+    for (final value in newGamePieces.values) {
+      List<String> valueMoves = value.getAvailableMoves(gamePieces);
+      if (valueMoves.contains(notationValue)) underAttack = true;
+    }
+
     return underAttack;
   }
 
-  void isCheckFromPawn() {
-    int index = notationValue.index();
-    int moveCalcHelper = color == PieceColor.white ? 1 : -1;
-    int nextRowNumber = notationValue.number() + moveCalcHelper;
-    for (int i in [1, -1]) {
-      if (index > 0 && index < 7) {
-        String diag = '${notationLetters[index - i]}$nextRowNumber';
-        if (_pieces[diag]?.name == 'PAWN' && _pieces[diag]?.color != color) {
-          underAttack = true;
-          return;
-        }
-      }
+  Map<String, GamePiece> sortedPieces(Map<String, GamePiece> gamePieces) {
+    Map<String, GamePiece> newGamePieces = Map.from(gamePieces)
+      ..removeWhere((key, value) => value.color == color);
+    // maybe only for testing needed ???
+    if (!gamePieces.containsKey(notationValue)) {
+      gamePieces[notationValue] = King(notationValue: notationValue, color: color);
     }
-    underAttack = false;
+    return newGamePieces;
   }
-
-// void isCheckFromKnight{
-// void isCheckFromQueenAndRook(){
-// void isCheckFromQueenAndBishop(){
 }

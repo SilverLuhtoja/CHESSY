@@ -60,7 +60,7 @@ void main() {
       'a3': Pawn(notationValue: 'a3', color: PieceColor.white),
     };
 
-    List<String> expected = ['b2', 'a2', 'b1'];
+    List<String> expected = ['b2', 'a2', 'b1', 'c3'];
     List<String> result = queen.getAvailableMoves(gamePieces);
 
     expect(result.toSet(), expected.toSet());

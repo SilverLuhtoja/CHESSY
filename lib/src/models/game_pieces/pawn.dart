@@ -57,7 +57,8 @@ class Pawn implements GamePiece {
       // check and add enemies last
       getDiagonals().forEach((diagonal) {
         GamePiece? piece = _pieces[diagonal];
-        if (piece != null && piece.color != color && _pieces.isNotKing(diagonal)) {
+        // if (piece != null && piece.color != color && _pieces.isNotKing(diagonal)) {
+        if (piece != null && piece.color != color) {
           moves.add(piece.notationValue);
         }
       });

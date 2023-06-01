@@ -36,11 +36,10 @@ void main() {
       'g5': King(notationValue: 'g5', color: PieceColor.black),
     };
 
-    List<String> expected = ['e3', 'g3', 'e5', 'd6', 'c7'];
+    List<String> expected = ['e3', 'g3', 'e5', 'd6', 'c7', 'g5'];
     List<String> result = bishop.getAvailableMoves(gamePieces);
 
     expect(result.toSet(), expected.toSet());
-    assert(!result.contains('g5'));
   });
 
   test("when in corner, return correct moves", () {
