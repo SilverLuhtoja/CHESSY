@@ -71,13 +71,6 @@ class King implements GamePiece {
     return letterVal >= 0 && letterVal < 8 && numberVal > 0 && numberVal < 9;
   }
 
-  // get current king spot
-  // loop squares like queen
-  // Have to check whos currently attacking also (rook cant move diagonally)
-  // loop surrounding squares and check for pawns and knights
-  // Basically every piece movement to check for opposite colors
-
-  // LOOP ALL ENEMY PIECES AND CHECK IF KING IS INSIDE
   bool isUnderCheck(Map<String, GamePiece> gamePieces) {
     Map<String, GamePiece> newGamePieces = sortedPieces(gamePieces);
 

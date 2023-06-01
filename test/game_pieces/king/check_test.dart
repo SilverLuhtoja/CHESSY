@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:replaceAppName/src/models/game_pieces/bishop.dart';
-import 'package:replaceAppName/src/models/game_pieces/bishop.dart';
 import 'package:replaceAppName/src/models/game_pieces/game_piece_interface.dart';
 import 'package:replaceAppName/src/models/game_pieces/king.dart';
 import 'package:replaceAppName/src/models/game_pieces/knight.dart';
@@ -45,7 +44,7 @@ void main() {
       bool result = king.isUnderCheck(gamePieces);
       expect(result, false);
     });
-    test("when knight in range, it is true", () {
+    test("when in range, it is true", () {
       King king = King(notationValue: 'd1', color: PieceColor.white);
       Map<String, GamePiece> gamePieces = {
         'b2': Knight(notationValue: 'b2', color: PieceColor.black),
@@ -53,7 +52,7 @@ void main() {
       bool result = king.isUnderCheck(gamePieces);
       expect(result, true);
     });
-    test("when knight in range, it is true", () {
+    test("when in range, it is true", () {
       King king = King(notationValue: 'd1', color: PieceColor.white);
       Map<String, GamePiece> gamePieces = {
         'e3': Knight(notationValue: 'e3', color: PieceColor.black),
@@ -73,7 +72,7 @@ void main() {
       bool result = king.isUnderCheck(gamePieces);
       expect(result, false);
     });
-    test("when knight in range, it is true", () {
+    test("when in range, it is true", () {
       King king = King(notationValue: 'd1', color: PieceColor.white);
       Map<String, GamePiece> gamePieces = {
         'a4': Queen(notationValue: 'a4', color: PieceColor.black),
@@ -93,7 +92,7 @@ void main() {
       bool result = king.isUnderCheck(gamePieces);
       expect(result, false);
     });
-    test("when knight in range, it is true", () {
+    test("when in range, it is true", () {
       King king = King(notationValue: 'd1', color: PieceColor.white);
       Map<String, GamePiece> gamePieces = {
         'a4': Bishop(notationValue: 'a4', color: PieceColor.black),
@@ -104,7 +103,7 @@ void main() {
   });
 
   group('ROOK check', () {
-    test("when no threat, it is false", () {
+    test("when king on sight, it is true", () {
       King king = King(notationValue: 'd1', color: PieceColor.white);
       Map<String, GamePiece> gamePieces = {
         'd8': Rook(notationValue: 'd8', color: PieceColor.black),
@@ -112,7 +111,7 @@ void main() {
       bool result = king.isUnderCheck(gamePieces);
       expect(result, true);
     });
-    test("when knight in range, it is true", () {
+    test("when no threat, it is false", () {
       King king = King(notationValue: 'd1', color: PieceColor.white);
       Map<String, GamePiece> gamePieces = {
         'a4': Rook(notationValue: 'a4', color: PieceColor.black),
