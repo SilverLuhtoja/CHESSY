@@ -78,7 +78,7 @@ class _RulesState extends State<Rules> {
               for (var element in gameRules) ...[
                 SelectionButton(
                     location: 'assets/${element['name']}.svg',
-                    handler: () => setState(() => _selected = element['name']),
+                    handler: () => setState((){_selected = element['name']; _specialToShow = false;}),
                     color: _selected == element['name'] ? Colors.blue : Colors.grey),
                 const SizedBox(height: 5),
               ]

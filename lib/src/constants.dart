@@ -12,7 +12,7 @@ const List<String> notationLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 List<Map<String, dynamic>> gameRules = [
   {
     'name': 'PAWN',
-    "image": "assets/pawn_move.jpg",
+    "image": "assets/pawn_move.png",
     'text': 'PAWNS are unusual because they move and capture in different ways\n',
     "actions":
         "MOVE:\n* If first move: can move forward one or two squares.\n* All other moves: forward one square at a time\n\n ATTACK: diagonally",
@@ -25,14 +25,14 @@ List<Map<String, dynamic>> gameRules = [
   },
   {
     'name': 'KNIGHT',
-    "image": "assets/knight_move.jpg",
+    "image": "assets/knight_move.png",
     'text': 'KNIGHTS are the only pieces that can move over other pieces.\n',
     "actions":
         "MOVE and ATTACK:\n\ngoing two squares in one direction + then one more move at a 90-degree angle.\n\n * just like the shape of an “L”",
   },
   {
     'name': 'KING',
-    "image": "assets/king_move.jpg",
+    "image": "assets/king_move.png",
     "actions":
         "MOVE and ATTACK:\n\n* ONE square in any direction:\n*up \n*down \n*sideways\n*diagonally",
   },

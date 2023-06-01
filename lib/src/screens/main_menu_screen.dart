@@ -4,6 +4,7 @@ import 'package:replaceAppName/src/widgets/main_menu_widgets/app_statistics.dart
 import 'package:replaceAppName/src/widgets/main_menu_widgets/buttons/button.dart';
 import 'package:replaceAppName/src/widgets/main_menu_widgets/buttons/join_game_button.dart';
 import 'package:replaceAppName/src/widgets/uuid_container.dart';
+import '../services/database_service.dart';
 import '../widgets/main_menu_widgets/buttons/new_game_button.dart';
 import 'how_to_play_screen.dart';
 
@@ -37,17 +38,15 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   UuidContainer(),
-                  const AppStatistics(),
+                  AppStatistics(),
                   const SizedBox(height: 20),
                   const NewGameButton(),
                   const SizedBox(height: 20),
                   const JoinGameButton(),
                   const SizedBox(height: 20),
-                  MenuButton(text: "How to PLay?", handler: () => navigateTo(const HowToPlayScreen())),
-                  const SizedBox(height: 20),
                   MenuButton(
-                      text: "To Supabase Test",
-                      handler: () => navigateTo(const SupabaseTestScreen()))
+                      text: "How to PLay?",
+                      handler: () => navigateTo(const HowToPlayScreen())),
                 ],
               ),
             ],

@@ -18,6 +18,7 @@ class Database {
   late dynamic subscribed;
 
   get table => client.from('GAMEROOMS');
+  get userTable => client.from('USERS');
 
   // TODO: REFACTOR
   Future<String> createNewGame() async {
@@ -26,7 +27,10 @@ class Database {
     String? myUUID = await getUUID();
     String myColor = Random().nextInt(2) == 0 ? 'white' : 'black';
     String jsonPieces = jsonEncode(GameBoard().toJson());
-    Map<String, dynamic> params = {myColor: myUUID, "db_game_board": jsonPieces};
+    Map<String, dynamic> params = {
+      myColor: myUUID,
+      "db_game_board": jsonPieces
+    };
 
     Map<String, dynamic> data = await table.insert(params).select().single();
     id = data['game_id'];
@@ -44,15 +48,19 @@ class Database {
     id = rooms.first['game_id'];
 
     String availableColor = await getAvailableColor();
-    Map<String, dynamic> params = {availableColor: myUUID, "game_state": DbGameState.INGAME.name};
+    Map<String, dynamic> params = {
+      availableColor: myUUID,
+      "game_state": DbGameState.INGAME.name
+    };
 
     await table.update(params).eq('game_id', id);
 
     return availableColor;
   }
 
-  Future<void> updateGamePieces(GameBoard board, String otherPlayerTurnColor) async {
-    printDB("DB: UPDATEING GAMEPIECES");
+  Future<void> updateGamePieces(
+      GameBoard board, String otherPlayerTurnColor) async {
+    printDB("DB: UPDATING GAMEPIECES");
 
     // TODO: currently only gamePieces are mapped, not GameBoard Object(change ??)
     final jsonPieces = jsonEncode(board.toJson());
@@ -82,18 +90,29 @@ class Database {
   }
 
   Future<List<dynamic>> getAvailableRooms() async {
-    List<dynamic> rooms = await table.select('*').eq('game_state', DbGameState.WAITING.name);
-
-    printDB("DB: available rooms > $rooms");
+    List<dynamic> rooms =
+        await table.select('*').eq('game_state', DbGameState.WAITING.name);
     return rooms;
   }
+
+  Future<int> getGamesNumber(String status) async {
+     var res = await table
+        .select(
+          'game_id',
+          const FetchOptions(count: CountOption.exact),
+        )
+        .eq('game_state', status);
+    return res.count;
+  }
+
 
   Stream createStream() {
     return table.stream(primaryKey: ['game_id']).eq('game_id', id);
   }
 
   Future<String> getAvailableColor() async {
-    Map<String, dynamic> json = await table.select('*').eq('game_id', id).single();
+    Map<String, dynamic> json =
+        await table.select('*').eq('game_id', id).single();
     return json['white'] == null ? 'white' : 'black';
   }
 
