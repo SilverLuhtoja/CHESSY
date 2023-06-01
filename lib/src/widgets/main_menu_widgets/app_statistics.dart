@@ -21,7 +21,6 @@ class _AppStatisticsState extends State<AppStatistics> {
 
   @override
   Widget build(BuildContext context) {
-    _getData();
     return FutureBuilder(
       future: _getData(),
       builder: (context, snapshot) {
