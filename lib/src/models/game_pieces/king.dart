@@ -32,7 +32,7 @@ class King implements GamePiece {
 
   @override
   void move(String moveTo) {
-    // TODO: implement move
+    notationValue = moveTo;
   }
 
   @override
@@ -57,10 +57,10 @@ class King implements GamePiece {
 
   void calculateMoves(List<int> dir, String currentTile) {
     if (!isNextTileOutsideBorders(currentTile, dir) ||
-        _pieces[currentTile]?.color == PieceColor.black) return;
+        (_pieces[currentTile] != null && _pieces[currentTile]?.color != color)) return;
     String nextTile =
         "${notationLetters[currentTile.index() + dir[0]]}${currentTile.number() + dir[1]}";
-    if (_pieces[nextTile]?.color == PieceColor.white) return;
+    if (_pieces[nextTile]?.color == color) return;
 
     _moves.add(nextTile);
   }
@@ -76,10 +76,10 @@ class King implements GamePiece {
 
     for (final value in newGamePieces.values) {
       List<String> valueMoves = value.getAvailableMoves(gamePieces);
-      if (valueMoves.contains(notationValue)) underAttack = true;
+      if (valueMoves.contains(notationValue)) return true;
     }
 
-    return underAttack;
+    return false;
   }
 
   Map<String, GamePiece> sortedPieces(Map<String, GamePiece> gamePieces) {

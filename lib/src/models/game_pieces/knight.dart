@@ -35,7 +35,7 @@ class Knight implements GamePiece {
 
   @override
   void move(String moveTo) {
-    // TODO: implement move
+    notationValue = moveTo;
   }
 
   @override

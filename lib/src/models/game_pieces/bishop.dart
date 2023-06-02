@@ -19,7 +19,7 @@ class Bishop implements GamePiece {
 
   @override
   void move(String moveTo) {
-    // TODO: implement move
+    notationValue = moveTo;
   }
 
   Bishop.fromJson(Map<String, dynamic> json) {

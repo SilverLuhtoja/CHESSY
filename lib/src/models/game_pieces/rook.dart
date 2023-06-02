@@ -31,7 +31,7 @@ class Rook implements GamePiece {
 
   @override
   void move(String moveTo) {
-    // TODO: implement move
+    notationValue = moveTo;
   }
 
   List<String> getAvailableMoves(Map<String, GamePiece> gamePieces) {
