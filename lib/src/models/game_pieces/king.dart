@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../../constants.dart';
 import '../../utils/helpers.dart';
 import 'game_piece_interface.dart';
@@ -8,7 +10,7 @@ class King implements GamePiece {
   late String notationValue;
   late Map<String, GamePiece> _pieces;
   late List<String> _moves = [];
-  bool underAttack = false;
+  late List<String> _enemyMoves = [];
 
   King({required this.notationValue, required this.color});
 
@@ -52,7 +54,9 @@ class King implements GamePiece {
     for (var dir in directions) {
       calculateMoves(dir, notationValue);
     }
-    return _moves;
+
+    getAllEnemyMoves(gamePieces);
+    return filterMoves(_moves);
   }
 
   void calculateMoves(List<int> dir, String currentTile) {
@@ -71,24 +75,80 @@ class King implements GamePiece {
     return letterVal >= 0 && letterVal < 8 && numberVal > 0 && numberVal < 9;
   }
 
-  bool isUnderCheck(Map<String, GamePiece> gamePieces) {
-    Map<String, GamePiece> newGamePieces = sortedPieces(gamePieces);
-
-    for (final value in newGamePieces.values) {
-      List<String> valueMoves = value.getAvailableMoves(gamePieces);
-      if (valueMoves.contains(notationValue)) return true;
-    }
-
+  bool isUnderAttack(Map<String, GamePiece> gamePieces) {
+    getAllEnemyMoves(gamePieces);
+    if (_enemyMoves.contains(notationValue)) return true;
     return false;
   }
 
-  Map<String, GamePiece> sortedPieces(Map<String, GamePiece> gamePieces) {
-    Map<String, GamePiece> newGamePieces = Map.from(gamePieces)
-      ..removeWhere((key, value) => value.color == color);
-    // maybe only for testing needed ???
-    if (!gamePieces.containsKey(notationValue)) {
-      gamePieces[notationValue] = King(notationValue: notationValue, color: color);
+  List<String> filterMoves(List<String> moves) {
+    moves.removeWhere((value) => _enemyMoves.contains(value));
+    return moves;
+  }
+
+  bool isAttackDefendable(Map<String, GamePiece> gamePieces) {
+    List<String> attackingEnemyMoves = getAttackingEnemyMoves(gamePieces);
+    Map<String, GamePiece> myPieces = myPiecesWithoutKing(gamePieces);
+    for (final piece in myPieces.values) {
+      List<String> defenderMoves = piece.getAvailableMoves(gamePieces);
+      for (final move in defenderMoves) {
+        if (attackingEnemyMoves.contains(move)) {
+          return true;
+        }
+      }
     }
+    return false;
+  }
+
+  List<String> getAttackingEnemyMoves(gamePieces) {
+    List<String> moves = [];
+    Map<String, GamePiece> enemyPieces = enemyPiecesWithoutKing(gamePieces);
+    for (final piece in enemyPieces.values) {
+      List<String> attackerMoves = piece.getAvailableMoves(gamePieces);
+      if (attackerMoves.contains(notationValue)) {
+        moves = filterAttackerMovesToKing(attackerMoves, piece.notationValue);
+      }
+    }
+
+    return moves;
+  }
+
+  List<String> filterAttackerMovesToKing(List<String> attackerMoves, String attackerPos) {
+    List<String> moves = [];
+    for (String move in attackerMoves) {
+      if (move == attackerPos) moves = [];
+      if (move == notationValue) break;
+      moves.add(move);
+    }
+    return moves;
+  }
+
+  void getAllEnemyMoves(Map<String, GamePiece> gamePieces) {
+    if (_enemyMoves.isNotEmpty) return;
+    Map<String, GamePiece> enemyPieces = enemyPiecesWithoutKing(gamePieces);
+    for (final piece in enemyPieces.values) {
+      List<String> enemyMoves = piece.getAvailableMoves(gamePieces);
+      for (String move in enemyMoves) {
+        if (!_enemyMoves.contains(move)) {
+          _enemyMoves.add(move);
+        }
+      }
+    }
+  }
+
+  Map<String, GamePiece> enemyPiecesWithoutKing(Map<String, GamePiece> gamePieces) {
+    Map<String, GamePiece> newGamePieces = Map.from(gamePieces)
+      ..removeWhere((key, value) => value.color == color || value.name == 'KING');
+    // maybe only for testing needed ???
+    // if (!gamePieces.containsKey(notationValue)) {
+    //   gamePieces[notationValue] = King(notationValue: notationValue, color: color);
+    // }
+    return newGamePieces;
+  }
+
+  Map<String, GamePiece> myPiecesWithoutKing(Map<String, GamePiece> gamePieces) {
+    Map<String, GamePiece> newGamePieces = Map.from(gamePieces)
+      ..removeWhere((key, value) => value.color != color || value.name == 'KING');
     return newGamePieces;
   }
 }

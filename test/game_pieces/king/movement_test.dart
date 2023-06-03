@@ -14,6 +14,18 @@ void main() {
     expect(result.toSet(), expected.toSet());
   });
 
+  test("when nothing blocking, but queen other side, it doesn't include those tiles", () {
+    King king = King(notationValue: 'e1', color: PieceColor.white);
+    List<String> expected = ['e2', 'f2', 'f1'];
+    Map<String, GamePiece> gamePieces = {
+      'd8': Queen(notationValue: 'd8', color: PieceColor.black)
+    };
+
+    List<String> result = king.getAvailableMoves(gamePieces);
+
+    expect(result.toSet(), expected.toSet());
+  });
+
   test("when own pieces blocking, it won't include pieces", () {
     King king = King(notationValue: 'e1', color: PieceColor.white);
     Map<String, GamePiece> gamePieces = {
