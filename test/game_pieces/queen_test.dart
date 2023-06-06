@@ -8,6 +8,7 @@ void main() {
   test("when nothing blocking, it stays inside borders", () {
     Queen queen = Queen(notationValue: 'a1', color: PieceColor.white);
     List<String> expected = [
+      'a1',
       'a2',
       'a3',
       'a4',

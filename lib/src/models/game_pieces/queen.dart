@@ -49,6 +49,7 @@ class Queen implements GamePiece {
       [1, 1]
     ];
     for (var dir in directions) {
+      _moves.add(notationValue);
       calculateMoves(dir, notationValue);
     }
     return _moves;

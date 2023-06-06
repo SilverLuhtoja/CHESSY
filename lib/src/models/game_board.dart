@@ -122,6 +122,30 @@ class GameBoard {
     }
     throw ErrorDescription("GameBoard: Couldn't find key in GamePieces");
   }
+
+  bool isGameOver(String color) {
+    King myKing = gamePieces.values.where((e) => e.color.name == color && e is King).single as King;
+    bool gameOver = true;
+    List<String> kingMoves = myKing.getAvailableMoves(gamePieces);
+
+    // when checked
+    if (myKing.isUnderAttack(gamePieces)) {
+      if (myKing.isAttackDefendable(gamePieces)) gameOver = false;
+      // kingMoves.removeWhere((e) => !myKing.isNextMoveValid(e));
+      if (kingMoves.isNotEmpty) gameOver = false;
+    } else {
+      // when surrounded, not checked
+      for (String move in kingMoves) {
+        if (gamePieces[move] != null) {
+          if (myKing.isNextMoveValid(move)) gameOver = false;
+          if (myKing.isUnblockable(move)) gameOver = false;
+        }
+      }
+    }
+
+    if (gameOver) printError("GAME-OVER");
+    return gameOver;
+  }
 }
 
 class Tile {

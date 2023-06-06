@@ -16,7 +16,7 @@ void main() {
         'f2': Pawn(notationValue: 'f2', color: PieceColor.black),
         'd1': Queen(notationValue: 'd1', color: PieceColor.black),
       };
-      Map<String, GamePiece> result = king.enemyPiecesWithoutKing(gamePieces);
+      Map<String, GamePiece> result = king.allEnemyPieces(gamePieces);
       expect(result.length, 2);
     });
 
@@ -27,7 +27,7 @@ void main() {
         'f2': Pawn(notationValue: 'f2', color: PieceColor.black),
         'd1': Queen(notationValue: 'd1', color: PieceColor.black),
       };
-      Map<String, GamePiece> result = king.enemyPiecesWithoutKing(gamePieces);
+      Map<String, GamePiece> result = king.allEnemyPieces(gamePieces);
       expect(result.length, 1);
     });
   });

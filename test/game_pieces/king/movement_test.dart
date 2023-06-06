@@ -17,9 +17,7 @@ void main() {
   test("when nothing blocking, but queen other side, it doesn't include those tiles", () {
     King king = King(notationValue: 'e1', color: PieceColor.white);
     List<String> expected = ['e2', 'f2', 'f1'];
-    Map<String, GamePiece> gamePieces = {
-      'd8': Queen(notationValue: 'd8', color: PieceColor.black)
-    };
+    Map<String, GamePiece> gamePieces = {'d8': Queen(notationValue: 'd8', color: PieceColor.black)};
 
     List<String> result = king.getAvailableMoves(gamePieces);
 
@@ -45,6 +43,31 @@ void main() {
     Map<String, GamePiece> gamePieces = {};
 
     List<String> expected = ['h2', 'g2', 'g1'];
+    List<String> result = king.getAvailableMoves(gamePieces);
+
+    expect(result.toSet(), expected.toSet());
+  });
+
+  test("when corner and enemyPiece near, it includes enemy, but not where it can attack", () {
+    King king = King(notationValue: 'h1', color: PieceColor.white);
+    Map<String, GamePiece> gamePieces = {'g2': Queen(notationValue: 'g2', color: PieceColor.black)};
+
+    List<String> expected = ['g2'];
+    king.getAllEnemyMoves(gamePieces);
+    List<String> result = king.getAvailableMoves(gamePieces);
+
+    expect(result.toSet(), expected.toSet());
+  });
+
+  test("when corner and 2 enemyPiece near nad covering each other, it return no values", () {
+    King king = King(notationValue: 'h1', color: PieceColor.white);
+    Map<String, GamePiece> gamePieces = {
+      'g2': Queen(notationValue: 'g2', color: PieceColor.black),
+      'f3': Pawn(notationValue: 'f3', color: PieceColor.black)
+    };
+
+    List<String> expected = [];
+    king.getAllEnemyMoves(gamePieces);
     List<String> result = king.getAvailableMoves(gamePieces);
 
     expect(result.toSet(), expected.toSet());

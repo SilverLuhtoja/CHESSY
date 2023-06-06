@@ -8,7 +8,10 @@ KOOD01: https://github.com/01-edu/public/tree/master/subjects/mobile-dev/chess
 ### NEEDED CHANGES / BUGS:
 
 * DB also need history column
-* Refactor knight logic as in other piece logic, simplify pawns logic
+* Simplify pawns logic
+
+* Added Piece to available moves to get attacking moves from attacker to king, need fix it later
+
 
 ### THOUGHTS:
 
