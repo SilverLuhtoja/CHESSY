@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:replaceAppName/src/screens/supabase_test_screen.dart';
+import 'package:replaceAppName/src/services/uuid_service.dart';
 import 'package:replaceAppName/src/widgets/main_menu_widgets/app_statistics.dart';
 import 'package:replaceAppName/src/widgets/main_menu_widgets/buttons/button.dart';
 import 'package:replaceAppName/src/widgets/main_menu_widgets/buttons/join_game_button.dart';
 import 'package:replaceAppName/src/widgets/uuid_container.dart';
 import '../widgets/main_menu_widgets/buttons/new_game_button.dart';
+import '../widgets/username_container.dart';
 import 'how_to_play_screen.dart';
 
 class MainMenuScreen extends StatefulWidget {
@@ -37,13 +39,16 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   UuidContainer(),
+                  UsernameContainer(),
                   const AppStatistics(),
                   const SizedBox(height: 20),
                   const NewGameButton(),
                   const SizedBox(height: 20),
                   const JoinGameButton(),
                   const SizedBox(height: 20),
-                  MenuButton(text: "How to PLay?", handler: () => navigateTo(const HowToPlayScreen())),
+                  MenuButton(
+                      text: "How to PLay?",
+                      handler: () => navigateTo(const HowToPlayScreen())),
                   const SizedBox(height: 20),
                   MenuButton(
                       text: "To Supabase Test",
