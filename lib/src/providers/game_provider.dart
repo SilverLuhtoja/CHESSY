@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:replaceAppName/src/models/game_board.dart';
 import 'package:replaceAppName/src/models/game_pieces/game_piece_interface.dart';
+import 'package:replaceAppName/src/models/game_pieces/king.dart';
 import '../models/game_over_status.dart';
 import '../services/database_service.dart';
 import '../utils/helpers.dart';
@@ -41,6 +42,7 @@ class GamePiecesState {
   final bool isMyTurn;
   late bool waitingPlayer;
   late GameOverStatus? gameOverStatus;
+  late bool isCheck;
   late String? myColor;
 
   GamePiecesState({
@@ -49,6 +51,7 @@ class GamePiecesState {
     required this.waitingPlayer,
     required this.gameOverStatus,
     required this.myColor,
+    required this.isCheck,
   });
 
   static GamePiecesState init() {
@@ -57,7 +60,8 @@ class GamePiecesState {
         isMyTurn: false,
         waitingPlayer: true,
         gameOverStatus: null,
-        myColor: null);
+        myColor: null,
+        isCheck: false);
   }
 
   GamePiecesState copyWith({required GameBoard board, required bool turn, required String? color}) {
@@ -66,7 +70,8 @@ class GamePiecesState {
         isMyTurn: turn,
         waitingPlayer: true,
         gameOverStatus: null,
-        myColor: color);
+        myColor: color,
+        isCheck: false);
   }
 }
 
@@ -92,6 +97,10 @@ class GamePiecesStateNotifier extends StateNotifier<GamePiecesState> {
     state.waitingPlayer = value;
   }
 
+  void setIsCheck(bool value) {
+    state.isCheck = value;
+  }
+
   void setGameOverStatus(GameOverStatus status) {
     state.gameOverStatus = status;
   }
@@ -100,7 +109,8 @@ class GamePiecesStateNotifier extends StateNotifier<GamePiecesState> {
     _stream = db.createStream().listen((event) {
       final json = Map<String, dynamic>.from(event[0] as Map<Object?, Object?>);
       checkPlayerJoinEvent(json);
-      checkGameOverEvent(json);
+      checkGameOverAndCheck(json);
+      updateGameOverStatus(json);
 
       if (json['db_game_board'].toString().isEmpty) {
         printError('is null');
@@ -114,7 +124,8 @@ class GamePiecesStateNotifier extends StateNotifier<GamePiecesState> {
             isMyTurn: myTurn,
             waitingPlayer: state.waitingPlayer,
             gameOverStatus: state.gameOverStatus,
-            myColor: state.myColor);
+            myColor: state.myColor,
+            isCheck: state.isCheck);
       }
     });
   }
@@ -123,10 +134,9 @@ class GamePiecesStateNotifier extends StateNotifier<GamePiecesState> {
     if (json['white'] != null && json['black'] != null) setWaitingPlayer(false);
   }
 
-  // game already started and waiting player = false, one color are null > player left
-  void checkGameOverEvent(Map<String, dynamic> json) {
+  void updateGameOverStatus(Map<String, dynamic> json) {
     if (state.waitingPlayer == true) return;
-    printState("CHECKING STATUS > ${json['white'] == null || json['black'] == null}");
+
     if (json['winner'] != null) {
       json['winner'] == state.myColor
           ? setGameOverStatus(GameOverStatus.won)
@@ -136,6 +146,21 @@ class GamePiecesStateNotifier extends StateNotifier<GamePiecesState> {
     if (json['white'] == null || json['black'] == null) {
       setGameOverStatus(GameOverStatus.surrendered);
       return;
+    }
+  }
+
+  void checkGameOverAndCheck(Map<String, dynamic> json){
+    if (state.waitingPlayer == true) return;
+
+    Map<String, dynamic> convertedData = jsonDecode(json['db_game_board']);
+    final GameBoard newBoard = GameBoard.fromJson(convertedData);
+    String opponentColor = state.myColor == 'white' ? 'white' : 'black';
+
+    if (newBoard.isGameOver(json['current_turn']) && json['winner'] == null) {
+      db.update({"winner": opponentColor});
+    }else{
+      King king = newBoard.getMyKing(state.myColor);
+      setIsCheck(king.isUnderAttack(newBoard.gamePieces));
     }
   }
 

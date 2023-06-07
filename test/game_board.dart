@@ -133,6 +133,7 @@ void main() {
 
       expect(result, true);
     });
+
     test('when king checked, it is false', () {
       GameBoard gameBoard = GameBoard();
       King theKing = King(notationValue: 'e1', color: PieceColor.white);
@@ -146,6 +147,20 @@ void main() {
 
       final result = gameBoard.isGameOver('white');
 
+      expect(result, false);
+    });
+
+    test('when game start, it returns false', () {
+      GameBoard gameBoard = GameBoard();
+      King theKing = King(notationValue: 'e1', color: PieceColor.black);
+      Map<String, GamePiece> gamePieces = {
+        'e1': theKing,
+        'd8': King(notationValue: 'd8', color: PieceColor.white),
+        'e8': Queen(notationValue: 'e8', color: PieceColor.white),
+        'd1': Queen(notationValue: 'd1', color: PieceColor.black),
+      };
+      gameBoard.gamePieces = gamePieces;
+      bool result = gameBoard.isGameOver('white');
       expect(result, false);
     });
   });

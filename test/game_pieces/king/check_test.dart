@@ -8,6 +8,19 @@ import 'package:replaceAppName/src/models/game_pieces/queen.dart';
 import 'package:replaceAppName/src/models/game_pieces/rook.dart';
 
 void main() {
+
+
+  test('when game start, it returns false', () {
+    King king = King(notationValue: 'e1', color: PieceColor.black);
+    Map<String, GamePiece> gamePieces = {
+      'd8': Queen(notationValue: 'd8', color: PieceColor.white),
+      'e8': King(notationValue: 'e8', color: PieceColor.white),
+      'd1': Queen(notationValue: 'd1', color: PieceColor.black),
+    };
+    bool result = king.isUnderAttack(gamePieces);
+    expect(result, false);
+  });
+
   group('PAWN check', () {
     test("when no threat, it is false", () {
       King king = King(notationValue: 'd1', color: PieceColor.white);

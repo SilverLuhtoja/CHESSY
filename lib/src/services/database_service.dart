@@ -51,6 +51,10 @@ class Database {
     return availableColor;
   }
 
+  Future<void> update(Map<String, dynamic> payload) async {
+    await table.update(payload).eq('game_id', id);
+  }
+
   Future<void> updateGamePieces(GameBoard board, String otherPlayerTurnColor) async {
     printDB("DB: UPDATEING GAMEPIECES");
 

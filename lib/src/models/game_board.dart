@@ -14,8 +14,14 @@ class GameBoard {
   late Map<String, GamePiece> gamePieces = {};
 
   GameBoard() {
-    placeGamePiecesToBoard(PieceColor.white);
-    placeGamePiecesToBoard(PieceColor.black);
+    // placeGamePiecesToBoard(PieceColor.white);
+    // placeGamePiecesToBoard(PieceColor.black);
+
+    gamePieces['e8'] = King(notationValue: 'e8', color: PieceColor.black);
+    gamePieces['e7'] = Queen(notationValue: 'e7', color: PieceColor.black);
+    gamePieces['e2'] = Rook(notationValue: 'e2', color: PieceColor.white);
+    gamePieces['e1'] = King(notationValue: 'e1', color: PieceColor.white);
+    gamePieces['c5'] = Queen(notationValue: 'c5', color: PieceColor.white);
   }
 
   GameBoard.fromJson(Map<String, dynamic> json) {
@@ -124,27 +130,29 @@ class GameBoard {
   }
 
   bool isGameOver(String color) {
-    King myKing = gamePieces.values.where((e) => e.color.name == color && e is King).single as King;
-    bool gameOver = true;
+    King myKing = getMyKing(color);
     List<String> kingMoves = myKing.getAvailableMoves(gamePieces);
 
     // when checked
     if (myKing.isUnderAttack(gamePieces)) {
-      if (myKing.isAttackDefendable(gamePieces)) gameOver = false;
-      // kingMoves.removeWhere((e) => !myKing.isNextMoveValid(e));
-      if (kingMoves.isNotEmpty) gameOver = false;
+      if (myKing.isAttackDefendable(gamePieces)) return false;
+      if (kingMoves.isNotEmpty) return false;
     } else {
       // when surrounded, not checked
       for (String move in kingMoves) {
         if (gamePieces[move] != null) {
-          if (myKing.isNextMoveValid(move)) gameOver = false;
-          if (myKing.isUnblockable(move)) gameOver = false;
+          if (myKing.isNextMoveValid(move)) return false;
+          if (myKing.isUnblockable(move)) return false;
         }
       }
+      // any open tiles
+      if (kingMoves.any((e) => gamePieces[e] == null)) return false;
     }
+    return true;
+  }
 
-    if (gameOver) printError("GAME-OVER");
-    return gameOver;
+  King getMyKing(color) {
+    return gamePieces.values.where((e) => e.name == 'KING' && e.color.name == color).single as King;
   }
 }
 
