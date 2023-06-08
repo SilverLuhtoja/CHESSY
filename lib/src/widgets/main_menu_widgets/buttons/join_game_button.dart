@@ -13,9 +13,53 @@ class JoinGameButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.read(gamePiecesStateProvider.notifier);
 
-    void joinGame() async {
+    return SizedBox(
+      width: 160,
+      child: FutureBuilder(
+          future: db.getAvailableRooms(),
+          builder:
+              (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+            if (snapshot.hasData) {
+              return snapshot.data?.isEmpty == true
+                  ? disabledButton()
+                  : FilledButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  AvailableRooms(data: snapshot.data)),
+                        );
+                      },
+                      child: const Text('Join Game'));
+            } else {
+              return disabledButton();
+            }
+          }),
+    );
+  }
+
+  FilledButton disabledButton() =>
+      const FilledButton(onPressed: null, child: Text('Join Game'));
+}
+
+class AvailableRooms extends ConsumerWidget {
+  final List<dynamic>? data;
+
+  AvailableRooms({
+    super.key,
+    required this.data,
+  });
+
+  final List<int> colorCodes = <int>[600, 500, 100];
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final provider = ref.read(gamePiecesStateProvider.notifier);
+
+    joinGame(int id) async {
       try {
-        String myColor = await db.joinRoom();
+        String myColor = await db.joinRoom(id);
         provider.setMyColor(myColor);
         if (context.mounted) {
           provider.startStream();
@@ -31,25 +75,30 @@ class JoinGameButton extends ConsumerWidget {
       }
     }
 
-    return SizedBox(
-      width: 160,
-      child: FutureBuilder(
-          future: db.getAvailableRooms(),
-          builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
-            if (snapshot.hasData) {
-              return snapshot.data?.isEmpty == true
-                  ? disabledButton()
-                  : FilledButton(
-                      onPressed: () {
-                        joinGame();
-                      },
-                      child: const Text('Join Game'));
-            } else {
-              return disabledButton();
-            }
-          }),
-    );
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('JOIN GAME'),
+        ),
+        body: ListView.builder(
+            padding: const EdgeInsets.all(20),
+            itemCount: data!.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                height: 50,
+                child: Row(
+                  children: [
+                    Text(
+                      'Username: ${data![index]['creator_name']}',
+                      style: TextStyle(fontSize: 10),
+                    ),
+                    FilledButton(
+                        onPressed: () async {
+                          joinGame(data![index]['game_id']);
+                        },
+                        child: Text('JOIN'))
+                  ],
+                ),
+              );
+            }));
   }
-
-  FilledButton disabledButton() => const FilledButton(onPressed: null, child: Text('Join Game'));
 }
