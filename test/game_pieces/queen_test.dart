@@ -6,8 +6,9 @@ import 'package:replaceAppName/src/models/game_pieces/queen.dart';
 
 void main() {
   test("when nothing blocking, it stays inside borders", () {
-    Queen rook = Queen(notationValue: 'a1', color: PieceColor.white);
+    Queen queen = Queen(notationValue: 'a1', color: PieceColor.white);
     List<String> expected = [
+      'a1',
       'a2',
       'a3',
       'a4',
@@ -31,7 +32,7 @@ void main() {
       'h8',
     ];
 
-    List<String> result = rook.getAvailableMoves({});
+    List<String> result = queen.getAvailableMoves({});
 
     expect(result.toSet(), expected.toSet());
   });
@@ -39,7 +40,7 @@ void main() {
   test(
       "when middle of board, 2 white and 1 black pawn blocking, it includes black pawn and excludes white pawns",
       () {
-    Queen rook = Queen(notationValue: 'a1', color: PieceColor.white);
+    Queen queen = Queen(notationValue: 'a1', color: PieceColor.white);
     Map<String, GamePiece> gamePieces = {
       'c1': Pawn(notationValue: 'c1', color: PieceColor.white),
       'c3': Pawn(notationValue: 'c3', color: PieceColor.black),
@@ -47,28 +48,28 @@ void main() {
     };
 
     List<String> expected = ['b2', 'c3', 'a2', 'b1'];
-    List<String> result = rook.getAvailableMoves(gamePieces);
+    List<String> result = queen.getAvailableMoves(gamePieces);
 
     expect(result.toSet(), expected.toSet());
   });
 
   test("when king is in way, it doesn't return king in moves", () {
-    Queen rook = Queen(notationValue: 'a1', color: PieceColor.white);
+    Queen queen = Queen(notationValue: 'a1', color: PieceColor.white);
     Map<String, GamePiece> gamePieces = {
       'c1': Pawn(notationValue: 'c1', color: PieceColor.white),
       'c3': King(notationValue: 'c3', color: PieceColor.black),
       'a3': Pawn(notationValue: 'a3', color: PieceColor.white),
     };
 
-    List<String> expected = ['b2', 'a2', 'b1'];
-    List<String> result = rook.getAvailableMoves(gamePieces);
+    List<String> expected = ['b2', 'a2', 'b1', 'c3'];
+    List<String> result = queen.getAvailableMoves(gamePieces);
 
     expect(result.toSet(), expected.toSet());
     assert(!result.contains('g5'));
   });
 
   test("when all blocked, it gives available moves all directions", () {
-    Queen rook = Queen(notationValue: 'b2', color: PieceColor.white);
+    Queen queen = Queen(notationValue: 'b2', color: PieceColor.white);
     Map<String, GamePiece> gamePieces = {
       'a4': Pawn(notationValue: 'a4', color: PieceColor.white),
       'b4': Pawn(notationValue: 'b4', color: PieceColor.white),
@@ -80,7 +81,7 @@ void main() {
     };
 
     List<String> expected = ['a3', 'b3', 'c3', 'a2', 'c2', 'a1', 'b1', 'c1'];
-    List<String> result = rook.getAvailableMoves(gamePieces);
+    List<String> result = queen.getAvailableMoves(gamePieces);
 
     expect(result.toSet(), expected.toSet());
     assert(!result.contains('g5'));

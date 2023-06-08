@@ -77,7 +77,7 @@ void main() {
       'f3': King(notationValue: 'f3', color: PieceColor.black),
     };
 
-    List<String> expected = ['e3'];
+    List<String> expected = ['e3', 'f3'];
     List<String> result = pawn.getAvailableMoves(gamePieces);
 
     expect(result, expected);

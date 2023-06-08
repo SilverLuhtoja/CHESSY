@@ -19,7 +19,7 @@ class Bishop implements GamePiece {
 
   @override
   void move(String moveTo) {
-    // TODO: implement move
+    notationValue = moveTo;
   }
 
   Bishop.fromJson(Map<String, dynamic> json) {
@@ -52,10 +52,10 @@ class Bishop implements GamePiece {
 
   void calculateMoves(List<int> dir, String currentTile) {
     if (!isNextTileOutsideBorders(currentTile, dir) ||
-        _pieces[currentTile]?.color == PieceColor.black) return;
+        (_pieces[currentTile] != null && _pieces[currentTile]?.color != color)) return;
     String nextTile =
         "${notationLetters[currentTile.index() + dir[0]]}${currentTile.number() + dir[1]}";
-    if (_pieces[nextTile]?.color == PieceColor.white || !_pieces.isNotKing(nextTile)) return;
+    if (_pieces[nextTile]?.color == color) return;
 
     _moves.add(nextTile);
     calculateMoves(dir, nextTile);

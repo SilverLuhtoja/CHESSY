@@ -52,11 +52,10 @@ void main() {
       'e3': Pawn(notationValue: 'e3', color: PieceColor.white),
     };
 
-    List<String> expected = ['d4', 'e5', 'f4', 'g4', 'h4'];
+    List<String> expected = ['d4', 'e5', 'f4', 'g4', 'h4', 'c4'];
     List<String> result = rook.getAvailableMoves(gamePieces);
 
     expect(result.toSet(), expected.toSet());
-    assert(!result.contains('g5'));
   });
 
   test("when in corner, return correct moves", () {

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:replaceAppName/src/models/game_board.dart';
 import 'package:replaceAppName/src/models/game_pieces/game_piece_interface.dart';
+import 'package:replaceAppName/src/models/game_pieces/king.dart';
 import 'package:replaceAppName/src/providers/game_provider.dart';
 import 'package:replaceAppName/src/services/database_service.dart';
 import 'package:replaceAppName/src/utils/helpers.dart';
@@ -28,6 +29,7 @@ class GameScreen extends ConsumerWidget {
     final bool isWaitingForPlayer = gameBoard.waitingPlayer;
     final bool isGameOver = gameBoard.gameOverStatus == null;
     final bool isMyTurn = gameBoard.isMyTurn;
+    final bool isKingChecked = gameBoard.isCheck;
 
     stackedBuilds.addAll(gameBoard.gameboard.flatGrid.map((tile) => Positioned(
         top: (tile.row - 1) * tileSize + padding * 2,
@@ -56,6 +58,7 @@ class GameScreen extends ConsumerWidget {
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              isKingChecked ? kingCheckNotification() : Container(),
               isWaitingForPlayer
                   ? const WaitingView()
                   : isGameOver
@@ -71,6 +74,13 @@ class GameScreen extends ConsumerWidget {
           )),
     );
   }
+
+  Widget kingCheckNotification() => Container(
+      margin: const EdgeInsets.only(bottom: 20),
+      child: const Text(
+        "! KING ON CHECK !",
+        style: TextStyle(fontSize: 20),
+      ));
 
   Center buildGridValues(Tile tile) {
     return Center(
@@ -125,9 +135,11 @@ class GameScreen extends ConsumerWidget {
     // ONLY RENDERS WHEN STATE IS CHANGED
     GameState pieceClickedState = ref.watch(gameStateProvider);
     GamePiece clickedPiece = gamePieces[tile.notationValue]!;
-    if (clickedPiece != null && clickedPiece.color.name == gamePiecesState.myColor) {
+    if (clickedPiece.color.name == gamePiecesState.myColor) {
       if (pieceClickedState.gamePieceClicked != clickedPiece.notationValue) {
-        activeTiles = clickedPiece.getAvailableMoves(gamePieces);
+        printGreen("CLICKED PIECE NOTATION VALUE: ${clickedPiece.notationValue}");
+        activeTiles = gamePiecesState.gameboard.getPieceAvailableMoves(tile.notationValue);
+
         ref.read(gameStateProvider.notifier).setLastClickedPiece(clickedPiece.notationValue);
       } else {
         activeTiles = [];
@@ -142,16 +154,19 @@ class GameScreen extends ConsumerWidget {
 
     GameState pieceClickedState = ref.watch(gameStateProvider);
     String clickedValue = pieceClickedState.gamePieceClicked ?? "";
-    String? otherPlayerTurnColor =
-        ref.watch(gamePiecesStateProvider).myColor == 'white' ? 'black' : 'white';
+    String myColor = ref.watch(gamePiecesStateProvider).myColor!;
+    String? otherPlayerTurnColor = myColor == 'white' ? 'black' : 'white';
 
     printGreen('${pieceClickedState.gamePieceClicked} -> ${tile.notationValue}');
-    if (clickedValue.isNotEmpty) {
+    if (clickedValue.isNotEmpty &&
+        !gameBoard.gameboard.isKingUnderAttack(clickedValue, tile.notationValue, myColor)) {
       gameBoard.gameboard.moveGamePiece(clickedValue, tile.notationValue);
       activeTiles = [];
 
       db.updateGamePieces(gameBoard.gameboard, otherPlayerTurnColor);
       ref.read(gameStateProvider.notifier).setLastClickedPiece(null);
+    } else {
+      printError("INVALID MOVE: KING ON CHECK");
     }
   }
 

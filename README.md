@@ -8,14 +8,18 @@ KOOD01: https://github.com/01-edu/public/tree/master/subjects/mobile-dev/chess
 ### NEEDED CHANGES / BUGS:
 
 * DB also need history column
+* Simplify pawns logic
+
+* Added Piece to available moves to get attacking moves from attacker to king, need fix it later
+
 
 ### THOUGHTS:
 
 * How do handle check ???
-    1. Extra table to database and piece logic check if piece is threatening king,
-       if it is update database table with current piece
-    2. Every turn other player first have to check if his king is on check.
-       Basically the checking will work as queen moves + checking horse and pawns around 3 squares
+   * Every turn other player first have to check if his king is on check.
+    Basically the checking will work as queen moves + checking horse and pawns around 3 squares
+   * ~~Extra table to database and piece logic check if piece is threatening king,
+      if it is update database table with current piece~~
 
 * How do make the end game logic when king is on check?
     1. When player moves to block or kill the threat, then it needs to check again if king is still in check
@@ -68,7 +72,7 @@ NOTE : Before full gamelogic development rethink if things can be simplified, al
 
 3. GameLogic:
 
-- [ ] GameBoard and pieces has set up correctly
+- [x] GameBoard and pieces has set up correctly
 - [ ] Board notation numbers and letters are easy to read (Like Leonards)
 - [ ] Every piece is clickable
 - [ ] GameLogic is understandable and flexible ( PiecesMap don't have to be in gameboard, or board holds all pieces?)
@@ -102,7 +106,7 @@ QUEEN:
 
 THE KING:
 
-- [ ] show available moves and can move
+- [x] show available moves and can move
 - [ ] When King and Rook have not moved, can make Castling (SPECIAL MOVE)
 - [ ] When King is under attack, then every other gamepiece can only move to kill threat or cover its line of fire
 - [ ] Nobody can kill THE KING

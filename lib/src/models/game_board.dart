@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import '../constants.dart';
 import '../utils/helpers.dart';
 import 'game_pieces/bishop.dart';
 import 'game_pieces/game_piece_interface.dart';
@@ -11,11 +12,16 @@ import 'game_pieces/rook.dart';
 class GameBoard {
   late List<List<Tile>> gameBoard = generateBoard(8);
   late Map<String, GamePiece> gamePieces = {};
-  final List<String> _notationLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
   GameBoard() {
     placeGamePiecesToBoard(PieceColor.white);
     placeGamePiecesToBoard(PieceColor.black);
+
+    // gamePieces['e8'] = King(notationValue: 'e8', color: PieceColor.black);
+    // gamePieces['e7'] = Queen(notationValue: 'e7', color: PieceColor.black);
+    // gamePieces['e2'] = Rook(notationValue: 'e2', color: PieceColor.white);
+    // gamePieces['e1'] = King(notationValue: 'e1', color: PieceColor.white);
+    // gamePieces['c5'] = Queen(notationValue: 'c5', color: PieceColor.white);
   }
 
   GameBoard.fromJson(Map<String, dynamic> json) {
@@ -35,6 +41,9 @@ class GameBoard {
           break;
         case 'QUEEN':
           gamePieces[piece.key] = Queen.fromJson(piece.value);
+          break;
+        case 'KING':
+          gamePieces[piece.key] = King.fromJson(piece.value);
           break;
       }
     }
@@ -56,7 +65,7 @@ class GameBoard {
 
   List<List<Tile>> generateBoard(int gridSize) {
     List<List<Tile>> tiles = [];
-    bool startWhite = true;
+    bool startWhite = false;
 
     for (int row = 1; row < gridSize + 1; row++) {
       List<Tile> singleRowOfTiles = [];
@@ -70,7 +79,7 @@ class GameBoard {
   void generateRow(int gridSize, bool startWhite, int row, List<Tile> singleRowOfTiles) {
     bool isWhite = startWhite;
     for (int column = 0; column < gridSize; column++) {
-      String notationValue = "${_notationLetters[column]}${gridSize + 1 - row}";
+      String notationValue = "${notationLetters[column]}${gridSize + 1 - row}";
       singleRowOfTiles.add(Tile(row, column, isWhite, notationValue));
       isWhite = !isWhite;
     }
@@ -79,12 +88,12 @@ class GameBoard {
   void placeGamePiecesToBoard(PieceColor color) {
     for (int i = 0; i < 8; i++) {
       String rowNumber = color == PieceColor.white ? '2' : '7';
-      String value = "${_notationLetters[i]}$rowNumber";
+      String value = "${notationLetters[i]}$rowNumber";
       gamePieces[value] = Pawn(notationValue: value, color: color);
     }
     for (int i = 0; i < 8; i++) {
       String rowNumber = color == PieceColor.white ? '1' : '8';
-      String value = "${_notationLetters[i]}$rowNumber";
+      String value = "${notationLetters[i]}$rowNumber";
       switch (i) {
         case 0:
         case 7:
@@ -101,9 +110,9 @@ class GameBoard {
         case 3:
           gamePieces[value] = Queen(notationValue: value, color: color);
           break;
-        // case 4:
-        //   gamePieces[value] = King(notationValue: value, color: color);
-        //   break;
+        case 4:
+          gamePieces[value] = King(notationValue: value, color: color);
+          break;
       }
     }
   }
@@ -118,6 +127,62 @@ class GameBoard {
       return;
     }
     throw ErrorDescription("GameBoard: Couldn't find key in GamePieces");
+  }
+
+  bool isGameOver(String color) {
+    King myKing = getMyKing(color);
+    List<String> kingMoves = myKing.getAvailableMoves(gamePieces);
+
+    // when checked
+    if (myKing.isUnderAttack(gamePieces)) {
+      if (myKing.isAttackDefendable(gamePieces)) return false;
+      if (kingMoves.isNotEmpty) return false;
+    } else {
+      int friendlyPiecesCount = getFriendlyPiecesCount(color);
+      // no open moves for king, but still friendly pieces on board
+      if (friendlyPiecesCount > 0) return false;
+      // if any open moves
+      if (kingMoves.any((e) => gamePieces[e] == null)) return false;
+
+      // when surrounded, not checked, check if can kill
+      for (String move in kingMoves) {
+        if (gamePieces[move] != null) {
+          if (myKing.isNextMoveValid(move)) return false;
+          if (myKing.isUnblockable(move)) return false; //maybe not needed
+        }
+      }
+    }
+    return true;
+  }
+
+  bool isKingUnderAttack(String moveFrom, String moveTo, String color){
+    Map<String, GamePiece> newGamePieces = Map.from(gamePieces);
+    printWarning(newGamePieces);
+    GamePiece piece = gamePieces[moveFrom]!;
+    if (gamePieces[moveTo] != null ){
+      newGamePieces.remove(moveTo);
+    }
+    piece.notationValue = moveTo;
+    newGamePieces[moveTo] = piece;
+    newGamePieces.remove(moveFrom);
+
+    return getMyKing(color).isUnderAttack(newGamePieces);
+  }
+
+  King getMyKing(color) {
+    return gamePieces.values.where((e) => e.name == 'KING' && e.color.name == color).single as King;
+  }
+
+  int getFriendlyPiecesCount(String color) {
+    return gamePieces.values
+        .where((e) => e.color.name == color && e.name != 'KING')
+        .toList()
+        .length;
+  }
+
+  List<String> getPieceAvailableMoves(String notationValue){
+    List<String> availableMoves = gamePieces[notationValue]!.getAvailableMoves(gamePieces);
+    return availableMoves.where((e) => e != notationValue).toList();
   }
 }
 
