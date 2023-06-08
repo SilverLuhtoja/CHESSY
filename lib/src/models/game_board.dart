@@ -14,14 +14,14 @@ class GameBoard {
   late Map<String, GamePiece> gamePieces = {};
 
   GameBoard() {
-    // placeGamePiecesToBoard(PieceColor.white);
-    // placeGamePiecesToBoard(PieceColor.black);
+    placeGamePiecesToBoard(PieceColor.white);
+    placeGamePiecesToBoard(PieceColor.black);
 
-    gamePieces['e8'] = King(notationValue: 'e8', color: PieceColor.black);
-    gamePieces['e7'] = Queen(notationValue: 'e7', color: PieceColor.black);
-    gamePieces['e2'] = Rook(notationValue: 'e2', color: PieceColor.white);
-    gamePieces['e1'] = King(notationValue: 'e1', color: PieceColor.white);
-    gamePieces['c5'] = Queen(notationValue: 'c5', color: PieceColor.white);
+    // gamePieces['e8'] = King(notationValue: 'e8', color: PieceColor.black);
+    // gamePieces['e7'] = Queen(notationValue: 'e7', color: PieceColor.black);
+    // gamePieces['e2'] = Rook(notationValue: 'e2', color: PieceColor.white);
+    // gamePieces['e1'] = King(notationValue: 'e1', color: PieceColor.white);
+    // gamePieces['c5'] = Queen(notationValue: 'c5', color: PieceColor.white);
   }
 
   GameBoard.fromJson(Map<String, dynamic> json) {
@@ -86,27 +86,27 @@ class GameBoard {
   }
 
   void placeGamePiecesToBoard(PieceColor color) {
-    // for (int i = 0; i < 8; i++) {
-    //   String rowNumber = color == PieceColor.white ? '2' : '7';
-    //   String value = "${notationLetters[i]}$rowNumber";
-    //   gamePieces[value] = Pawn(notationValue: value, color: color);
-    // }
+    for (int i = 0; i < 8; i++) {
+      String rowNumber = color == PieceColor.white ? '2' : '7';
+      String value = "${notationLetters[i]}$rowNumber";
+      gamePieces[value] = Pawn(notationValue: value, color: color);
+    }
     for (int i = 0; i < 8; i++) {
       String rowNumber = color == PieceColor.white ? '1' : '8';
       String value = "${notationLetters[i]}$rowNumber";
       switch (i) {
-        // case 0:
-        // case 7:
-        //   gamePieces[value] = Rook(notationValue: value, color: color);
-        //   break;
-        // case 1:
-        // case 6:
-        //   gamePieces[value] = Knight(notationValue: value, color: color);
-        //   break;
-        // case 2:
-        // case 5:
-        //   gamePieces[value] = Bishop(notationValue: value, color: color);
-        //   break;
+        case 0:
+        case 7:
+          gamePieces[value] = Rook(notationValue: value, color: color);
+          break;
+        case 1:
+        case 6:
+          gamePieces[value] = Knight(notationValue: value, color: color);
+          break;
+        case 2:
+        case 5:
+          gamePieces[value] = Bishop(notationValue: value, color: color);
+          break;
         case 3:
           gamePieces[value] = Queen(notationValue: value, color: color);
           break;
@@ -138,21 +138,51 @@ class GameBoard {
       if (myKing.isAttackDefendable(gamePieces)) return false;
       if (kingMoves.isNotEmpty) return false;
     } else {
-      // when surrounded, not checked
+      int friendlyPiecesCount = getFriendlyPiecesCount(color);
+      // no open moves for king, but still friendly pieces on board
+      if (friendlyPiecesCount > 0) return false;
+      // if any open moves
+      if (kingMoves.any((e) => gamePieces[e] == null)) return false;
+
+      // when surrounded, not checked, check if can kill
       for (String move in kingMoves) {
         if (gamePieces[move] != null) {
           if (myKing.isNextMoveValid(move)) return false;
-          if (myKing.isUnblockable(move)) return false;
+          if (myKing.isUnblockable(move)) return false; //maybe not needed
         }
       }
-      // any open tiles
-      if (kingMoves.any((e) => gamePieces[e] == null)) return false;
     }
     return true;
   }
 
+  bool isKingUnderAttack(String moveFrom, String moveTo, String color){
+    Map<String, GamePiece> newGamePieces = Map.from(gamePieces);
+    printWarning(newGamePieces);
+    GamePiece piece = gamePieces[moveFrom]!;
+    if (gamePieces[moveTo] != null ){
+      newGamePieces.remove(moveTo);
+    }
+    piece.notationValue = moveTo;
+    newGamePieces[moveTo] = piece;
+    newGamePieces.remove(moveFrom);
+
+    return getMyKing(color).isUnderAttack(newGamePieces);
+  }
+
   King getMyKing(color) {
     return gamePieces.values.where((e) => e.name == 'KING' && e.color.name == color).single as King;
+  }
+
+  int getFriendlyPiecesCount(String color) {
+    return gamePieces.values
+        .where((e) => e.color.name == color && e.name != 'KING')
+        .toList()
+        .length;
+  }
+
+  List<String> getPieceAvailableMoves(String notationValue){
+    List<String> availableMoves = gamePieces[notationValue]!.getAvailableMoves(gamePieces);
+    return availableMoves.where((e) => e != notationValue).toList();
   }
 }
 

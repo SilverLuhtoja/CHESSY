@@ -150,7 +150,7 @@ void main() {
       expect(result, false);
     });
 
-    test('when game start, it returns false', () {
+    test('when possible moves, it returns false', () {
       GameBoard gameBoard = GameBoard();
       King theKing = King(notationValue: 'e1', color: PieceColor.black);
       Map<String, GamePiece> gamePieces = {
@@ -160,6 +160,12 @@ void main() {
         'd1': Queen(notationValue: 'd1', color: PieceColor.black),
       };
       gameBoard.gamePieces = gamePieces;
+      bool result = gameBoard.isGameOver('white');
+      expect(result, false);
+    });
+
+    test('when game start, it returns false', () {
+      GameBoard gameBoard = GameBoard();
       bool result = gameBoard.isGameOver('white');
       expect(result, false);
     });

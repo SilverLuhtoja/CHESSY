@@ -149,7 +149,7 @@ class GamePiecesStateNotifier extends StateNotifier<GamePiecesState> {
     }
   }
 
-  void checkGameOverAndCheck(Map<String, dynamic> json){
+  void checkGameOverAndCheck(Map<String, dynamic> json) {
     if (state.waitingPlayer == true) return;
 
     Map<String, dynamic> convertedData = jsonDecode(json['db_game_board']);
@@ -158,9 +158,12 @@ class GamePiecesStateNotifier extends StateNotifier<GamePiecesState> {
 
     if (newBoard.isGameOver(json['current_turn']) && json['winner'] == null) {
       db.update({"winner": opponentColor});
-    }else{
-      King king = newBoard.getMyKing(state.myColor);
-      setIsCheck(king.isUnderAttack(newBoard.gamePieces));
+    }
+    King king = newBoard.getMyKing(state.myColor);
+    if (king.isUnderAttack(newBoard.gamePieces)) {
+      setIsCheck(true);
+    } else {
+      setIsCheck(false);
     }
   }
 

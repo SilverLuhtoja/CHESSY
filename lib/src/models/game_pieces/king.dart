@@ -68,30 +68,10 @@ class King implements GamePiece {
     availableMoves.add(nextTile);
   }
 
-  List<String> calculateEnemyKingMoves(Map<String, GamePiece> gamePieces, String currentTile) {
-    List<String> enemyKingMoves = [];
-    for (var dir in directions) {
-      if (!isNextTileOutsideBorders(currentTile, dir)) continue;
-      String nextTile =
-          "${notationLetters[currentTile.index() + dir[0]]}${currentTile.number() + dir[1]}";
-      if (gamePieces[nextTile] != null && gamePieces[nextTile]?.color != color) continue;
-
-      enemyKingMoves.add(nextTile);
-    }
-
-    return enemyKingMoves;
-  }
-
   bool isNextTileOutsideBorders(String currentTile, List<int> dir) {
     int letterVal = currentTile.index() + dir[0];
     int numberVal = currentTile.number() + dir[1];
     return letterVal >= 0 && letterVal < 8 && numberVal > 0 && numberVal < 9;
-  }
-
-  bool isUnderAttack(Map<String, GamePiece> gamePieces) {
-    getAllEnemyMoves(gamePieces);
-    if (_enemyMoves.contains(notationValue)) return true;
-    return false;
   }
 
   List<String> filterMoves(List<String> moves) {
@@ -100,6 +80,12 @@ class King implements GamePiece {
       moves.removeWhere((e) => !isNextMoveValid(e));
     }
     return moves;
+  }
+
+  bool isUnderAttack(Map<String, GamePiece> gamePieces) {
+    getAllEnemyMoves(gamePieces);
+    if (_enemyMoves.contains(notationValue)) return true;
+    return false;
   }
 
   bool isNextMoveValid(String move) {
@@ -174,6 +160,20 @@ class King implements GamePiece {
         }
       }
     }
+  }
+
+  List<String> calculateEnemyKingMoves(Map<String, GamePiece> gamePieces, String currentTile) {
+    List<String> enemyKingMoves = [];
+    for (var dir in directions) {
+      if (!isNextTileOutsideBorders(currentTile, dir)) continue;
+      String nextTile =
+          "${notationLetters[currentTile.index() + dir[0]]}${currentTile.number() + dir[1]}";
+      if (gamePieces[nextTile] != null && gamePieces[nextTile]?.color != color) continue;
+
+      enemyKingMoves.add(nextTile);
+    }
+
+    return enemyKingMoves;
   }
 
   // TODO: maybe can use set
