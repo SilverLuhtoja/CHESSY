@@ -39,7 +39,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   UuidContainer(),
-                  UsernameContainer(),
+                  UsernameContainer(realoadNeeded: (value) {
+                  },),
                   const AppStatistics(),
                   const SizedBox(height: 20),
                   const NewGameButton(),

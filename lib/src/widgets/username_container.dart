@@ -5,30 +5,35 @@ import 'package:replaceAppName/src/services/username_service.dart';
 import 'package:replaceAppName/src/utils/helpers.dart';
 
 class UsernameContainer extends StatefulWidget {
-  const UsernameContainer({super.key});
+  final ValueChanged<bool> realoadNeeded;
+  const UsernameContainer({super.key, required this.realoadNeeded});
 
   @override
   State<UsernameContainer> createState() => _UsernameContainerState();
 }
 
 class _UsernameContainerState extends State<UsernameContainer> {
-
   var wantToChange = false;
   @override
   Widget build(BuildContext context) {
     return Row(children: [
-      Visibility(
-        visible: wantToChange,
-        child: NameChangeInput(onStateChanged: (value) => setState(() {
-          wantToChange = value; 
-        })),
-      ),
-        Visibility(
-        visible: !wantToChange,
-        child: NameDisplay(onStateChanged: (value) => setState(() {
-          wantToChange = value; 
-        }),)
-        )
+      wantToChange
+          ? NameChangeInput(
+              onStateChanged: (value) => setState(() {
+                    wantToChange = value;
+                    widget.realoadNeeded(true);
+                  }))
+          : NameDisplay(
+              onStateChanged: (value) {
+                if (value == true) {
+                  setState(() {
+                    wantToChange = value;
+                  });
+                } else {
+                  deleteUsername();
+                  setState(() {});
+                }
+              })
     ]);
   }
 }
@@ -52,11 +57,15 @@ class UsernameButton extends StatelessWidget {
 class NameChangeInput extends StatelessWidget {
   final ValueChanged<bool> onStateChanged;
 
-    NameChangeInput({super.key, required this.onStateChanged});
+  NameChangeInput({
+    super.key,
+    required this.onStateChanged,
+  });
   TextEditingController nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    printGreen('NameChangeInput');
     return Row(children: [
       SizedBox(
         width: 150,
@@ -78,7 +87,8 @@ class NameChangeInput extends StatelessWidget {
 
 class NameDisplay extends StatefulWidget {
   final ValueChanged<bool> onStateChanged;
-  NameDisplay({super.key, required this.onStateChanged});
+  NameDisplay(
+      {super.key, required this.onStateChanged,});
 
   @override
   State<NameDisplay> createState() => _NameDisplayState();
@@ -91,16 +101,33 @@ class _NameDisplayState extends State<NameDisplay> {
 
   @override
   Widget build(BuildContext context) {
+     printGreen('NameDisplay');
     return FutureBuilder(
         future: _getName(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasData) {
+            
+            if (snapshot.data.length == 0) {
+              return Row(children: [
+                Text('PLEASE ADD YOUR USERNAME'),
+                const SizedBox(
+                  width: 30,
+                ),
+                UsernameButton(
+                    handler: () => widget.onStateChanged(true), text: 'ADD')
+              ]);
+            }
             return Row(children: [
               Text(snapshot.data),
               const SizedBox(
                 width: 30,
               ),
-              UsernameButton(handler: () => widget.onStateChanged(true), text: 'change')
+              UsernameButton(
+                  handler: () {
+                    widget.onStateChanged(true);
+                    }, text: 'change'),
+              UsernameButton(
+                  handler: () => widget.onStateChanged(false), text: 'Delete')
             ]);
           } else {
             return Text('loading...');
