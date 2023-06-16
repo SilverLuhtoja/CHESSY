@@ -75,30 +75,65 @@ class AvailableRooms extends ConsumerWidget {
       }
     }
 
+    _getRooms() async {
+      return await db.getAvailableRooms();
+    }
+
     return Scaffold(
         appBar: AppBar(
           title: Text('JOIN GAME'),
         ),
-        body: ListView.builder(
-            padding: const EdgeInsets.all(20),
-            itemCount: data!.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                height: 50,
-                child: Row(
-                  children: [
-                    Text(
-                      'Username: ${data![index]['creator_name']}',
-                      style: TextStyle(fontSize: 10),
-                    ),
-                    FilledButton(
-                        onPressed: () async {
-                          joinGame(data![index]['game_id']);
-                        },
-                        child: Text('JOIN'))
-                  ],
-                ),
-              );
-            }));
+        body: Column(
+          children: [
+            SizedBox(height: 20),
+            Text('AVAILABLE ROOMS TO JOIN:'),
+            FutureBuilder(
+                future: _getRooms(),
+                builder:
+                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data.length != 0) {
+                      return ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.all(20),
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Container(
+                              height: 50,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Text(
+                                    'Game created by: ${snapshot.data![index]['creator_name']}',
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                  MaterialButton(
+                                    onPressed: () async {
+                                      joinGame(
+                                          snapshot.data![index]['game_id']);
+                                    },
+                                    color: Colors.blue,
+                                    minWidth: 0,
+                                    height: 20,
+                                    child: Text(
+                                      'JOIN',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            );
+                          });
+                    } else {
+                      return Text('No rooms available.');
+                    }
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                })
+          ],
+        ));
   }
 }

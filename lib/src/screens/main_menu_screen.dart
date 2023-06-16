@@ -39,7 +39,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   UuidContainer(),
-                  UsernameContainer(realoadNeeded: (value) {
+                  UsernameContainer(reloadNeeded: (value) {
                   },),
                   const AppStatistics(),
                   const SizedBox(height: 20),

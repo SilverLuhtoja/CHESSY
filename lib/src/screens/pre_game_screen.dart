@@ -41,7 +41,7 @@ class _PreGameScreenState extends State<PreGameScreen> {
                       child: SingleChildScrollView(
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [UsernameContainer(realoadNeeded: (value) => setState(() {
+                              children: [UsernameContainer(reloadNeeded: (value) => setState(() {
                               }),)]))));
             } else {
                printWarning('else');

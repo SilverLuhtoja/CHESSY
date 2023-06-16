@@ -5,8 +5,8 @@ import 'package:replaceAppName/src/services/username_service.dart';
 import 'package:replaceAppName/src/utils/helpers.dart';
 
 class UsernameContainer extends StatefulWidget {
-  final ValueChanged<bool> realoadNeeded;
-  const UsernameContainer({super.key, required this.realoadNeeded});
+  final ValueChanged<bool> reloadNeeded;
+  const UsernameContainer({super.key, required this.reloadNeeded});
 
   @override
   State<UsernameContainer> createState() => _UsernameContainerState();
@@ -21,7 +21,7 @@ class _UsernameContainerState extends State<UsernameContainer> {
           ? NameChangeInput(
               onStateChanged: (value) => setState(() {
                     wantToChange = value;
-                    widget.realoadNeeded(true);
+                    widget.reloadNeeded(true);
                   }))
           : NameDisplay(
               onStateChanged: (value) {
