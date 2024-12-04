@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:replaceAppName/src/models/game_pieces/game_piece_interface.dart';
 import 'package:replaceAppName/src/models/game_pieces/pawn.dart';
+import 'package:replaceAppName/src/services/username_service.dart';
 import 'package:replaceAppName/src/services/uuid_service.dart';
 import 'package:replaceAppName/src/utils/helpers.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -25,8 +26,10 @@ class Database {
 
     String? myUUID = await getUUID();
     String myColor = Random().nextInt(2) == 0 ? 'white' : 'black';
+    String? myName = await getUsername();
+
     String jsonPieces = jsonEncode(GameBoard().toJson());
-    Map<String, dynamic> params = {myColor: myUUID, "db_game_board": jsonPieces};
+    Map<String, dynamic> params = {myColor: myUUID, "db_game_board": jsonPieces, "creator_name": myName};
 
     Map<String, dynamic> data = await table.insert(params).select().single();
     id = data['game_id'];
@@ -35,13 +38,13 @@ class Database {
     return myColor;
   }
 
-  Future<dynamic> joinRoom() async {
+  Future<dynamic> joinRoom(int roomid) async {
     printDB("DB: Joining game");
 
     String? myUUID = await getUUID();
-    List<dynamic> rooms = await getAvailableRooms();
-    if (rooms.isEmpty) return;
-    id = rooms.first['game_id'];
+    // List<dynamic> rooms = await getAvailableRooms();
+    // if (rooms.isEmpty) return;
+    id = roomid;
 
     String availableColor = await getAvailableColor();
     Map<String, dynamic> params = {availableColor: myUUID, "game_state": DbGameState.INGAME.name};
